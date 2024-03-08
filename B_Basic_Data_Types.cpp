@@ -7,9 +7,21 @@ using namespace std;
 int main()
 {
     fastread();
-    int n
+    int n;
+    long long m;
+    char k;
+    float i;
+    double o;
+
+
+
 ;
-    cin>>n;
+    cin>>n >>m>>k >>i >>o;
+    cout<< n <<endl;
+    cout<< m <<endl;
+    cout<< k <<endl;
+    cout<< i <<endl;
+    cout<< o <<endl;
     
 
     return 0;
