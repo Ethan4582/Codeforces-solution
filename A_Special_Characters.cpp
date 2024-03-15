@@ -7,8 +7,23 @@ using namespace std;
 int main()
 {
     fastread();
-    int n ;
-    cin>>n ;
+    int t ;
+    cin>>t ;
+
+    while(t--){
+      int n ; 
+      cin >> n ; 
+      if ( n%2 ){
+         cout << "NO\n";
+         continue;
+      }
+      n/=2;
+      cout << "YES\n";
+      for  ( int i=0 ; i <n ; i++) cout << "AAB";
+      cout << "\n";
+
+
+    }
     
 
     return 0;
