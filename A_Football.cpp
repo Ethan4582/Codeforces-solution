@@ -37,40 +37,42 @@ int n;
 
 
 
-#include <iostream>
-#include <string>
 
-using namespace std;
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+// #include <iostream>
+// #include <string>
 
-    int n;
-    cin >> n;
+// using namespace std;
 
-    string team1, team2;
-    int count1 = 0, count2 = 0;
+// int main() {
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(NULL);
 
-    for (int i = 0; i < n; ++i) {
-        string team;
-        cin >> team;
-        if (team == team1) {
-            count1++;
-        } else if (team == team2) {
-            count2++;
-        } else if (count1 == 0) {
-            team1 = team;
-            count1++;
-        } else {
-            team2 = team;
-            count2++;
-        }
-    }
+//     int n;
+//     cin >> n;
 
-    string winning_team = (count1 > count2) ? team1 : team2;
+//     string team1, team2;
+//     int count1 = 0, count2 = 0;
 
-    cout << winning_team << endl;
+//     for (int i = 0; i < n; ++i) {
+//         string team;
+//         cin >> team;
+//         if (team == team1) {
+//             count1++;
+//         } else if (team == team2) {
+//             count2++;
+//         } else if (count1 == 0) {
+//             team1 = team;
+//             count1++;
+//         } else {
+//             team2 = team;
+//             count2++;
+//         }
+//     }
 
-    return 0;
-}
+//     string winning_team = (count1 > count2) ? team1 : team2;
+
+//     cout << winning_team << endl;
+
+//     return 0;
+// }
