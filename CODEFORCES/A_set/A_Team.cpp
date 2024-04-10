@@ -22,6 +22,9 @@ int main() {
         
         if (sure_count >= 2) {
             implemented_problems++;
+
+
+            
         }
     }
 
