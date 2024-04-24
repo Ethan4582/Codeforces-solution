@@ -42,36 +42,37 @@ const int N = 1000000;
 int prime[N];
 vector<int> pr;
 
+void check(bool flag) {
+    if (flag) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
+}
 
 int main() {
-    int arr[1001];
-	string s;
-	cin>>s;
-	for(int i=0;i<s.size();i++){
-	    arr[i]=s[i]-'0';
-	}
-	int count=1;
-	for(int i=0;i<s.size();i++){
-	    if(arr[i]==0 && arr[i+1]==0){
-	        count++;
-	        if(count==7){
-	            break;
-	        }
-	    }else if(arr[i]==1 && arr[i+1]==1){
-	        count++;if(count==7){
-	            break;
-	        }
-	    }else if(arr[i]==1 && arr[i+1]==0){
-	        count=1;
-	    }
-	    else if(arr[i]==0 && arr[i+1]==1){
-	        count=1;
-	    }
-	}
-	if(count>=7){
-	    cout<<"YES";
-	}else{
-	    cout<<"NO";
-	}
-	return 0;
+    int s, n, x, y;
+    cin >> s >> n;
+    vector<pair<int, int>> pairs;
+
+    for (int i = 0; i < n; ++i) {
+        cin >> x >> y;
+        pairs.push_back(make_pair(x, y));
+    }
+
+    sort(pairs.begin(), pairs.end());
+
+    bool allTrue = true; 
+
+    for (int i = 0; i < n; i++) {
+        if (s > pairs[i].first) {
+            s += pairs[i].second;
+        } else {
+            allTrue = false; 
+            break;
+        }
+    }
+
+    check(allTrue); 
+    return 0;
 }

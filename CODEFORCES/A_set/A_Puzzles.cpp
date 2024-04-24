@@ -43,35 +43,52 @@ int prime[N];
 vector<int> pr;
 
 
-int main() {
-    int arr[1001];
-	string s;
-	cin>>s;
-	for(int i=0;i<s.size();i++){
-	    arr[i]=s[i]-'0';
-	}
-	int count=1;
-	for(int i=0;i<s.size();i++){
-	    if(arr[i]==0 && arr[i+1]==0){
-	        count++;
-	        if(count==7){
-	            break;
-	        }
-	    }else if(arr[i]==1 && arr[i+1]==1){
-	        count++;if(count==7){
-	            break;
-	        }
-	    }else if(arr[i]==1 && arr[i+1]==0){
-	        count=1;
-	    }
-	    else if(arr[i]==0 && arr[i+1]==1){
-	        count=1;
-	    }
-	}
-	if(count>=7){
-	    cout<<"YES";
-	}else{
-	    cout<<"NO";
-	}
-	return 0;
+
+int main()
+{
+    ll i,j,k;
+    ll n,m;
+    ll min=99999999;
+
+    cin>>n>>m;
+    ll a[m];
+
+    for(i=0;i<m;i++)
+        cin>>a[i];
+
+    sort(a,a+m);
+   // the close the number the min the difference 
+
+    for(i=0;i<=(m-n);i++)
+    {
+        ll temp=a[n+i-1]-a[i];
+        if(temp<min)
+            min=temp;
+    }
+
+    cout<<min;
+
+    return 0;
 }
+
+
+
+// int main() {
+//     int no_of_students, no_of_puzzles;
+//     cin >> no_of_students >> no_of_puzzles;
+
+//     vector<int> no_of_pieces(no_of_puzzles);
+//     for (int i = 0; i < no_of_puzzles; i++)
+//         cin >> no_of_pieces[i];
+
+//     sort(no_of_pieces.begin(), no_of_pieces.end());
+
+//     const int a = 1e9;
+//     int minimum_difference = a;
+//     for (int i = no_of_students - 1; i < no_of_puzzles; i++) {
+//         minimum_difference = min(minimum_difference, no_of_pieces[i] - no_of_pieces[i - (no_of_students - 1)]);
+//     }
+
+//     cout << minimum_difference << "\n";
+//     return 0;
+// }

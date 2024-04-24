@@ -38,40 +38,23 @@ int power(int x, int y, int MOD) {
 
 using namespace std;
 
-const int N = 1000000; 
-int prime[N];
-vector<int> pr;
 
+
+#define MAX_LENGTH 100 + 2
 
 int main() {
-    int arr[1001];
-	string s;
-	cin>>s;
-	for(int i=0;i<s.size();i++){
-	    arr[i]=s[i]-'0';
-	}
-	int count=1;
-	for(int i=0;i<s.size();i++){
-	    if(arr[i]==0 && arr[i+1]==0){
-	        count++;
-	        if(count==7){
-	            break;
-	        }
-	    }else if(arr[i]==1 && arr[i+1]==1){
-	        count++;if(count==7){
-	            break;
-	        }
-	    }else if(arr[i]==1 && arr[i+1]==0){
-	        count=1;
-	    }
-	    else if(arr[i]==0 && arr[i+1]==1){
-	        count=1;
-	    }
-	}
-	if(count>=7){
-	    cout<<"YES";
-	}else{
-	    cout<<"NO";
-	}
-	return 0;
+    int no_of_bits;
+    string initial_state;
+    cin >> no_of_bits >> initial_state;
+
+    int first_zero_location = no_of_bits; 
+    for (int i = 0; i < no_of_bits; i++) {
+        if (initial_state[i] == '0') {
+            first_zero_location = i + 1; 
+            break;
+        }
+    }
+
+    p(first_zero_location);
+    return 0;
 }
