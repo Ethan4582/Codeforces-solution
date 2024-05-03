@@ -41,27 +41,30 @@ using namespace std;
 const int N = 1000000; 
 int prime[N];
 vector<int> pr;
-
 int main() {
-    int T;
-    cin >> T;
- 
-    while (T--) {
-        ll a, b, c;
-        cin >> a >> b >> c;
- 
-        ll needPoly = (3 - b % 3) % 3;
-        if (b > 0 && needPoly > c) {
-            cout << "-1\n";
-            continue;
+    fastread();
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+        ll n = s.size();
+        ll ans = 0, cnt0 = 0, cnt1 = 0; // Initialize ans to zero and fix variable declaration
+
+        // Calculate ans
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '1') {
+                cnt1++;
+            } else {
+                if (cnt1 > 0) {
+                    ans += cnt1 + 1; // here + 1  is for the bad zero 
+                } else {
+                    cnt0++;
+                }
+            }
         }
- 
-        c -= needPoly;
-        b += needPoly;
- 
-        ll mn = a + c / 3 + (c % 3 + 1) / 2 + b / 3;
-        cout << mn << '\n';
+
+        p(ans);
     }
- 
     return 0;
 }

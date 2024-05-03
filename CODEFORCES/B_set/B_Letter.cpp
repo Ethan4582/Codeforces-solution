@@ -43,25 +43,34 @@ int prime[N];
 vector<int> pr;
 
 int main() {
-    int T;
-    cin >> T;
- 
-    while (T--) {
-        ll a, b, c;
-        cin >> a >> b >> c;
- 
-        ll needPoly = (3 - b % 3) % 3;
-        if (b > 0 && needPoly > c) {
-            cout << "-1\n";
-            continue;
+    string s1, s2;
+    getline(cin, s1);
+    getline(cin, s2);
+
+    unordered_map<char, int> count1, count2;
+    for (char &ch : s1) {
+        if (isalpha(ch)) {
+           // ch = tolower(ch);
+            count1[ch]++;
         }
- 
-        c -= needPoly;
-        b += needPoly;
- 
-        ll mn = a + c / 3 + (c % 3 + 1) / 2 + b / 3;
-        cout << mn << '\n';
     }
- 
+    for (char &ch : s2) {
+        if (isalpha(ch)) {
+           // ch = tolower(ch);
+            count2[ch]++;
+        }
+    }
+
+    bool possible = true;
+    for (const auto &p : count2) {
+        char ch = p.first;
+        if (count2[ch] > count1[ch]) {
+            possible = false;
+            break;
+        }
+    }
+
+    cout << (possible ? "YES" : "NO") << endl;
+
     return 0;
 }

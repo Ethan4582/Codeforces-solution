@@ -41,41 +41,70 @@ using namespace std;
 const int N = 1000000; 
 int prime[N];
 vector<int> pr;
+int main()
+{
+        ll i,j,k;
+        ll n,count=0;
+        ll seg=0;
+        ll l,r;
 
+        cin>>n;
+        ll a[n],s[n];
 
- 
-int main() {
-    int t;
-    cin >> t;
- 
-    while (t--) {
-        int n;
-        cin >> n;
-        string a;
-        cin >> a;
- 
-        vector<int> suf_cnt(n + 1, 0);
-        for (int i = n - 1; i >= 0; --i) {
-            suf_cnt[i] = suf_cnt[i + 1] + (a[i] == '1');
+        for(i=0;i<n;i++)
+        {
+            cin>>a[i];
+            s[i]=a[i];
         }
- 
-        int pref_cnt = 0;
-        int opt_ans = -1;
-        int opt_dist = n * 2;
-        int threshold = (n + 1) / 2;
- 
-        for (int i = 0; i <= n; ++i) {
-            if (pref_cnt >= (i + 1) / 2 && suf_cnt[i] >= (n - i + 1) / 2 && abs(n - 2 * i) < opt_dist) {
-                opt_dist = abs(n - 2 * i);
-                opt_ans = i;
+
+        sort(s,s+n);
+        for(i=0;i<n;i++)
+        {
+            if(s[i]==a[i])
+                count++;
+        }
+
+        if(count==n)
+        {
+            cout<<"yes\n1 1";
+            return 0;
+        }
+
+        for(i=0;i<n-1,seg<1;)
+        {
+            if(a[i]<a[i+1])
+            {
+                i++;
             }
-            if (i != n) {
-                pref_cnt += (a[i] == '0');
+
+            else
+            {
+                l=i;
+                r=i;
+               while(a[i]>a[i+1] && i<n-1)
+               {
+                   i++;
+                   r++;
+               }
+
+               sort(a+l,a+r+1);
+               seg++;
             }
         }
- 
-        cout << opt_ans << endl;
-    }
- 
-    return 0;
+
+        /*for(i=0;i<n;i++)
+            cout<<a[i]<<" ";*/
+
+        for(i=0;i<n;i++)
+        {
+            if(s[i]!=a[i])
+            {
+                cout<<"no";
+                return 0;
+            }
+        }
+
+        cout<<"yes\n"<<l+1<<" "<<r+1;
+
+        return 0;
 }

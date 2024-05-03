@@ -16,40 +16,46 @@
 #define p2(a, b) cout << a << " " << b << "\n";
 #define YES cout << "YES\n";
 #define NO cout << "NO\n";
- 
+
+
+int GCD(int a, int b) {
+    return b == 0 ? a : GCD(b, a % b);
+}
+
+int power(int x, int y, int MOD) {
+    if (y == 0) {
+        return 1;
+    }
+    if (y % 2 == 0) {
+        return power((x * x) % MOD, y / 2, MOD) % MOD;
+    } else {
+        return (x * power((x * x) % MOD, (y - 1) / 2, MOD) % MOD) % MOD;
+    }
+}
+
 #define fastread() (ios_base::sync_with_stdio(false), cin.tie(NULL));
 #define SIEVE seive(); 
- 
+
 using namespace std;
- 
+
 const int N = 1000000; 
 int prime[N];
 vector<int> pr;
- 
- 
+
 
 int main() {
-    int n, b;
-    cin >> n >> b;
-
-    int maximum = b;
-    vector<int> dollars(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> dollars[i];
-    }
-
-    for (int i = 0; i < n; ++i) {
-        for (int j = i; j < n; ++j) {
-            int can_buy = b / dollars[i];
-            int more = b % dollars[i];
-            int sell = can_buy * dollars[j] + more;
-            if (sell > maximum) {
-                maximum = sell;
-            }
-        }
-    }
-
-    cout << maximum << endl;
-
+    int h1, m1, h2, m2;
+    char colon;
+    
+    cin >> h1 >> colon >> m1;
+    cin >> h2 >> colon >> m2;
+    
+    int t1 = h1 * 60 + m1;
+    int t2 = h2 * 60 + m2;
+    int t3 = (t1 + t2) / 2;
+    
+    cout << setw(2) << setfill('0') << t3 / 60 << ":" << setw(2) << setfill('0') << t3 % 60 << "\n";
+    
     return 0;
+
 }
