@@ -15,7 +15,7 @@ int main() {
         
         bool possible = true;
         
-        // Check if there are consecutive '00' in the desired configuration
+        
         for (int i = 0; i < n - 1; ++i) {
             if (s[i] == '0' && s[i + 1] == '0') {
                 possible = false;
