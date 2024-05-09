@@ -1,0 +1,90 @@
+Count the number of subarrays with given xor K
+
+
+/----------------------Most optimal 
+
+Time Complexity: O(N) or O(N*logN) depending on which map data structure we are using, where N = size of the array.
+
+Space Complexity: O(N) as we are using a map data structure.   all of them are unique 
+
+//By formula: x = xr^k:
+    const x = xr ^ k;
+
+      
+      function subarraysWithXorK(nums, target) {
+         int r =0 
+      map< int , int > mpp; 
+      mpp[xr]++;
+      int cnt=0 ;
+      for ( int i=0 ; i <n ;i ++){
+      xr = xr^ k ; 
+      int x = xr ^k ; 
+      cnt ++=mpp[x];
+      mpp[xr]++;
+      }
+      return count;
+      }
+
+
+
+
+
+
+
+
+
+/--------------------------------------------/optimal 
+
+Time Complexity: O(N2), where N = size of the array.
+Space Complexity: O(1) as we are not using any extra space.
+
+function subarraysWithXorK(a, k) {
+  const n = a.length; //size of the given array.
+  let cnt = 0;
+
+  // Step 1: Generating subarrays:
+  for (let i = 0; i < n; i++) {
+    let xorr = 0;
+    for (let j = i; j < n; j++) {
+
+      //step 2:calculate XOR of all
+      // elements:
+      xorr = xorr ^ a[j];
+
+      // step 3:check XOR and count:
+      if (xorr == k) cnt++;
+    }
+  }
+  return cnt;
+}
+
+
+
+
+
+Naive Approach (Brute-force): 
+
+
+function subarraysWithXorK(a, k) {
+    const n = a.length;
+    let cnt = 0;
+
+    // Step 1: Generating subarrays:
+    for (let i = 0; i < n; i++) {
+        for (let j = i; j < n; j++) {
+
+            // Step 2: calculate XOR of all elements:
+            let xorr = 0;
+            for (let K = i; K <= j; K++) {
+                xorr = xorr ^ a[K];
+            }
+
+            // Step 3: check XOR and count:
+            if (xorr === k) cnt++;
+        }
+    }
+    return cnt;
+}
+
+
+

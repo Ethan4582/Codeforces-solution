@@ -1,0 +1,167 @@
+https://leetcode.com/problems/set-matrix-zeroes/
+
+-> find the zer and them mark enteir row and colm zero 
+
+//Optimal Space Complexity: O(1) as we are not using any extra space.
+We caannot surpass the @ array time cplexity using  Time Complexity: O(2*(N*M)),
+We  can optimize the size instead to makeing new roe or colmn it can use the matrix itself to make the hashing 
+colm[0]-> row[n]
+row[0] -> com[m]
+
+////______----->  edge case a 1 collsionthus use another varaible to store col0 =1  to store oroginal value 
+
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int n = matrix.size(); // Number of rows
+        int m = matrix[0].size(); // Number of columns
+
+        // Variable to check if the first column needs to be marked as 0
+        int col0 = 1;
+
+        // Step 1: Traverse the matrix and mark 1st row & col accordingly
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == 0) {
+                    // Mark i-th row
+                    matrix[i][0] = 0;
+
+                    // Mark j-th column
+                    if (j != 0)
+                        matrix[0][j] = 0;
+                    else
+                        col0 = 0;
+                }
+            }
+        }
+
+        // Step 2: Mark with 0 from (1,1) to (n-1, m-1)
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < m; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Step 3: Finally mark the 1st col & then 1st row
+        if (matrix[0][0] == 0) {
+            for (int j = 0; j < m; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+        if (col0 == 0) {
+            for (int i = 0; i < n; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+//better 
+Time Complexity: O(2*(N*M)),
+Space Complexity: O(N) + O(M)
+We need 4 colmn and 4- row array that we use keep the track if the it has we mark the row and column  then end put zero in it 
+
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix, int n, int m) {
+        // Create vectors to mark which rows and columns contain zeros
+        vector<int> row(n, 0); // Initialize row vector with zeros
+        vector<int> col(m, 0); // Initialize col vector with zeros
+
+        // Iterate through the matrix to mark rows and columns containing zeros
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == 0) {
+                    row[i] = 1; // Mark row i as containing zero
+                    col[j] = 1; // Mark column j as containing zero
+                }
+            }
+        }
+
+        // Iterate through the matrix again to set zeros in appropriate rows and columns
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (row[i] == 1 || col[j] == 1) {
+                    matrix[i][j] = 0; // Set element at position (i, j) to zero if its row or column contains zero
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+
+//brute force 
+
+Time Complexity: O((N*M)*(N + M)) + O(N*M),  of 0(N^3) where N = no. of rows in the matrix and M = no. of columns in the matrix.
+Space Complexity: O(1) as we are not using any extra space.
+
+We will mark the column and row -1 to avoid collision and confusion with other zero 
+and now convert all - 1 to zero 
+
+-->Way to travel in two d martix 
+for Loop (i)
+for loop (j)
+
+
+
+class Solution {
+public:
+    void markRow(vector<vector<int>>& matrix, int n, int m, int i) {
+        // Set all non-zero elements as -1 in row i
+        for (int j = 0; j < m; j++) {
+            if (matrix[i][j] != 0) {
+                matrix[i][j] = -1;
+            }
+        }
+    }
+
+    void markCol(vector<vector<int>>& matrix, int n, int m, int j) {
+        // Set all non-zero elements as -1 in column j
+        for (int i = 0; i < n; i++) {
+            if (matrix[i][j] != 0) {
+                matrix[i][j] = -1;
+            }
+        }
+    }
+
+    void setZeroes(vector<vector<int>>& matrix) {
+        int n = matrix.size(); // Number of rows
+        int m = matrix[0].size(); // Number of columns
+
+        // Set -1 for rows and columns that contain 0, without marking the 0s as -1
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == 0) {
+                    markRow(matrix, n, m, i);
+                    markCol(matrix, n, m, j);
+                }
+            }
+        }
+
+        // Finally, mark all -1 as 0
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == -1) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+};

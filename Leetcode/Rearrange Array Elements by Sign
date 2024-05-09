@@ -1,0 +1,155 @@
+https://leetcode.com/problems/rearrange-array-elements-by-sign/submissions/1189729480/
+->  it is mention it is even array no element  is left 
+
+-> If ther is extra elemt left then add it  to  the last [another type of question ]
+
+
+//Brute  force 
+
+ Time Complexity: O(N) { O(N)  
+Space Complexity:  O(N) 
+
+
+
+Optimal 
+
+#include <vector>
+
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+        int n = nums.size();
+        // Create a new vector to store the rearranged array
+        vector<int> ans(n, 0); // initialize with size n and all elements as 0
+        
+        // Initialize two indices: one for positive numbers and one for negative numbers
+        int pos_index = 0;
+        int neg_index = 1;
+        
+        // Iterate through the original array
+        for (int i = 0; i < n; i++) {
+            // Check if the current number is negative
+            if (nums[i] < 0) {
+                // If it's negative, place it at the current negative index
+                ans[neg_index] = nums[i];
+                // Move to the next available negative index (skip one position)
+                neg_index += 2;
+            } else {
+                // If it's positive, place it at the current positive index
+                ans[pos_index] = nums[i];
+                // Move to the next available positive index (skip one position)
+                pos_index += 2;
+            }
+        }
+        // Return the rearranged array
+        return ans;
+    }
+};
+
+
+
+
+Time Complexity: O(N+N/2)
+Space Complexity:  O(N/2 + N/2) 
+
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+        vector<int> pos; // Vector to store positive numbers
+        vector<int> neg; // Vector to store negative numbers
+        int n = nums.size(); // Get the size of the input vector
+
+        // Separate positive and negative numbers
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0) // If the number is positive
+                pos.push_back(nums[i]); // Store it in the positive vector
+            else
+                neg.push_back(nums[i]); // Otherwise, store it in the negative vector
+        }
+
+        // Rearrange the array alternating between positive and negative numbers
+        for (int i = 0; i < n / 2; i++) {
+            nums[2 * i] = pos[i]; // Place positive numbers at even indices
+            nums[2 * i + 1] = neg[i]; // Place negative numbers at odd indices
+        }
+
+        return nums; // Return the rearranged array
+    }
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-> If ther is extra elemt left then add it  to  the last [another type of question ]
+->without altering 
+
+we can not use the optimal solution so we go to brute force solution 
+-> this is beacuse 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> RearrangebySign(vector<int> A, int n) {
+    // Define vectors to store positive and negative elements
+    vector<int> pos, neg;
+    
+    // Segregate the array into positive and negative elements
+    for (int i = 0; i < n; i++) {
+        if (A[i] > 0)
+            pos.push_back(A[i]);
+        else
+            neg.push_back(A[i]);
+    }
+  
+    // If positives are fewer than negatives
+    if (pos.size() < neg.size()) {
+        // Fill array alternately until positives and negatives are equal
+        for (int i = 0; i < pos.size(); i++) {
+            A[2 * i] = pos[i];
+            A[2 * i + 1] = neg[i];
+        }
+      
+        // Fill remaining negatives at the end of the array
+        int index = pos.size() * 2;
+        for (int i = pos.size(); i < neg.size(); i++) {
+            A[index] = neg[i];
+            index++;
+        }
+    } 
+    // If negatives are fewer than positives
+    else {
+        // Fill array alternately until positives and negatives are equal
+        for (int i = 0; i < neg.size(); i++) {
+            A[2 * i] = pos[i];
+            A[2 * i + 1] = neg[i];
+        }
+      
+        // Fill remaining positives at the end of the array
+        int index = neg.size() * 2;
+        for (int i = neg.size(); i < pos.size(); i++) {
+            A[index] = pos[i];
+            index++;
+        }
+    }
+    return A;
+}
+
+
+Time Complexity: O(2*N)
+
+Space Complexity:  O(N/2 + N/2) = O(N) { N/2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,361 @@
+
+
+//Rotate By one  optimal 
+
+//If need to right reverse algo 
+
+void Reverse(int arr[], int start, int end)
+{
+  while (start <= end)
+  {
+    int temp = arr[start];
+    arr[start] = arr[end];
+    arr[end] = temp;
+    start++;
+    end--;
+  }
+}
+
+
+Tc- 0(N)
+Sc-0(1)  this the extra space  butit is 0(N)   
+
+
+left 
+
+class Solution {
+public:
+    void rotate(int arr[], int n) {
+        if (n <= 1) {
+            return; // No need to rotate if the array is empty or has only one element
+        }
+
+        int firstElement = arr[0]; // Store the first element
+        for (int i = 0; i < n - 1; ++i) {
+            arr[i] = arr[i + 1]; // Shift elements to the left
+        }
+        arr[n - 1] = firstElement; // Place the first element at the end
+    }
+};
+
+https://www.geeksforgeeks.org/problems/cyclically-rotate-an-array-by-one2614/1?utm_source=geeksforgeeks&utm_medium=ml_article_practice_tab&utm_campaign=article_practice_tab
+class Solution {
+public:
+    void rotateByOne(std::vector<int>& nums) {
+        if (nums.empty() || nums.size() == 1) {
+            return; // No need to rotate if the array is empty or has only one element
+        }
+
+        int lastElement = nums.back(); // Store the last element
+        for (int i = nums.size() - 1; i > 0; --i) {
+            nums[i] = nums[i - 1]; // Shift elements to the right
+        }
+        nums[0] = lastElement; // Place the last element at the beginning
+    }
+};
+
+
+
+
+Rotate By K place 
+
+
+First store the elements from index d to N-1 into the temp array.
+Then store the first d elements of the original array into the temp array.
+Copy back the elements of the temp array into the original array
+
+Time Complexity: O(n)
+
+Space Complexity: O(k) since k array element needs to be stored in temp array
+
+#include <vector>
+
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        if (n == 0)
+            return;
+        k = k % n;
+        if (k > n)
+            return;
+        
+        vector<int> temp(k);
+        for (int i = n - k; i < n; i++) {
+            temp[i - n + k] = nums[i];
+        }
+        for (int i = n - k - 1; i >= 0; i--) {
+            nums[i + k] = nums[i];
+        }
+        for (int i = 0; i < k; i++) {
+            nums[i] = temp[i];
+        }
+    }
+};
+
+
+
+MOST oPTIMAL SOLUTION 
+
+rotaing  right 
+
+We se pattern n=3  divide the arry in 2part then  reverse it and mergera   and the reverse we get the desired output 
+Tc- 0(2N)
+Sc- 0(1)
+
+https://leetcode.com/problems/rotate-array/
+
+class Solution {
+ public:
+  void rotate(vector<int>& nums, int k) {
+    k %= nums.size();
+    reverse(nums, 0, nums.size() - 1);
+    reverse(nums, 0, k - 1);
+    reverse(nums, k, nums.size() - 1);
+  }
+
+ private:
+  void reverse(vector<int>& nums, int l, int r) {
+    while (l < r)
+      swap(nums[l++], nums[r--]);
+  }
+};
+
+
+//Moost Optimal ofr left roation  
+Tc- 0(N)
+sc-0(N)
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    // Function to get gcd of a and b
+    int gcd(int a, int b) {
+        if (b == 0)
+            return a;
+        else
+            return gcd(b, a % b);
+    }
+
+    // Function to left rotate arr[] of size n by d
+    void leftRotate(int arr[], int d, int n) {
+        // To handle if d >= n
+        d = d % n;
+        int g_c_d = gcd(d, n);
+
+        for (int i = 0; i < g_c_d; i++) {
+            // Move i-th values of blocks
+            int temp = arr[i];
+            int j = i;
+
+            while (1) {
+                int k = j + d;
+                if (k >= n)
+                    k = k - n;
+
+                if (k == i)
+                    break;
+
+                arr[j] = arr[k];
+                j = k;
+            }
+            arr[j] = temp;
+        }
+    }
+
+    // Function to print an array
+    void printArray(int arr[], int size) {
+        for (int i = 0; i < size; i++)
+            cout << arr[i] << " ";
+    }
+}
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+union of array 
+
+
+optimal solution 
+Time Complexity: O(m+n),
+
+space  is also same 
+
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector < int > FindUnion(int arr1[], int arr2[], int n, int m) {
+  int i = 0, j = 0; // pointers
+  vector < int > Union; // Uninon vector
+  while (i < n && j < m) {
+    if (arr1[i] <= arr2[j]) // Case 1 and 2
+    {
+      if (Union.size() == 0 || Union.back() != arr1[i])
+        Union.push_back(arr1[i]);
+      i++;
+    } else // case 3
+    {
+      if (Union.size() == 0 || Union.back() != arr2[j])
+        Union.push_back(arr2[j]);
+      j++;
+    }
+  }
+  while (i < n) // IF any element left in arr1
+  {
+    if (Union.back() != arr1[i])
+      Union.push_back(arr1[i]);
+    i++;
+  }
+  while (j < m) // If any elements left in arr2
+  {
+    if (Union.back() != arr2[j])
+      Union.push_back(arr2[j]);
+    j++;
+  }
+  return Union;
+}
+
+
+
+
+
+
+
+
+
+//brut forcr   
+
+Time Compleixty : O( (m+n)log(m+n) ) 
+
+Space Complexity : O(m+n) 
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector < int > FindUnion(int arr1[], int arr2[], int n, int m) {
+  map < int, int > freq;
+  vector < int > Union;
+  for (int i = 0; i < n; i++)
+    freq[arr1[i]]++;
+  for (int i = 0; i < m; i++)
+    freq[arr2[i]]++;
+  for (auto & it: freq)
+    Union.push_back(it.first);
+  return Union;
+}
+
+int main() {
+  int n = 10, m = 7;
+  int arr1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  int arr2[] = {2, 3, 4, 4, 5, 11, 12};
+  vector < int > Union = FindUnion(arr1, arr2, n, m);
+  cout << "Union of arr1 and arr2 is " << endl;
+  for (auto & val: Union)
+    cout << val << " ";
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+the elemnt tha are common in both   Sorted  array  
+
+
+
+
+https://leetcode.com/problems/intersection-of-two-arrays/description/
+https://www.geeksforgeeks.org/problems/intersection-of-two-arrays2404/1?utm_source=geeksforgeeks&utm_medium=ml_article_practice_tab&utm_campaign=article_practice_tab
+
+
+optimal - two poimter 
+
+
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        int i = 0;
+        int j = 0;
+        vector<int> ans;
+
+        while (i < nums1.size() && j < nums2.size()) {
+            if (nums1[i] < nums2[j]) {
+                i++;
+            } else if (nums2[j] < nums1[i]) {
+                j++;
+            } else {
+                ans.push_back(nums1[i]); // Corrected this line to use nums1[i]
+                i++;
+                j++;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+
+Brut force 
+- every elemnt have corsponding element  [ Hashing  ] 
+
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> ans; // Vector to store the intersection
+        int vis[1001] = {0}; // Array to keep track of visited elements, assuming the range of elements is from 0 to 1000
+
+        int j; // Declare j outside of the loop
+
+        // Iterate through nums1 array
+        for (int i = 0; i < nums1.size(); i++) {
+            // Iterate through nums2 array
+            for (j = 0; j < nums2.size(); j++) {
+                // If the current elements match and the element hasn't been visited before
+                if (nums1[i] == nums2[j] && !vis[nums2[j]]) {
+                    ans.push_back(nums1[i]); // Add the element to the intersection
+                    vis[nums2[j]] = 1; // Mark the element as visited
+                    break; // Break the loop as we found a match
+                }
+            }
+            // If the current element in nums2 array is greater than the current element in nums1 array, break
+            if (j < nums2.size() && nums2[j] > nums1[i]) break;
+        }
+        return ans; // Return the intersection vector
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+

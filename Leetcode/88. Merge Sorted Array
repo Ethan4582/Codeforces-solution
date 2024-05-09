@@ -1,0 +1,124 @@
+
+
+More optimal solution------------------->
+
+Tc-  0(m+n) 
+sc  - 0(1)
+
+class Solution {
+ public:
+  void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+    int i = m - 1;      // nums1's index (the actual nums)
+    int j = n - 1;      // nums2's index
+    int k = m + n - 1;  // nums1's index (the next filled position)
+
+    while (j >= 0)
+      if (i >= 0 && nums1[i] > nums2[j])
+        nums1[k--] = nums1[i--];
+      else
+        nums1[k--] = nums2[j--];
+  }
+};
+
+
+
+
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        for (int j = 0, i = m; j<n; j++){
+            nums1[i] = nums2[j];
+            i++;
+        }
+        sort(nums1.begin(),nums1.end());
+    }
+};
+
+
+
+
+
+----------------------Litle optimal 
+
+Time Complexity: O(min(n, m)) + O(n*logn) + O(m*logm),
+
+Space Complexity: O(1) 
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        // Declare 2 pointers:
+        int left = n - 1;
+        int right = 0;
+
+        // Swap the elements until nums1[left] is smaller than nums2[right]:
+        while (left >= 0 && right < m) {
+            if (nums1[left] > nums2[right]) {
+                swap(nums1[left], nums2[right]);
+                left--, right++;
+            }
+            else {
+                break;
+            }
+        }
+
+        // Sort nums1[] and nums2[] individually:
+        sort(nums1.begin(), nums1.begin() + n);
+        sort(nums2.begin(), nums2.begin() + m);
+    }
+};
+
+
+
+
+----------------------------->the Brute  force 
+Time Complexity: O(n+m) + O(n+m)
+
+
+Space Complexity: O(n+m)
+
+
+void merge(long long arr1[], long long arr2[], int n, int m) {
+
+    //Declare a 3rd array and 2 pointers:
+    long long arr3[n + m];
+    int left = 0;
+    int right = 0;
+
+    int index = 0;
+
+    //Insert the elements from the 2 arrays
+    // into the 3rd array using left and right
+    // pointers:
+
+    while (left < n && right < m) {
+        if (arr1[left] <= arr2[right]) {
+            arr3[index] = arr1[left];
+            left++, index++;
+        }
+        else {
+            arr3[index] = arr2[right];
+            right++, index++;
+        }
+    }
+
+    // If right pointer reaches the end:
+    while (left < n) {
+        arr3[index++] = arr1[left++];
+    }
+
+    // If left pointer reaches the end:
+    while (right < m) {
+        arr3[index++] = arr2[right++];
+    }
+
+    // Fill back the elements from arr3[]
+    // to arr1[] and arr2[]:
+    for (int i = 0; i < n + m; i++) {
+        if (i < n) arr1[i] = arr3[i];
+        else arr2[i - n] = arr3[i];
+    }
+}
+
+

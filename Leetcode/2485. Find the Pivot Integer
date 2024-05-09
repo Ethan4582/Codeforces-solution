@@ -1,0 +1,88 @@
+2485. Find the Pivot Integer
+https://leetcode.com/problems/find-the-pivot-integer/description/?envType=daily-question&envId=2024-03-13
+
+
+MOst optimal 
+
+Tc - 0(1) 
+Sc- 0(1 )
+class Solution {
+ public:
+  int pivotInteger(int n) {
+    // 1 + 2 + ... + x = x + ... + n
+    // (1 + x) * x / 2 = (x + n) * (n - x + 1) / 2
+    //         x + x^2 = nx - x^2 + x + n^2 - nx + n
+    //         2 * x^2 = n^2 + n
+    //               x = sqrt((n^2 + n) / 2)
+    const int y = (n * n + n) / 2;
+    const int x = sqrt(y);
+    return x * x == y ? x : -1;
+  }
+};
+
+
+
+
+
+
+
+
+
+Optimal ________________----------------------------------------------------------
+The space complexity is O(1) 
+Overall, the time complexity is O(n).
+
+->>>    2 pointer 
+class Solution {
+public:
+    int pivotInteger(int n) {
+        int i=1,j=n;
+        if(i==j) // It is just for example 2 i.e. n = 1 cause it does not enter in below while loop cause i and j are same i.e both are 1 so it doesn't enter the while loop and return -1 but we have to return 1 thats why we use this case.
+            return i;
+        else{
+            int s1=0,s2=0,res=-1;
+            while(i<=j){
+                if(s1<=s2){
+                    s1+=i;
+                    i+=1;
+                }
+                else if(s2<=s1){
+                    s2+=j;
+                    j-=1;
+                }
+                if(j==i && s1==s2){
+                    res=i;
+                }
+            }
+            return res;
+        }
+    }
+};
+
+
+
+
+Brute force ------------------------------------------
+Overall, the time complexity is O(n^2).
+The space complexity is O(1) 
+
+class Solution {
+public:
+    int pivotInteger(int n) {
+        for (int x = 1; x <= n; x++) {
+            long long sum1 = 0;
+            long long sum2 = 0;
+            for (int i = 1; i <= x; i++) {
+                sum1 += i;
+            }
+            for (int j = x; j <= n; j++) {
+                sum2 += j;
+            }
+            if (sum1 == sum2) {
+                return x;
+            }
+        }
+        return -1;
+    }
+};
+

@@ -1,0 +1,397 @@
+
+
+
+
+////////////////////////////GCD- HCf///////////////////////////
+
+### Eculidian Algoritm
+
+Time Complexity: O(logɸmin(a,b)), where ɸ is 1.61.
+
+Space Complexity: O(1).
+
+
+
+gcd (n1 , n2 ) =  gcd ( n1-n2 , n2) → n1 >n2
+-> repeat  this step  again and again  the moment any onnne number become the remong num is the gcd 
+
+→ to jump few step for ward just take the modular gcd (n1%n2 , n2 )
+
+
+int main()
+{
+    fastread();
+    int n, m;
+    cin >> n >> m;
+    
+    while (n > 0 && m > 0) {
+        if (n > m) {
+            n %= m;
+        }
+        else {
+            m %= n;
+        }
+    }
+    
+    if (n == 0) {
+        cout << m;
+    }
+    else {
+        cout << n;
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+ 
+Time Complexity: O(N).
+
+Space Complexity: O(1).
+
+GCD of (9/12)= 3    find the greatest common in the alll divisor of 2 number 
+
+   -> brute force  
+int n , m ;
+    cin>>n>>m;
+    int gcd =1 ;
+
+
+    for ( int i = 1 ; i <=min(n ,m); i++){
+        if ( n %i ==0  &&  m%i == 0){
+            gcd = i ;
+        }
+    }
+
+    cout << gcd ;
+
+    return 0;
+}
+
+//another way 
+int n , m ;
+    cin>>n>>m;
+    int gcd =1 ;
+
+
+    for ( int i = min(n,m); i <i; i--){
+        if ( n %i ==0  &&  m%i == 0){
+            cout << gcd = i ;
+            break;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+->  to ge the number 
+- %  10 give you the last digit and remainder ex- 4879 % 10= 9  and  4879/10  gives us 4870  Modular to get the reminder and  division by 10 to get the the number with 1 less digit
+- → faster wau is just take log of the number (n)  gives it digit
+
+int cont=0 ;
+    cin>>n;
+    while (n>0){
+       n=  n/10;
+        cont++;
+    }
+
+    cout <<cont;
+
+or ->   cont - > int log (n ) +1 
+Yc-  for time complesity if divistionis happen by k then we say     tc-  o(log_base_k (n ) ) -> as number of iteration is dependent on number of iteration 
+
+
+
+////////////////////////////////////// Reverse Number ///////////////////////////
+
+int rev_num=0 ;
+    cin>>n;
+    while (n>0){
+        int last_digit= n%10 ;
+       n=  n/10;
+        rev_num = (rev_num *10) +last_digit;
+    }
+
+    cout <<rev_num;
+
+
+
+https://leetcode.com/problems/reverse-integer/
+
+
+
+The reason for checking against INT_MAX and INT_MIN is to ensure that the reversed number fits within the range of a 32-bit signed integer. In C++, the int data type typically represents signed integers, and its range is from -2147483648 to 2147483647.
+
+
+	class Solution {
+ public:
+  int reverse(int x) {
+    long ans = 0;
+
+    while (x != 0) {
+      ans = ans * 10 + x % 10;
+      x /= 10;
+    }
+
+    return (ans < INT_MIN || ans > INT_MAX) ? 0 : ans;
+  }
+};
+
+    
+    ///////////////////////////////////////    palindrome - means Rverse is still the same /////////////////////////////////
+
+
+### Palindrome - reverse is still the  same
+
+- just store in copy of n as it can be used
+
+
+ log10(x)
+
+https://leetcode.com/problems/palindrome-number/
+
+class Solution {
+ public:
+  bool isPalindrome(int x) {
+    if (x < 0)
+      return false;
+
+    long reversed = 0;
+    int y = x;
+
+    while (y > 0) {
+      reversed = reversed * 10 + y % 10;
+      y /= 10;
+    }
+
+    return reversed == x;
+  }
+};
+
+Tc- 0(log10(n)
+sc- o( 1)
+
+
+//////////////////////////////////////////////////### ArmStrong  Number  - 371 - 3^3 +7^3+1^3  =371/////////////////////////////////////////
+
+  int n;
+    cin >> n;
+    int k = n; // Store the original number before modification
+    int new_num = 0;
+
+    while (n != 0) {
+        int r = n % 10;
+        new_num += pow(r, 3); // Corrected exponentiation calculation
+        n /= 10;
+    }
+
+    if (k == new_num) { // Corrected comparison operator
+        cout << "Yes";
+    }
+    else {
+        cout << "No";
+    }
+
+    return 0;
+}
+
+/////////////////////////////////////////////////////////////////////Print all the divisior 
+
+Tc - 0(n)
+simple for loop 
+  - > num%  i ==0  then cout << i ;
+
+
+	cout<<"The Divisors of "<<n<<" are:"<<endl;
+	for(int i = 1; i <= n; i++)
+		if(n % i == 0)
+			cout << i << " ";
+	
+	cout << "\n";
+////////////////////////////////////
+
+Better Time compexity 
+TC - 0(1 ) 
+
+-> we see objesevation we do not have  to go the after the moidpoint we just the mutiple factor to get the divsior of the number 
+Another intuition is that the root of a number actually acts as a splitting part of all the divisors of a number.
+
+
+void printDivisorsOptimal(int n){
+    
+    cout<<"The Divisors of "<<n<<" are:"<<endl;
+	for(int i = 1; i <= sqrt(n); i++)
+		if(n % i == 0){
+			cout << i << " ";
+			if(i != n/i) cout << n/i << " ";  // this to avoid the midpoint number 
+		}
+	
+	cout << "\n";
+}
+
+
+Time Complexity: O(sqrt(n)), because every time the loop runs only sqrt(n) times.
+
+Space Complexity: O(1), we are not using any extra space
+ cin>>n;
+    //i*i=36  -> true 
+    //7*7=36 which  false 
+     
+       for(int i= 0; i*i<=n;i++){
+         if ( n%10 ==0){
+           ls.push_back(i);
+           if(n/1!=i){
+            ls.push_back(n/i);
+           }
+         }
+       }
+       sort(ls.begin() , ls.end());
+
+       for (auto it : ls){
+        cout<<it<<" ";
+       } 
+    return 0;
+
+
+//////////////////////////////////////Check  if Prime 
+
+Simple for loop - Brute force 
+Tc- 0(N)
+
+### Check if Prime
+
+
+/////////////////////////////////////////////////////////Sieve of Eratosthenes
+-> jsut mark all the number the muitlpe of it thenall the number that is remin unmarked are the prime number 
+-> tkae an arr and mark all it true and prime  and then we iterate and mark evrynumber mutl=iple false the rest whic is left then it is called true 
+
+
+→num exactly 2 factor 1 and n itself
+
+---------------------> this the implemntation code 
+
+
+Time Complexity: O(N*log(log(N)))
+Auxiliary Space: O(N)
+class Solution {
+public:
+    int countPrimes(int n) {
+        if (n <= 2)
+            return 0;
+        vector<bool> isPrime = sieveEratosthenes(n);
+        int count = 0;
+        for (bool prime : isPrime) {
+            if (prime) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+private:
+    vector<bool> sieveEratosthenes(int n) {
+        vector<bool> isPrime(n, true);
+        isPrime[0] = false;
+        isPrime[1] = false;
+        for (int i = 2; i * i < n; ++i) {
+            if (isPrime[i]) {
+                for (int j = i * i; j < n; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+        return isPrime;
+    }
+};
+
+
+
+This work but timi limit exced ad Tc-  0(n (rootN))
+
+class Solution {
+public:
+    int countPrimes(int n) {
+        if (n <= 2)
+            return 0;
+        vector<bool> isPrime(n, true);
+        isPrime[0] = false;
+        isPrime[1] = false;
+        int count = n - 2; // Start with all numbers assumed prime except 0 and 1
+        for (int i = 2; i * i < n; ++i) {
+            if (isPrime[i]) {
+                for (int j = i * i; j < n; j += i) {
+                    if (isPrime[j]) {
+                        isPrime[j] = false;
+                        count--; // Decrement count for each non-prime number
+                    }
+                }
+            }
+        }
+        return count;
+    }
+};
+
+Tc-  0(n(sqrt(n))
+class Solution {
+public:
+    int countPrimes(int n) {
+        if (n <= 2) return 0;
+        int cnt = 0;
+        for (int i = 2; i < n; i++) { // Fix loop condition
+            bool isPrime = true; // marr all it true 
+            for (int j = 2; j * j <= i; j++) {
+                if (i % j == 0) {
+                    isPrime = false; // Found a divisor, so i is not prime
+                    break;
+                }
+            }
+            if (isPrime) {  // counting all thereming prime 
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+};
+
+
+
+
+   int cnt=0;
+     
+       for(int i= 0; i*i<=n;i++){
+         if ( n%10 ==0){
+           cnt++;
+           if(n/1!=i){
+           cnt++;
+           }
+         }
+       }
+
+       cout <<cnt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

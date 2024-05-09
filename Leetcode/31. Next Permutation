@@ -1,0 +1,88 @@
+https://leetcode.com/problems/next-permutation/description/
+
+next permuation means  the  next soted permation 
+ex-  123 <321
+the  next permaution 
+123  is  132    [ if last elemnt like   321  it will be 123 the first ] 
+
+
+Time Complexity: O(3N),
+Space Complexity:
+
+
+//Optimal solution 
+Find the break-point, i: Break-point means the first index i from the back of the given array where arr[i] becomes smaller than arr[i+1].
+For example, if the given array is {2,1,5,4,3,0,0}, the break-point will be index 1(0-based indexing). Here from the back of the array, index 1 is the first index where arr[1] i.e. 1 is smaller than arr[i+1] i.e. 5.
+
+2->If such a break-point does not exist i.e. if the array is sorted in decreasing order, in this case, we will reverse the whole array and will return it as our answer.
+
+3->
+If a break-point exists:
+Find the smallest number i.e. > arr[i] and in the right half of index i(i.e. from index i+1 to n-1) and swap it with arr[i].
+Reverse the entire right half(i.e. from index i+1 to n-1) of index i. And finally, return the array.
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int ind = -1; // Break point
+
+        // Step 1: Find the break point
+        //n-2  because  the last element is the always the greatest element 
+        for (int i = n - 2; i >= 0; i--) {
+            if (nums[i] < nums[i + 1]) {
+                ind = i; // Found the break point
+                break;
+            }
+        }
+        //Most probally the last permuate 
+        // If break point does not exist, reverse the whole array
+        if (ind == -1) {
+            reverse(nums.begin(), nums.end());
+            return;
+        }
+
+        // Step 2: Find the next greater element and swap it with nums[ind]
+        for (int i = n - 1; i > ind; i--) {
+            if (nums[i] > nums[ind]) {
+                swap(nums[i], nums[ind]);
+                break;
+            }
+        }
+
+        // Step 3: Reverse the right half
+        reverse(nums.begin() + ind + 1, nums.end());
+    }
+};
+
+
+
+
+
+//Better is  Using STL library 
+
+int main() {
+    int arr[] = {1,3,2};
+
+next_permuatation(arr.begin( ) , arr.end( ) );
+return  arr;    ///  this will autamaticllai give the  next permuataion 
+    next_permutation(arr,arr+3);//using in-built function of C++
+    
+    cout<<arr[0]<<" "<<arr[1]<<" "<<arr[2];
+    
+    return 0;
+}
+
+
+
+//brute force 
+
+Step 1: Find all possible permutations of elements present and store them.
+
+Step 2: Search input from all possible permutations.
+
+Step 3: Print the next permutation present right after it.
+
+Tc- N! * N   [ which ia log so we do not go with  the brute force ]

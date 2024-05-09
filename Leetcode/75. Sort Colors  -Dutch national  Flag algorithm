@@ -1,0 +1,162 @@
+75. Sort Colors
+
+https://leetcode.com/problems/sort-colors/description/
+
+--------->>>> most optimal   Dutch national  Flag algorithm 
+it uses three pointer 
+arr[0….low-1] contains 0. [Extreme left part]
+arr[low….mid-1] contains 1.
+arr[high+1….n-1] contains 2. [Extreme right part], n = size of the array
+
+
+Time Complexity: O(N), where N = size of the given array.
+Reason: We are using a single loop that can run at most N times.
+
+Space Complexity: O(1) as we are not using any extra space.
+
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int zero = -1;  // Index pointer for 0
+        int one = -1;   // Index pointer for 1
+        int two = -1;   // Index pointer for 2
+
+        // Traverse through the array
+        for (const int num : nums) {
+            if (num == 0) {
+                // If the current number is 0, increment all pointers
+                nums[++two] = 2;    // Move 2 pointer to the right
+                nums[++one] = 1;    // Move 1 pointer to the right
+                nums[++zero] = 0;   // Move 0 pointer to the right
+            } else if (num == 1) {
+                // If the current number is 1, increment 1 and 2 pointers
+                nums[++two] = 2;    // Move 2 pointer to the right
+                nums[++one] = 1;    // Move 1 pointer to the right
+            } else {
+                // If the current number is 2, increment only 2 pointer
+                nums[++two] = 2;    // Move 2 pointer to the right
+            }
+        }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+//brute force
+-sorting algo  Merge sort  
+Time Complexity: O(N*logN)
+
+Space Complexity: O(1)
+
+
+
+void merge(vector<int> &arr, int low, int mid, int high) {
+    vector<int> temp; // temporary array
+    int left = low;      // starting index of left half of arr
+    int right = mid + 1;   // starting index of right half of arr
+
+    //storing elements in the temporary array in a sorted manner//
+
+    while (left <= mid && right <= high) {
+        if (arr[left] <= arr[right]) {
+            temp.push_back(arr[left]);
+            left++;
+        }
+        else {
+            temp.push_back(arr[right]);
+            right++;
+        }
+    }
+
+    // if elements on the left half are still left //
+
+    while (left <= mid) {
+        temp.push_back(arr[left]);
+        left++;
+    }
+
+    //  if elements on the right half are still left //
+    while (right <= high) {
+        temp.push_back(arr[right]);
+        right++;
+    }
+
+    // transfering all elements from temporary to arr //
+    for (int i = low; i <= high; i++) {
+        arr[i] = temp[i - low];
+    }
+}
+
+void mergeSort(vector<int> &arr, int low, int high) {
+    if (low >= high) return;
+    int mid = (low + high) / 2 ;
+    mergeSort(arr, low, mid);  // left half
+    mergeSort(arr, mid + 1, high); // right half
+    merge(arr, low, mid, high);  // merging sorted halves
+}
+
+
+
+
+
+//////////////////////////////////////////better  
+------------------->>>>>>2 counter varaible to countnumber   anf then run for loop through t each counter and overide the array 
+
+Time Complexity: O(N) + O(N), where N = size of the array. First O(N) for counting the number of 0’s, 1’s, 2’s, and second O(N) for placing them correctly in the original array.
+
+Space Complexity: O(1) as we are not using any extra space.
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int n = nums.size();
+        int count0 = 0, count1 = 0, count2 = 0;
+
+        // Count the occurrences of each color
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) count0++;
+            else if (nums[i] == 1) count1++;
+            else count2++;
+        }
+
+        // Fill the array with the sorted colors
+        for (int i = 0; i < count0; i++) {
+            nums[i] = 0;
+        }
+        for (int i = count0; i < count0 + count1; i++) {
+            nums[i] = 1;
+        }
+        for (int i = count0 + count1; i < n; i++) {
+            nums[i] = 2;
+        }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

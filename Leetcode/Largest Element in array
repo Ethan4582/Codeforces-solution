@@ -1,0 +1,103 @@
+https://www.geeksforgeeks.org/problems/largest-element-in-array4009/1
+
+
+
+//brute force is quick sort which which is the most optimal   is comarining the solution 
+class Solution
+{
+public:
+    int largest(vector<int> &arr, int n)
+    {
+        int largest = arr[0]; // Initialize largest with the first element
+        for (int i = 1; i < n; i++) // Start from index 1 and iterate up to n - 1
+        {
+            if (arr[i] > largest) // Compare the current element with the largest found so far
+            {
+                largest = arr[i]; // Update largest if the current element is larger
+            }
+        }
+        return largest;
+    }
+};
+
+https://www.geeksforgeeks.org/problems/second-largest3735/1
+//Second largest  
+
+// if done sortin N(log(N)) +N  if entier arry is of same number or not seond elment   
+
+//brut force 
+class Solution {
+public:
+    // Function returns the second largest elements
+    int print2largest(int arr[], int n) {
+        int largest = arr[n - 1]; // Initialize largest to the last element
+        for (int i = n - 2; i >= 0; i--) {
+            if (arr[i] != largest) {
+                int secondlargest = arr[i];
+                return secondlargest; // Return the second largest element
+            }
+        }
+        return -1; // Return -1 if no second largest element found
+    }
+};
+
+
+//optimal Solution 
+
+Time comp --0(N)
+
+
+class Solution {
+public:
+    // Function returns the second largest elements
+    int print2largest(int arr[], int n) {
+        int largest = arr[0];
+        int secondLargest = INT_MIN; // Initialize second largest to smallest possible integer value
+
+        for (int i = 1; i < n; i++) {
+            if (arr[i] > largest) {
+                secondLargest = largest; // Update second largest
+                largest = arr[i]; // Update largest
+            } else if (arr[i] > secondLargest && arr[i] != largest) {
+                secondLargest = arr[i]; // Update second largest
+            }
+        }
+
+/*
+        // Return the second largest element  if not prresent 
+        return secondLargest != INT_MIN ? secondLargest : -1;
+
+
+*/
+
+        if (secondLargest == INT_MIN) {
+            return -1; // No second largest found
+        } else {
+            return secondLargest; // Return second largest
+        }
+    }
+};
+
+
+
+
+
+//second Smallest  in array   with 0(N)
+
+int second_smallest(vector<int> &a, int n) {
+    int smallest = a[0];
+    int second_smallest = INT_MAX;
+
+    for (int i = 0; i < n; i++) {
+        if (a[i] < smallest) {
+            second_smallest = smallest;
+            smallest = a[i];
+        } else if (a[i] != smallest && a[i] < second_smallest) {
+            second_smallest = a[i];
+        }
+    }
+
+    return second_smallest;
+}
+
+

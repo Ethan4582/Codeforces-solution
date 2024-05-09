@@ -1,0 +1,54 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+
+
+Brute force 
+
+Optimal 
+Time complexity: O(n)
+
+Space Complexity: O(1)
+
+class Solution {
+public:
+    int maxProfit(vector<int> &arr) {
+        int maxPro = 0; // Initialize maximum profit
+        int n = arr.size(); // Get the size of the input array
+        int minPrice = INT_MAX; // Initialize minimum price to maximum possible integer value
+
+        // Iterate over the array to find the maximum profit
+        for (int i = 0; i < n; i++) {
+            minPrice = min(minPrice, arr[i]); // Update minimum price if a lower price is found
+            maxPro = max(maxPro, arr[i] - minPrice); // Update maximum profit based on current price and minimum price seen so far
+        }
+
+        return maxPro; // Return the maximum profit
+    }
+};
+
+
+
+
+Time complexity: O(n^2)
+
+Space Complexity: O(1)
+
+
+class Solution {
+public:
+    int maxProfit(vector<int> &arr) {
+        int maxPro = 0; // Initialize maximum profit
+        int n = arr.size(); // Get the size of the input array
+
+        // Iterate over the array to find the maximum profit
+        for (int i = 0; i < n; i++) {
+            // Compare the current element with the elements ahead of it to find potential profit
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] > arr[i]) { // Check if selling price is greater than buying price
+                    maxPro = max(arr[j] - arr[i], maxPro); // Update maximum profit if a better deal is found
+                }
+            }
+        }
+
+        return maxPro; // Return the maximum profit
+    }
+};

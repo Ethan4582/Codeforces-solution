@@ -1,0 +1,175 @@
+https://leetcode.com/problems/3sum/description/
+
+need to find 3 elemnt  whoes sum is zero  na d cann not take same element again and only once  and also avoid unique elemwnt 
+
+
+////////////////////////// The most optimal 
+-> 2 pointer approach 
+need to sort the array for algorithm approach 
+
+fised 3 pointer 1 , j , k    and i is fixed  and k at the end pointer  and now move  the j pointer 
+->. if dupicate element i will move the next new elemnt after i have efound  the third elemnt to avoid dupliaction 
+-> do the same for thr k elemnt fron the back of the array    -------------->   i  is always fixed 
+
+-> if k passed the j  it  is not int   the sorted order so need   sowe need to next set of new elemnt 
+-> we move the elment of i to new elment to avoid dupliaction  and now fix the i and do the smae thing befire 
+
+
+
+Time Complexity: O(NlogN)+O(N2), 
+
+This space is only used to store the answer. We are not using any extra space to solve this problem. 
+So, from that perspective, space complexity can be written as O(1).
+#include <vector>
+#include <algorithm> // Needed for the sort function
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> ans;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < n; i++) {
+            // Remove duplicates:
+            if (i != 0 && nums[i] == nums[i - 1]) 
+                continue;
+
+            // Moving 2 pointers:
+            int j = i + 1;
+            int k = n - 1;
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+                if (sum < 0) {
+                    j++;
+                } else if (sum > 0) {
+                    k--;
+                } else {
+                    vector<int> temp = {nums[i], nums[j], nums[k]};
+                    ans.push_back(temp);
+                    j++;
+                    k--;
+                    // Skip the duplicates:
+                    while (j < k && nums[j] == nums[j - 1]) 
+                        j++;
+                    while (j < k && nums[k] == nums[k + 1]) 
+                        k--;
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///HashSet
+Time Complexity: O(N^2 * log(no. of unique triplets)),
+Space Complexity: O(2 * no. of the unique triplets) + O(N) 
+
+use hashing 
+
+arr k = -(arr[ i ]+ ar[ j ] )
+if first run suppose we take the first amd second elemnt  then we lok in the has elemnt as it  -(arr[ i ]+ ar[ j ] ) 
+Whil do this has to remebr we need only take elemnt between the choose elment in the has map  after complete the loop  empty the hash table 
+is not present we can just add the  previous elemnt in hashset then  move the second elent to nest this way till we find the third elemnt 
+
+-> we do not have to wory abot the elemnt becaus the set data structre  will make sure we have th unique elemnt pai 
+
+
+-> now we run the loop again but we need to emty the set before 
+
+
+
+Optimal 
+
+#include <vector>
+#include <set>
+#include <algorithm> // Needed for the sort function
+
+class Solution {
+public:
+    std::vector<std::vector<int>> threeSum(std::vector<int>& nums) {
+        int n = nums.size();
+    
+        // Using a hash table to store unique triplets
+        std::set<std::vector<int>> st;
+
+        for (int i = 0; i < n; i++) {
+            // We need to declare the set every time we change the second element 
+            std::set<int> hashset;
+            for (int j = i + 1; j < n; j++) {
+                // When moved, we need to accumulate in the hashset 
+                int third = -(nums[i] + nums[j]);
+                // Now we have to find the third element between the i and j 
+                if (hashset.find(third) != hashset.end()) {
+                    // Declare the new found set of the triplet 
+                    std::vector<int> temp = {nums[i], nums[j], third}; // Corrected the declaration of 'temp' and added 'third' to it
+                    std::sort(temp.begin(), temp.end()); // Sort the triplet to maintain order
+                    st.insert(temp);
+                }
+                hashset.insert(nums[j]);
+            }
+        }
+
+        // Convert the set of unique triplets into a vector of vectors
+        std::vector<std::vector<int>> ans(st.begin(), st.end());
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+//brute force 
+
+-> try out all the elemnt then  give the  unique elemnt 
+time Complexity: O(N3 * log(no. of unique triplets)), 
+Space Complexity: O(2 * no. of the unique triplets) a
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int n = nums.size();
+        set<vector<int>> st;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                for (int k = j + 1; k < n; k++) {
+                    if (nums[i] + nums[j] + nums[k] == 0) {
+                        vector<int> temp = {nums[i], nums[j], nums[k]};
+                        sort(temp.begin(), temp.end());
+                        st.insert(temp);
+                    }
+                }
+            }
+        }
+
+        vector<vector<int>> ans(st.begin(), st.end());
+        return ans;
+    }
+};
+

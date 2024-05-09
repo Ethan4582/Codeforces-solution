@@ -1,0 +1,67 @@
+Length of the longest subarray with zero Sum
+
+
+-------------------------------Better /optinaal 
+
+Complexity Analysis
+Time Complexity: O(N), as we are traversing the array only once
+
+Space Complexity: O(N), in the worst case we would insert all array elements prefix sum into our hashmap
+
+int maxLen(int A[], int n)
+{
+    // Your code here
+    unordered_map<int,int> mpp; 
+    int maxi = 0;
+    int sum = 0; 
+    for(int i = 0;i<n;i++) {
+        sum += A[i]; 
+        if(sum == 0) {
+            maxi = i + 1; 
+        }
+        else {
+            if(mpp.find(sum) != mpp.end()) {
+                maxi = max(maxi, i - mpp[sum]); 
+            }
+            else {
+                mpp[sum] = i;
+            }
+        }   
+    }
+
+    return maxi; 
+}
+
+
+
+
+
+brute force
+
+Time Complexity: O(N^2) as we have two loops for traversal
+
+Space Complexity: O(1) as we aren’t using any extra space.
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(vector<int>& a) {
+    int maxLen = 0;
+    unordered_map<int, int> sumIndexMap;
+    int sum = 0;
+
+    for (int i = 0; i < a.size(); i++) {
+        sum += a[i];
+
+        if (sum == 0) {
+            maxLen = i + 1;
+        } else if (sumIndexMap.find(sum) != sumIndexMap.end()) {
+            maxLen = max(maxLen, i - sumIndexMap[sum]);
+        } else {
+            sumIndexMap[sum] = i;
+        }
+    }
+
+    return maxLen;
+}

@@ -1,0 +1,124 @@
+
+Find missing number  in array 
+
+https://leetcode.com/problems/missing-number/
+
+2- Optimal solution [ sum ||  XOR ]
+
+//XOR 
+2^2^2^2^2=2 as 2^2 =0
+Time Complexity: O(N), where N = size of array+1.
+Space Complexity: O(1) as we are not using any extra space.
+
+------>>>>>> in cas it nums i 10^5    the sums is  veey big just overflow can be done using long 
+in comarision  to Xor   slightly more space  
+
+->>xor  of all number will not big 
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int xor1 = 0;
+        for (int i = 0; i <= nums.size(); i++) { // Include nums.size() to cover all indices
+            xor1 = xor1 ^ i;
+        }
+        int xor2 = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            xor2 = xor2 ^ nums[i];
+        }
+        return xor1 ^ xor2;
+    }
+};
+
+
+//------------------------sum-------------------------------
+
+Time Complexity: O(2N), where N = size of array+1.
+Space Complexity: O(1) as we are not using any extra space.
+
+! The line for (int num : nums) means:
+
+"For each number (num) in the collection of numbers (nums), do something."
+In this case, it's adding each number in the nums collection to a variable called ar
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        int totalSum = n * (n + 1) / 2;
+        int arraySum = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            arraySum += nums[i]; // Corrected from num to nums[i]
+        }
+        return totalSum - arraySum;
+    }
+};
+
+
+
+
+
+
+
+
+//beeter approch 
+hashing algo
+Time Complexity: O(N) + O(N) ~ O(2*N),  where N = size of the array+1.
+space Complexity: O(N), w
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        // Create a hash array to store presence of numbers
+        vector<int> hash(nums.size() + 1, 0);
+
+        // Iterate through nums and mark the presence of numbers in hash array
+        for (int i = 0; i < nums.size(); i++) {
+            hash[nums[i]] = 1;
+        }
+
+        // Find the missing number
+        for (int i = 0; i < hash.size(); i++) {
+            if (hash[i] == 0) {
+                return i;
+            }
+        }
+
+        // If no missing number found, return -1
+        return -1;
+    }
+};
+
+
+//brute force 
+
+Time Complexity: O(N2), where N = size of the array+1.
+Space Complexity: O(1)  as we are not using any extra space.
+
+/ Outer loop that runs from 1 to N:
+    for (int i = 1; i <= N; i++) {
+
+        // flag variable to check
+        //if an element exists
+        int flag = 0;
+
+        //Search the element using linear search:
+        for (int j = 0; j < N - 1; j++) {
+            if (a[j] == i) {
+
+                // i is present in the array:
+                flag = 1;
+                break;
+            }
+        }
+
+        // check if the element is missing
+        //i.e flag == 0:
+
+        if (flag == 0) return i;
+    }
+
+    // The following line will never execute.
+    // It is just to avoid warnings.
+    return -1;
+}

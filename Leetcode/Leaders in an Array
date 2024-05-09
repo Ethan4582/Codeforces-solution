@@ -1,0 +1,72 @@
+ Gratest elemnt is when everything on the right side is an array is smaller the the number itself
+
+
+https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/description/
+
+
+////////////////////////////////////////////////////////
+Optimal Solution 
+pointer form  back comaring it withe   max = INT_MIN   and updatethe array  then reverse the array 
+
+Space Complexity: O(N) 
+time  Complexity: O(N) {
+
+class Solution {
+public:
+    vector<int> replaceElements(vector<int>& arr) {
+        vector<int> ans;
+        int n = arr.size();
+        int maxi = -1; // Initialize the maximum value for the right side
+        
+        for (int i = n - 1; i >= 0; i--) {
+            ans.push_back(maxi); // Push the current maximum for the right side
+            
+            // Update the maximum if the current element is greater
+            maxi = max(maxi, arr[i]);
+        }
+        
+        reverse(ans.begin(), ans.end()); // Reverse the answer vector
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////
+Brute force  - linear search 
+
+
+Time Complexity: O(N^2) 
+
+Space Complexity: O(N) {
+
+  vector<int> printLeadersBruteForce(int arr[], int n) {
+    vector<int> ans;
+  
+    for (int i = 0; i < n; i++) {
+        bool leader = true;
+
+        // Checking whether arr[i] is greater than all the elements in its right side
+        for (int j = i + 1; j < n; j++)
+            if (arr[j] > arr[i]) {
+                // If any element found is greater than current leader, curr element is not the leader.
+                leader = false;
+                break;
+            }
+
+        // Push all the leaders in ans array.
+        if (leader)
+            ans.push_back(arr[i]);
+    }
+  
+    return ans;
+}
+

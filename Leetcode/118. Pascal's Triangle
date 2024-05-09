@@ -1,0 +1,340 @@
+https://leetcode.com/problems/pascals-triangle/description/
+
+
+Variation 1: Given row number r and column number c. Print the element at position (r, c) in Pascal’s triangle.
+[find the number at the cordinate in a pascal traingle 
+
+formula => row -1 C com-1 ;   nCr
+
+exteme brute force ---is run loop for each than  put inn formual and finfd the value 
+
+ we see  a pattern for ncr   it  [p/q]  = p-1 * p-2 *p-1/  q-1*q-2*q*3    [ meaning it will numnumber n times  subtarcting ti -1  each time 
+
+
+int nCr(int n, int r) {
+    long long res = 1;
+
+    // calculating nCr:
+    for (int i = 0; i < r; i++) {
+        res = res * (n - i);
+        res = res / (i + 1);
+    }
+    return res;
+}
+
+int pascalTriangle(int r, int c) {
+    int element = nCr(r - 1, c - 1);
+    return element;
+}
+
+
+
+
+
+Variation 2: Given the row number n. Print the n-th row of Pascal’s triangle.
+
+
+brute is 
+
+int nCr(int n, int r) {
+    long long res = 1;
+
+    // calculating nCr:
+    for (int i = 0; i < r; i++) {
+        res = res * (n - i);
+        res = res / (i + 1);
+    }
+    return res;
+}
+
+//  now we can use loop the for mula for rown
+for ( int c=1 , c<=n ; c++){
+ cout <<  nCr(n-1 , c-1),,endl ;
+
+)
+
+Tc- 0(n*R)
+
+//Optmize 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+n=5 [  1, 4, 6,4,1 ]
+
+Variation 3: Given the number of rows n. Print the first n rows of Pascal’s triangle.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://github.com/Ethan4582/Simple-Todo-app.git
+
+
+
+
+
+
+https://leetcode.com/problems/pascals-triangle/description/
+
+
+Variation 1: Given row number r and column number c. Print the element at position (r, c) in Pascal’s triangle.
+[find the number at the cordinate in a pascal traingle 
+
+formula => row -1 C com-1 ;   nCr
+
+exteme brute force ---is run loop for each than  put inn formual and finfd the value 
+
+ we see  a pattern for ncr   it  [p/q]  = p-1 * p-2 *p-3/  q-3*q-2*q*1   [ meaning it will numnumber n times  subtarcting ti -1  each time 
+
+
+int nCr(int n, int r) {
+    long long res = 1;
+
+    // calculating nCr:
+    for (int i = 0; i < r; i++) {
+        res = res * (n - i);
+        res = res / (i + 1);
+    }
+    return res;
+}
+
+int pascalTriangle(int r, int c) {
+    int element = nCr(r - 1, c - 1);
+    return element;
+}
+
+
+
+
+
+Variation 2: Given the row number n. Print the n-th row of Pascal’s triangle.
+
+
+brute is 
+
+int nCr(int n, int r) {
+    long long res = 1;
+
+    // calculating nCr:
+    for (int i = 0; i < r; i++) {
+        res = res * (n - i);
+        res = res / (i + 1);
+    }
+    return res;
+}
+
+//Simple loop to print  the column using the formula 
+for ( int c=1 , c<=n ; c++){
+ cout <<  nCr(n-1 , c-1),,endl ;
+
+)
+
+Tc- 0(n*R)
+Sc-O(1)
+
+
+
+
+//Optmize 
+
+-> we see the pattern  -> ans (row=col)/ col 
+
+Time Complexity: O(N)
+Space Complexity: O(1)
+
+
+
+void pascalTriangle(int n) {
+    long long ans = 1;
+    cout << ans << " "; // printing 1st element
+
+    //Printing the rest of the part:
+    for (int i = 1; i < n; i++) {
+        ans = ans * (n - i);
+        ans = ans / i;
+        cout << ans << " ";
+    }
+    cout << endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+n=5 [  1, 4, 6,4,1 ]
+
+Variation 3: Given the number of rows n. Print the first n rows of Pascal’s triangle.
+
+Output ->  print  the  list of row in  then in list 
+
+
+Tc- 0(n^3)
+
+
+
+
+//brute force 
+int nCr(int n, int r) {
+    long long res = 1;
+
+    // calculating nCr:
+    for (int i = 0; i < r; i++) {
+        res = res * (n - i);
+        res = res / (i + 1);
+    }
+    return (int)(res);
+}
+
+vector<vector<int>> pascalTriangle(int n) {
+    vector<vector<int>> ans;
+
+    //Store the entire pascal's triangle:
+    for (int row = 1; row <= n; row++) {
+        vector<int> tempLst; // temporary list
+        for (int col = 1; col <= row; col++) {
+            tempLst.push_back(nCr(row - 1, col - 1));
+        }
+        ans.push_back(tempLst);
+    }
+    return ans;
+}
+
+int main()
+{
+    int n = 5;
+    vector<vector<int>> ans = pascalTriangle(n);
+    for (auto it : ans) {
+        for (auto ele : it) {
+            cout << ele << " ";
+        }
+        cout << "n";
+    }
+    return 0;
+}
+
+
+
+/// ////////////////////////////////////////////////// optimal approach 
+
+Time Complexity: O(n2), where n = number of rows(given).
+Sc-0(1)
+
+
+
+vector<int> generateRow(int row) {
+    long long ans = 1;
+    vector<int> ansRow;
+    ansRow.push_back(1); //inserting the 1st element
+
+    //calculate the rest of the elements:
+    for (int col = 1; col < row; col++) {
+        ans = ans * (row - col);
+        ans = ans / col;
+        ansRow.push_back(ans);
+    }
+    return ansRow;
+}
+
+
+vector<vector<int>> pascalTriangle(int n) {
+    vector<vector<int>> ans;
+
+    //store the entire pascal's triangle:
+    for (int row = 1; row <= n; row++) {
+        ans.push_back(generateRow(row));
+    }
+    return ans;
+}
+
+int main()
+{
+    int n = 5;
+    vector<vector<int>> ans = pascalTriangle(n);
+    for (auto it : ans) {
+        for (auto ele : it) {
+            cout << ele << " ";
+        }
+        cout << "n";
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+////////////////////              This is using Dp   it take time 0(n^2) and sc -(0^2)
+
+class Solution {
+ public:
+  vector<vector<int>> generate(int numRows) {
+    vector<vector<int>> ans;
+
+    for (int i = 0; i < numRows; ++i)
+      ans.push_back(vector<int>(i + 1, 1));
+
+    for (int i = 2; i < numRows; ++i)
+      for (int j = 1; j < ans[i].size() - 1; ++j)
+        ans[i][j] = ans[i - 1][j - 1] + ans[i - 1][j];
+
+    return ans;
+  }
+};
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

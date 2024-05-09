@@ -1,0 +1,192 @@
+
+///Count Maximum Consecutive One’s in the array
+
+Optimal 
+https://leetcode.com/problems/max-consecutive-ones/description/
+
+tc-  O(N)
+
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int maxi = 0;
+        int count = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == 1) {
+                count++;
+                maxi = max(maxi, count);
+            } else {
+                count = 0;
+            }
+        }
+        return maxi;
+    }
+};
+
+
+
+////////////////////////////////////
+
+Find the number that appears once, and the other numbers twice
+Tc- 0(n^2}
+sc-0(1)
+
+
+brute force 
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int num = 0; // Variable to store the single number
+
+        // Iterate through each element in the array
+        for (int i = 0; i < nums.size(); i++) {
+            int count = 0; // Counter to track the number of occurrences of the current element
+
+            // Iterate through the array again to count occurrences of the current element
+            for (int j = 0; j < nums.size(); j++) {
+                if (nums[j] == nums[i]) {
+                    count++; // Increment count if the element is found
+                }
+            }
+
+            // If the count is 1, it means the current element is the single number
+            if (count == 1) {
+                num = nums[i]; // Update 'num' with the single number found
+                break; // Exit the loop since we found the single number
+            }
+        }
+
+        return num; // Return the single number found
+    }
+};
+
+
+
+////////////HAshing 
+
+For creating hashing figure out the  size of the hash array 
+
+Time Complexity: O(N)+O(N)+O(N), where N = size of the array
+Space Complexity: O(maxElement+1) where maxElement = the maximum element of the array.
+
+--->  we can not use hash  for   tracjing negative number and also  very large number 
+
+
+int getSingleElement(vector<int> &arr) {
+
+    //size of the array:
+    int n = arr.size();
+
+    // Find the maximum element:
+    int maxi = arr[0];
+    for (int i = 0; i < n; i++) {
+        maxi = max(maxi, arr[i]);
+    }
+
+    // Declare hash array of size maxi+1
+    // And hash the given array:
+    vector<int> hash(maxi + 1, 0);
+    for (int i = 0; i < n; i++) {
+        hash[arr[i]]++;
+    }
+
+    //Find the single element and return the answer:
+    for (int i = 0; i < n; i++) {
+        if (hash[arr[i]] == 1)
+            return arr[i];
+    }
+
+    //This line will never execute
+    //if the array contains a single element.
+    return -1;
+}
+
+
+///////////////////////////////////  Hashing using the map data structure: 
+
+https://leetcode.com/problems/single-number/submissions/1186006958/  
+
+Order give   nlog n   but unoder give   0(N)  for the best case 
+
+
+The reason  is we willonly store the amount we really need  better space compelxity 
+
+Tc-  map + for loop it self for map 
+ O(N*logM) + O(M), where M = size of the map i.e. M = (N/2)+1. N = size of the array.
+
+Space Complexity: O(M) as we are using a map data structure. Here M = size of the map i.e. M = (N/2)+1.
+
+
+
+
+
+int getSingleElement(vector<int> &arr) {
+
+    //size of the array:
+    int n = arr.size();
+
+    // Declare the hashmap.
+    // And hash the given array:
+    map<int, int> mpp;
+    for (int i = 0; i < n; i++) {
+        mpp[arr[i]]++;
+    }
+
+    //Find the single element and return the answer:
+    for (auto it : mpp) {
+        if (it.second == 1)
+            return it.first;
+    }
+
+    //This line will never execute
+    //if the array contains a single element.
+    return -1;
+}
+
+
+
+
+///////////////////////////  Most optimmal using XOR  ///////////////////////
+
+
+Time Complexity: O(N), where N = size of the array.
+Reason: We are iterating the array only once.
+
+Space Complexity: O(1) as we are not using any extra space.
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int Xor = 0 ;
+        for (int i=0 ; i<nums.size() ;  i++){
+            Xor = Xor^nums[i];
+        }
+        return Xor ;
+        
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

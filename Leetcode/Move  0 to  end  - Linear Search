@@ -1,0 +1,200 @@
+
+https://leetcode.com/problems/move-zeroes/description/
+
+
+
+Optimal - 2 pointer approch without creating temp array 
+Tc- 0(n0
+sc- 0(1)
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        // Initialize an index variable i to track the position where non-zero elements will be placed
+        int i = 0;
+
+        // Iterate through each element in the vector nums
+        for (const int num : nums) {
+            // If the current element is not zero, copy it to the position indicated by index i
+            if (num != 0)
+                nums[i++] = num; // Move non-zero elements to the front of the array
+        }
+
+        // After the loop, all non-zero elements have been moved to the front.
+        // Now, from index i onwards, all elements should be zero to the end of the array.
+        while (i < nums.size())
+            nums[i++] = 0; // Fill the remaining positions with zeros
+    }
+};
+
+
+
+
+
+
+
+
+https://www.geeksforgeeks.org/problems/move-all-zeroes-to-end-of-array0751/1?utm_source=geeksforgeeks&utm_medium=article_practice_tab&utm_campaign=article_practice_tab
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    void pushZerosToEnd(int arr[], int n) {
+        // Count of non-zero elements
+        int count = 0;
+
+        // Traverse the array. If element encountered is non-zero, then replace the element at index 'count' with this element
+        for (int i = 0; i < n; i++) {
+            if (arr[i] != 0) {
+                arr[count++] = arr[i];
+            }
+        }
+
+        // All non-zero elements have been shifted to front and count is set as index of first 0.
+        // Make all elements 0 from count to end.
+        while (count < n) {
+            arr[count++] = 0;
+        }
+    }
+};
+
+int main() {
+    Solution ob;
+    int n;
+    cin >> n;
+    int arr[n];
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    ob.pushZerosToEnd(arr, n);
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+//brut force by creating  temp array 
+Tc-  0(2N)
+Sc  - 0(N) [ worst case ]
+
+
+include <bits/stdc++.h>
+using namespace std;
+
+vector<int> moveZeros(int n, vector<int> a) {
+    //temporary array:
+    vector<int> temp;
+    //copy non-zero elements
+    //from original -> temp array:
+    for (int i = 0; i < n; i++) {
+        if (a[i] != 0)
+            temp.push_back(a[i]);
+    }
+
+    // number of non-zero elements.
+    int nz = temp.size();
+
+    //copy elements from temp
+    //fill first nz fields of
+    //original array:
+    for (int i = 0; i < nz; i++) {
+        a[i] = temp[i];
+    }
+
+    //fill rest of the cells with 0:
+    for (int i = nz; i < n; i++) {
+        a[i] = 0;
+    }
+    return a;
+}
+
+
+int main()
+{
+    vector<int> arr = {1, 0, 2, 3, 2, 0, 0, 4, 5, 1};
+    int n = 10;
+    vector<int> ans = moveZeros(n, arr);
+    for (auto &it : ans) {
+        cout << it << " ";
+    }
+    cout << '\n';
+    return 0;
+}
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//linear search  ->   good for smaller array but not large array 
+- Best Case: \( O(1) \) - The key is present at the first index.
+- Worst Case: \( O(N) \) - The key is present at the last index, requiring a linear search through the entire list.
+- Average Case: \( O(N) \) - The average time complexity is also linear due to the linear search.
+- Auxiliary Space: \( O(1) \) - Except for the variable used for iteration, no additional space is used.
+
+https://www.geeksforgeeks.org/problems/searching-a-number0324/1
+
+using namespace std;
+ 
+int search(int arr[], int N, int x)
+{
+    for (int i = 0; i < N; i++)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}
+
+
+https://www.geeksforgeeks.org/problems/find-index4752/1?utm_source=geeksforgeeks&utm_medium=ml_article_practice_tab&utm_campaign=article_practice_tab
+
+class Solution {
+public:
+    vector<int> findIndex(int arr[], int n, int key) {
+        int start = -1, end = -1; // Initialize start and end index to -1
+        
+        // Find the start index
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == key) {
+                start = i; // Update start index
+                break;
+            }
+        }
+        
+        // Find the end index
+        for (int i = n - 1; i >= 0; i--) {
+            if (arr[i] == key) {
+                end = i; // Update end index
+                break;
+            }
+        }
+        
+        // Return the result as a vector
+        return {start, end};
+    }
+};
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,159 @@
+https://leetcode.com/problems/longest-consecutive-sequence
+
+
+///////////////////Optimal 
+
+Put evrey thing in set data structre  [ it will  take onordered set which is not  sorted ]
+
+like first elemnt in set stack ex -  102  we check do we have 101  if it is then it not starting point 
+->  we do this for everyelemnt check if it has previou elemen if  it does move to next elemnt
+-> if not prvious elemt it starting point  then start look for next elemnt for cinsecuative 
+-> we keep the counter for conseative elemnt in the set 
+
+
+Time Complexity: O(N) + O(2*N) ~ O(3*N), where N = size of the array.
+Space Complexity: O(N), as we are using the set data structure to solve this problem.
+
+
+-> this thing si not better of time complexity of SC- 0(N)
+->better is faster as  Sc- 0(1 )
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int n = nums.size(); // Size of array
+        
+        if (n == 0)
+            return 0; // If array is empty, return 0
+
+        int longest =1 ;
+        unordered_set<int>st ;
+        for (int i=0 ; i <n ; i++){
+            st.insert(nums[i]);
+        }
+        for(auto it : st){
+            if(st.find(it-1)==st.end()){
+                int cnt =1 ;
+                int x=it ;
+                while (st.find(x+1)!=st.end()){
+                    x=x+1;
+                    cnt=cnt+1;
+                }
+                longest =max(longest,cnt);
+            }
+        }
+
+return longest ;
+        
+    }
+};
+ 
+
+
+
+
+
+
+
+///Better Solution 
+->  sort  the array 
+->  last samller =INT_MIN     [ if simmilar element is present then it will upadte itself  as INT_MIN  [ thus avid the similar elemnt ] 
+-> if big jump  form  4   to  102  it restart the count   and longest alreadys tores the longest  conceative 
+
+
+Time Complexity: O(NlogN) + O(N), N = size of the given array.
+Reason: O(NlogN) for sorting the array. To find the longest sequence, we are using a loop that results in O(N).
+
+Space Complexity: O(1), as we are not using any extra space to solve this problem.
+
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int n = nums.size(); // Size of array
+        
+        if (n == 0)
+            return 0; // If array is empty, return 0
+
+        sort(nums.begin(), nums.end()); // Sort the array in ascending order
+        
+        int last_num = INT_MIN; // Initialize the last number to INT_MIN
+        int cnt = 0; // Counter for consecutive numbers
+        int longest = 1; // Initialize the length of the longest consecutive sequence
+
+        for (int i = 0; i < n; i++) {
+            // If the current number is consecutive to the last number
+            if (nums[i] - 1 == last_num) {
+                cnt += 1; // Increment the counter
+                last_num = nums[i]; // Update the last number
+            }
+            // If the current number is not equal to the last number
+            else if (last_num != nums[i]) {
+                cnt = 1; // Reset the counter to 1
+                last_num = nums[i]; // Update the last number
+            }
+            longest = max(cnt, longest); // Update the length of the longest sequence
+        }
+        return longest; // Return the length of the longest consecutive sequence
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////brute force 
+
+
+Time Complexity: O(N2), N = size of the given array.
+Reason: We are using nested loops each running for approximately N times.
+
+Space Complexity: O(1), as we are not using any extra space to solve this problem.
+class Solution {
+public:
+    // Function to perform linear search in the array 'a' for element 'num'
+    bool linearSearch(vector<int>& a, int num) {
+        int n = a.size(); // Size of array
+        for (int i = 0; i < n; i++) {
+            if (a[i] == num)
+                return true; // If element is found, return true
+        }
+        return false; // If element is not found, return false
+    }
+
+    // Function to find the length of the longest consecutive sequence in 'nums'
+    int longestConsecutive(vector<int>& nums) {
+        int n = nums.size(); // Size of array
+        int longest = 1; // Initialize the length of the longest sequence to 1
+        
+        // Iterate through each element in the array
+        for (int i = 0; i < n; i++) {
+            int x = nums[i]; // Current element
+            int cnt = 1; // Counter for consecutive numbers starting with 'x'
+            
+            // Search for consecutive numbers greater than 'x' using linear search
+            while (linearSearch(nums, x + 1) == true) {
+                x += 1; // Move to the next consecutive number
+                cnt += 1; // Increment the counter
+            }
+
+            longest = max(longest, cnt); // Update the length of the longest sequence
+        }
+        return longest; // Return the length of the longest consecutive sequence
+    }
+};
