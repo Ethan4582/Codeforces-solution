@@ -1,63 +1,75 @@
 #include <bits/stdc++.h>
+#define p(a) cout << a << "\n";
+#define rep(i, a, n) for (int i = a; i < n; i++)
 
 using namespace std;
 
-typedef long long ll;
-
-void solve() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int &e : v) {
-        cin >> e;
-    }
-    vector<int> a = v;
-    sort(a.begin(), a.end());
-    for (int i = 0; i < n; i++) {
-        if (v[i] != a[1]) {
-            cout << i + 1 << "\n";
+int findUniqueElementIndex(const vector<int>& arr, int n) {
+    int low = 0, high = n - 1;
+    
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        
+        if ((mid == 0 || arr[mid] != arr[mid - 1]) && (mid == n - 1 || arr[mid] != arr[mid + 1])) {
+            return mid;
+        } else if (arr[mid] == arr[0]) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
         }
     }
-}
-
-int main() {
-    int n;
-    cin >> n;
-    while (n--) {
-        solve();
-    }
-    return 0;
-}
-
-
-#include <iostream>
-#include <unordered_map>
-#include <vector>
-
-using namespace std;
-
-void solve() {
-    int n;
-    cin >> n;
-    unordered_map<int, int> freq;
-    vector<int> v(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> v[i];
-        freq[v[i]]++;
-    }
-    for (int i = 0; i < n; ++i) {
-        if (freq[v[i]] == 1) {
-            cout << i + 1 << "\n";
-            break;
-        }
-    }
+    
+    return -1; // Unique element not found
 }
 
 int main() {
     int t;
     cin >> t;
+
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+
+        vector<int> arr(n);
+        rep(i, 0, n) {
+            cin >> arr[i];
+        }
+
+        int uniqueIndex = findUniqueElementIndex(arr, n);
+        p(uniqueIndex + 1); // Adding 1 to convert to 1-based indexing
     }
+
+    return 0;
+}
+
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm> 
+
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> arr(n);
+
+        for (int i = 0; i < n; ++i) {
+            cin >> arr[i];
+        }
+
+        for (int i = 0; i < n; ++i) {
+            if (count(arr.begin(), arr.end(), arr[i]) == 1) {
+                cout << i + 1 << endl;
+                break;
+            }
+        }
+    }
+
     return 0;
 }
