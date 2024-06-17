@@ -1,0 +1,231 @@
+704. Binary Search
+--------------> simple Implmetaion
+// Time: O(logN)
+// Space: O(1)
+class Solution {
+public:
+    int search(vector<int>& A, int target) {
+        int L = 0, R = A.size() - 1;
+        while (L <= R) {
+            int M = (L + R) / 2;
+            if (A[M] == target) return M;
+            if (A[M] < target) L = M + 1;
+            else R = M - 1;
+        }
+        return -1;
+    }
+};
+
+
+------------->>recursive impmnation
+
+class Solution {
+public:
+    int binarySearch(vector<int>& nums, int low, int high, int target) {
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (target > nums[mid]) {
+                return binarySearch(nums, mid + 1, high, target);
+            } else {
+                return binarySearch(nums, low, mid - 1, target);
+            }
+        }
+        return -1;
+    }
+
+    int search(vector<int>& nums, int target) {
+        int n = nums.size();
+        return binarySearch(nums, 0, n - 1, target);
+    }
+};
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+-------------> Implement Lower Bound and Upper Bound
+
+Lower Bound  arr[mid] >=n ;  this  index is lower bound  it can be all the ondex of the number bogger than n 
+ in case as number ->   n= 5   n-1 = 19   x= 20   here the lower bound of x is n the size of the array 
+
+
+
+
+////////////////---------To  Find the lower bound -------------------------//////////////////////
+
+
+What is Lower Bound?
+The lower bound algorithm finds the first or the smallest index in a sorted array where the value at that index is greater than or equal to a given key i.e. x.
+
+The lower bound is the smallest index, ind, where arr[ind] >= x. But if any such index is not found, the lower bound algorithm returns n i.e. size of the given array.
+Smalles index such that a[index]>=n 
+
+Simple Implaimation Linear search 
+
+
+
+int lowerBound(vector<int> arr, int n, int x) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] >= x) {
+            // lower bound found:
+            return i;
+        }
+    }
+    return n;
+}
+
+
+
+
+
+Binary search impmantion 
+
+
+lb = lower_bound(arr.begin() , arr.end(),n )  - arr.begin();
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int lowerBound(vector<int> arr, int n, int x) {
+    int low = 0, high = n - 1;
+    int ans = n;
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        // maybe an answer
+        if (arr[mid] >= x) {
+            ans = mid;
+            //look for smaller index on the left
+            high = mid - 1;
+        }
+        else {
+            low = mid + 1; // look on the right
+        }
+    }
+    return ans;
+}
+
+
+------------------------------>    Upper Bound  arr[ index] > n ; 
+What is Upper Bound?
+The upper bound algorithm finds the first or the smallest index in a sorted array where the value at that index is greater than the given key i.e. x.
+
+The upper bound is the smallest index, ind, where arr[ind] > x.
+it is exactly just change of the sign 
+
+
+
+
+---------------------------------------------------------------------------------------------
+35. Search Insert Position
+
+Time Complexity: O(logN)
+class Solution {
+public:
+// finding the lower bound 
+    int searchInsert(vector<int>& nums, int target) {
+        int n = nums.size(); // size of the array
+    int low = 0, high = n - 1;
+    int ans = n;
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        // maybe an answer
+        if (nums[mid] >= target ) {
+            ans = mid;
+            //look for smaller index on the left
+            high = mid - 1;
+        }
+        else {
+            low = mid + 1; // look on the right
+        }
+    }
+    return ans;
+        
+    }
+};
+
+
+
+
+// Time: O(logN)
+// Space: O(1)
+class Solution {
+public:
+    int searchInsert(vector<int>& A, int target) {
+        int L = 0, R = A.size();
+        while (L < R) {
+            int M = (L + R) / 2;
+            if (A[M] < target) L = M + 1;
+            else R = M;
+        }
+        return L;
+    }
+};
+
+
+
+/////////////////////----------------------------------------
+
+
+Floor and Ceil in Sorted Array
+
+
+# **What is the floor of x?**
+
+**The floor of x is the largest element in the array which is smaller than or equal to x( i.e. *largest element in the array <= x*).**
+
+# **What is the ceiling of x?**
+
+**The ceiling of x is the smallest element in the array greater than or equal to x( i.e. *smallest element in the array >= x*).**
+
+
+
+int findFloor(int arr[], int n, int x) {
+	int low = 0, high = n - 1;
+	int ans = -1;
+
+	while (low <= high) {
+		int mid = (low + high) / 2;
+		// maybe an answer
+		if (arr[mid] <= x) {
+			ans = arr[mid];
+			//look for smaller index on the left
+			low = mid + 1;
+		}
+		else {
+			high = mid - 1; // look on the right
+		}
+	}
+	return ans;
+}
+
+int findCeil(int arr[], int n, int x) {
+	int low = 0, high = n - 1;
+	int ans = -1;
+
+	while (low <= high) {
+		int mid = (low + high) / 2;
+		// maybe an answer
+		if (arr[mid] >= x) {
+			ans = arr[mid];
+			//look for smaller index on the left
+			high = mid - 1;
+		}
+		else {
+			low = mid + 1; // look on the right
+		}
+	}
+	return ans;
+}
+
+
+
+
+
+
+
+
+
+
