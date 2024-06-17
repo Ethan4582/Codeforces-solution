@@ -1,0 +1,131 @@
+
+//Brute force 
+-> find all the product of subarry and  then find the naximum among them 
+
+it will go from 0(n^3) ->  0(n^2)
+
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+      int result = INT_MIN;
+    for(int i=0;i<nums.size()-1;i++) {
+        for(int j=i+1;j<nums.size();j++) {
+            int prod = 1;
+            for(int k=i;k<=j;k++) 
+                prod *= nums[k];
+            result = max(result,prod);    
+        }a
+    }
+    return result;
+    }
+};
+
+
+//------------------->little optmize 
+
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int n = nums.size(); 
+        long long mx = INT_MIN;
+        
+        for (int i = 0; i < n; i++) {
+            long long pr = 1;
+            for (int j = i; j < n; j++) {
+                pr *= nums[j];
+                mx = max(mx, pr);
+            }
+        }
+        
+        return mx;
+    }
+};
+
+
+///---------------->  Optimal Approach 1:
+
+If the given array only contains positive numbers: If this is the case, we can confidently say that the maximum product subarray will be the entire array itself.
+If the given also array contains an even number of negative numbers: As we know, an even number of negative numbers always results in a positive number. So, also, in this case, the answer will be the entire array itself.
+If the given array also contains an odd number of negative numbers: just remove that number 
+
+// Time: O(N)
+// Space: O(1)
+
+class Solution {
+public:
+    int maxProduct(vector<int>& A) {
+        int n = A.size();
+        int pre = 1, suff = 1; 
+        int maximum = INT_MIN; 
+        
+        for (int i = 0; i < n; i++) {
+            if (pre == 0) {
+                pre = 1;
+            }
+            if (suff == 0) {
+                suff = 1;
+            }
+            pre *= A[i];
+            suff *= A[n - 1 - i];
+            
+            maximum = max(maximum, max(pre, suff));
+        }
+        
+        return maximum;
+    }
+};
+
+
+
+----------------  2 pointer approach 
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    int maxProduct(vector<int>& A) {
+        int ans = A[0], N = A.size(), j = 0;
+        while (j < N) {
+            int i = j, prod = 1;
+            while (j < N && A[j] != 0) {
+                prod *= A[j++];
+                ans = max(ans, prod);
+            }
+            if (j < N) ans = max(ans, 0);
+            while (i < N && prod < 0) {
+                prod /= A[i++];
+                if (i != j) ans = max(ans, prod);
+            }
+            while (j < N && A[j] == 0) ++j;
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+---------------------. Optimal 2   using modifed kaden algo and can vbe used as   DP approach 
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    int maxProduct(vector<int>& A) {
+        int maxProd = 1, minProd = 1, ans = INT_MIN;
+        for (int n : A) {
+            int a = n * maxProd, b = n * minProd;
+            maxProd = max({n, a, b});
+            minProd = min({n, a, b});
+            ans = max(ans, maxProd);
+        }
+        return ans;
+    }
+}; 
+
