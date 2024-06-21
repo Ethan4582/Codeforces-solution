@@ -1,0 +1,95 @@
+
+
+-------------- Bruteforces
+need to return the floor value of the squrt of the given integer 
+
+simple linear search 
+
+
+int floorSqrt(int n) {
+    int ans = 0;
+    //linear search on the answer space:
+    for (long long i = 1; i <= n; i++) {
+        long long val = i * i;
+        if (val <= n * 1ll) {
+            ans = i;
+        } else {
+            break;
+        }
+    }
+    return ans;
+}
+
+---------------------------  First Approach(Using in-built sqrt() function): 
+
+
+int floorSqrt(int n) {
+    int ans = sqrt(n);
+    return ans;
+}
+
+
+--------------------------- Optimal Approach(Using binary search): 
+
+if mid is not  my answer the right side or mid -> high  is eliminated and search space is low to mid -1
+
+if in case the mid can be the answer no number shorter than it will never be  my answer 
+
+->>>>  so when apply the BS search the low end point at the max the value that is not possible and the high pointing at the vlaue that is not possible 
+
+------------>  high will store the vlaue 
+
+
+int floorSqrt(int n) {
+    int low = 1, high = n;
+    //Binary search on the answers:
+    while (low <= high) {
+        long long mid = (low + high) / 2;
+        long long val = mid * mid;
+        if (val <= (long long)(n)) {
+            //eliminate the left half:
+            low = mid + 1;
+        }
+        else {
+            //eliminate the right half:
+            high = mid - 1;
+        }
+    }
+    return high;
+}
+
+
+
+
+---------------------------------------------------------------------  Pattern that we use 
+
+low point the max and high point at the  min value 
+-> rest the patter to apply binary search is the same 
+
+int floorSqrt(int n) {
+    int low = 1, high = n;
+    //Binary search on the answers:
+    while (low <= high) {
+        long long mid = (low + high) / 2;
+        long long val = mid * mid;
+        if (val <= (long long)(n)) {   ///  this is the check codintion that we use it may 
+            //eliminate the left half:
+            low = mid + 1;
+        }
+        else {
+            //eliminate the right half:
+            high = mid - 1;
+        }
+    }
+    return high;
+}
+
+
+
+
+
+
+
+
+
+
