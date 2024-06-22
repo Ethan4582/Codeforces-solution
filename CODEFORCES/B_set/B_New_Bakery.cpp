@@ -99,3 +99,44 @@ int main() {
   }
     return 0;
 }
+
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define fastIO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout.precision(numeric_limits<double>::max_digits10);
+#define int long long
+
+void Code(){
+    int n,a,b;
+    cin>>n>>a>>b;
+    if(b<=a){
+        cout<<n*a<<'\n';
+        return;
+    }
+    if(b-a>=n-1){
+        int ans=b*(b+1)/2 - (b-n)*(b-n+1)/2;
+        cout<<ans<<'\n';
+        return;
+    }
+    int ans = b*(b+1)/2 - a*(a+1)/2;
+    n-=b-a;
+    ans+=a*n;
+    
+    cout<<ans<<'\n';
+}
+
+int32_t main() {
+    fastIO;
+   
+
+    int t=1;
+    cin>>t;
+    while(t--){
+       
+        Code();
+    }
+    return 0;
+}
