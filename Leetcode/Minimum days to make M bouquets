@@ -1,0 +1,110 @@
+
+------------------------------------------------(Brute force)
+
+If m*k > arr.size: This means we have insufficient flowers. 
+So, it is impossible to make m bouquets and we will return -1.
+
+
+
+Time Complexity: O((max(arr[])-min(arr[])+1) * N), where {max(arr[]) -> maximum element of the array, min(arr[]) -> minimum element of the array, N = size of the array}.
+Reason: We are running a loop to check our answers that are in the range of [min(arr[]), max(arr[])]. For every possible answer, we will call the possible() function. Inside the possible() function, we are traversing the entire array, which results in O(N).
+
+Space Complexity: O(1) 
+
+
+
+class Solution {
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int n = bloomDay.size();
+        long long val = (long long)m * k;
+        if (val > n) return -1;
+
+        int mn = *min_element(bloomDay.begin(), bloomDay.end());
+        int mx = *max_element(bloomDay.begin(), bloomDay.end());
+        for (int i = mn; i <= mx; i++) {
+            if (countBouquets(bloomDay, i, m, k) >= m)
+                return i;
+        }
+
+        return -1;
+    }
+
+private:
+    int countBouquets(vector<int>& arr, int day, int m, int k) {
+        int n = arr.size();
+        int noOfB = 0, cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (arr[i] <= day) {
+                cnt++;
+            } else {
+                noOfB += (cnt / k);
+                cnt = 0;
+            }
+        }
+        noOfB += (cnt / k);
+        return noOfB;
+    }
+};
+
+
+
+
+
+---------------------------------------------------------- Optimal 
+
+
+Time Complexity: O(log(max(arr[])-min(arr[])+1) * N), where {max(arr[]) -> maximum element of the array, min(arr[]) -> minimum element of the array, N = size of the array}.
+Reason: We are applying binary search on our answers that are in the range of [min(arr[]), max(arr[])]. For every possible answer ‘mid’, we will call the possible() function. Inside the possible() function, we are traversing the entire array, which results in O(N).
+
+Space Complexity: O(1) 
+
+
+
+
+class Solution {
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        if ((long long)m * k > bloomDay.size()) {
+            return -1;
+        }
+
+         int low = *min_element(bloomDay.begin(), bloomDay.end());
+        int high = *max_element(bloomDay.begin(), bloomDay.end());
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+
+            if (canMakeBouquets(bloomDay, m, k, mid)) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return low;
+    }
+
+private:
+    bool canMakeBouquets(vector<int>& bloomDay, int m, int k, int day) {
+int n=bloomDay.size();
+       int cnt = 0;
+    int noOfB = 0;
+    // count the number of bouquets:
+    for (int i = 0; i < n; i++) {
+        if (bloomDay[i] <= day) {
+            cnt++;
+        }
+        else {
+            noOfB += (cnt / k);
+            cnt = 0;
+        }
+    }
+    noOfB += (cnt / k);
+    return noOfB >= m;
+    }
+};
+
+
+
+
+
