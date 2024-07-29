@@ -1,2 +1,57 @@
 Minimise Maximum Distance between Gas Stations
 
+
+// It does not make sense to right or left to the of the inital gas station as it does not reduce  so we alwahys placed in between 
+->>>>> ideal case is to plae in equal distance 
+as we are trying to mizise the distance we placed it in  the maximum diatance 
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+long double minimiseMaxDistance(vector<int> &arr, int k) {
+    int n = arr.size(); //size of array.
+    vector<int> howMany(n - 1, 0);
+
+    //Pick and place k gas stations:
+    for (int gasStations = 1; gasStations <= k; gasStations++) {
+        //Find the maximum section
+        //and insert the gas station:
+        long double maxSection = -1;
+        int maxInd = -1;
+        for (int i = 0; i < n - 1; i++) {
+            long double diff = arr[i + 1] - arr[i];
+
+// ______------------>  we trying to max length  so we can optmize this part  using binary search 
+            long double sectionLength =
+                diff / (long double)(howMany[i] + 1);
+            if (sectionLength > maxSection) {
+                maxSection = sectionLength;
+                maxInd = i;
+            }
+        }
+        //insert the current gas station:
+        howMany[maxInd]++;
+    }
+
+    //Find the maximum distance i.e. the answer:
+    long double maxAns = -1;
+    for (int i = 0; i < n - 1; i++) {
+        long double diff = arr[i + 1] - arr[i];
+        long double sectionLength =
+            diff / (long double)(howMany[i] + 1);
+        maxAns = max(maxAns, sectionLength);
+    }
+    return maxAns;
+}
+
+--------------------------------------->  Better Approach(Using Heap): 
+it store the maximum of in tree strcutre and ppo the maximum we will use to reducde for loop to log(n) + o(1) for looking and then find the maximum 
+->  use take you notes` for visualizing 
+
+
+
+------------------------>>>>>>>>>>>>>>>>>>>>> Binar  search 
+
