@@ -5,7 +5,8 @@ Minimise Maximum Distance between Gas Stations
 ->>>>> ideal case is to plae in equal distance 
 as we are trying to mizise the distance we placed it in  the maximum diatance 
 
-
+Time Complexity: O(k*n) + O(n),
+Space Complexity: O(n-1)
 
 
 #include <bits/stdc++.h>
@@ -47,9 +48,15 @@ long double minimiseMaxDistance(vector<int> &arr, int k) {
     return maxAns;
 }
 
+
+
 --------------------------------------->  Better Approach(Using Heap): 
 it store the maximum of in tree strcutre and ppo the maximum we will use to reducde for loop to log(n) + o(1) for looking and then find the maximum 
 ->  use take you notes` for visualizing 
+
+
+Time Complexity: O(nlogn + klogn), 
+Space Complexity: O(n-1)+O(n-1)
 
 
 long double minimiseMaxDistance(vector<int> &arr, int k) {
@@ -60,7 +67,7 @@ long double minimiseMaxDistance(vector<int> &arr, int k) {
     //insert the first n-1 elements into pq
     //with respective distance values:
     for (int i = 0; i < n - 1; i++) {
-        pq.push({arr[i + 1] - arr[i], i});
+        pq.push({arr[i + 1] - arr[i], i});// Log(N) to insert and store at the maximum of the stack 
     }
 
     //Pick and place k gas stations:
@@ -73,6 +80,7 @@ long double minimiseMaxDistance(vector<int> &arr, int k) {
 
         //insert the current gas station:
         howMany[secInd]++;
+        /// if 2 same first elment it compare based on  the seond elmenet 
 
         long double inidiff = arr[secInd + 1] - arr[secInd];
         long double newSecLen = inidiff / (long double)(howMany[secInd] + 1);
@@ -86,7 +94,7 @@ long double minimiseMaxDistance(vector<int> &arr, int k) {
 
 
 
------------------------->>>>>>>>>>>>>>>>>>>>> Binar  search 
+------------------------>>>>>>>>>>>>>>>>>>>>> BinarY  search 
 // Time: O(N * (logN + logM))
 // Space: O(1)
 class Solution {
