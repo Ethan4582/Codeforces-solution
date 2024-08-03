@@ -1,0 +1,66 @@
+Time complexity:
+O(n+m)
+
+class Solution {
+public:
+    bool canBeEqual(vector<int>& target, vector<int>& arr) {
+        vector<int> cnt1(1001);
+        vector<int> cnt2(1001);
+        for (int& v : target) {
+            ++cnt1[v];
+        }
+        for (int& v : arr) {
+            ++cnt2[v];
+        }
+        return cnt1 == cnt2;
+    }
+};
+
+	// Time: O(N)
+// Space: O(N)
+class Solution {
+public:
+    bool canBeEqual(vector<int>& B, vector<int>& A) {
+        unordered_map<int, int> cnt;
+        for (int n : A) cnt[n]++;
+        for (int n : B) {
+            if (--cnt[n] < 0) return false;
+        }
+        return true;
+    }
+};
+
+
+	--------------------------  >  Optimal 
+	
+// Time: O(NlogN)
+// Space: O(1)
+class Solution {
+public:
+    bool canBeEqual(vector<int>& A, vector<int>& B) {
+        sort(begin(A), end(A));
+        sort(begin(B), end(B));
+        return A == B;
+    }
+};
+
+	
+class Solution {
+public:
+    bool canBeEqual(vector<int>& target, vector<int>& arr) {
+        // Sort both arrays
+        sort(target.begin(), target.end()); 
+        sort(arr.begin(), arr.end());
+
+        // Check if both sorted arrays are equal
+        for (int i = 0; i < target.size(); i++) {
+            if (target[i] != arr[i]) {
+                return false; // Return false if any element does not match
+            }
+        }
+        return true; // Return true if all elements match
+    }
+};
+	
+	
+	
