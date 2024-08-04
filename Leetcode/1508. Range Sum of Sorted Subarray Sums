@@ -1,0 +1,106 @@
+------------------- Brute forces approach 
+
+
+------------------------------------------------   https://www.youtube.com/watch?v=oMHO5iti5_c
+
+
+We need to do a few things here:
+
+Find all possible continuous subarrays from the given array.
+Calculate the sum of each subarray.
+Sort these sums.
+Add up a specific range of these sorted sums.
+
+Complexity
+Time complexity: O(n^2 * log(n^2))
+
+Space complexity: O(n^2)
+
+class Solution {
+public:
+    int rangeSum(vector<int>& nums, int n, int left, int right) {
+        vector<int> arr(n * (n + 1) / 2); 
+        int k = 0; 
+        
+        for (int i = 0; i < n; i++) {
+            int s = 0; 
+            for (int j = i; j < n; j++) {
+                s += nums[j];
+                arr[k++] = s;
+            }
+        }
+        
+        sort(arr.begin(), arr.end());
+        long long ans = 0;
+        const int mod = 1e9 + 7;
+
+        for (int i = left - 1; i < right; i++) {
+            ans = (ans + arr[i]) % mod;
+        }
+        
+        return ans; 
+    }
+};
+
+
+Solution 1. Prefix Sum
+Compute the prefix sum array using pre. Use pre to get the array of all subarray sums -- sum. Sort sum array then add from sum[left - 1] to sum[right - 1].
+
+// Time: O(N^2 * log(N^2))
+// Space: O(N^2)
+class Solution {
+public:
+    int rangeSum(vector<int>& A, int N, int left, int right) {
+        vector<int> sum;
+        long ans = 0, mod = 1e9+7;
+        for (int i = 0; i < N; ++i) {
+            int pre = 0;
+            for (int j = i; j < N; ++j) {
+                pre += A[j];
+                sum.push_back(pre);
+            }
+        }
+        sort(begin(sum), end(sum));
+        for (int i = left; i <= right; ++i) ans = (ans + sum[i - 1]) % mod;
+        return ans;
+    }
+};
+
+-----------------------------------------------------------------------> Most Optmize 
+
+Time Complexity: O(right * log n)
+Space Complexity: O(n)
+
+
+The priority queue is defined to hold pairs of integers, where the first element is the partial sum and the second element is the next index in the array A to be considered.
+Calculating Range Sum:
+
+We iterate from 1 to right (the upper limit of the desired range).
+In each iteration:
+We retrieve the smallest sum from the priority queue and pop it off.
+If the current index i is greater than or equal to left, we add the retrieved sum to our answer.
+We then check if the next index (stored in the pair) is within bounds. If it is, we update the sum by adding the next element from A and push the updated pair back into the priority queue.
+
+
+
+// Time: O(right * logN)
+// Space: O(N)
+// Ref: https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/discuss/730511/C++-priority_queue-solution
+class Solution {
+public:
+    int rangeSum(vector<int>& A, int N, int left, int right) {
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q; // partial sum, next index
+        for (int i = 0; i < N; ++i) q.emplace(A[i], i + 1);
+        long ans = 0, mod = 1e9+7;
+        for (int i = 1; i <= right; ++i) {
+            auto p = q.top();
+            q.pop();
+            if (i >= left) ans = (ans + p.first) % mod;
+            if (p.second < N) {
+                p.first += A[p.second++];
+                q.push(p);
+            }
+        }
+        return ans;
+    }
+};
