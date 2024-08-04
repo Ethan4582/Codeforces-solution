@@ -68,6 +68,8 @@ public:
 
 -----------------------------------------------------------------------> Most Optmize 
 
+
+------------so are putting a singl length subaaray which further expanding itself thus also give us the sum of subarray as we are  as it is min heap we get the sum of subarrya in increaig order 
 Time Complexity: O(right * log n)
 Space Complexity: O(n)
 
