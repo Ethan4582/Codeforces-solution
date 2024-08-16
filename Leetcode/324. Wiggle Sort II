@@ -1,0 +1,82 @@
+324. Wiggle Sort II
+
+Complexity
+Time complexity: O(n log n)
+Space complexity: O(n)
+
+
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> res(n);
+        
+        // Sort the nums array
+        vector<int> sortedNums = nums; 
+        sort(sortedNums.begin(), sortedNums.end());
+
+        // Fill the res array with the wiggle pattern
+        int mid = (n + 1) / 2; // Find the middle index
+        int j = mid - 1; // Last index of the left half
+        int k = n - 1;   // Last index of the right half
+
+        // Fill the res array in the wiggle order
+        for (int i = 0; i < n; i++) {
+            if (i % 2 == 0) {
+                res[i] = sortedNums[j--]; // Fill even indices from the larger half
+            } else {
+                res[i] = sortedNums[k--]; // Fill odd indices from the smaller half
+            }
+        }
+
+        // Copy the result back to nums
+        nums = res;
+    }
+};
+
+
+
+
+class Solution {
+ public:
+  void wiggleSort(vector<int>& nums) {
+    const int n = nums.size();
+    const auto it = nums.begin() + n / 2;
+    nth_element(nums.begin(), it, nums.end());
+    const int median = *it;
+
+// index-rewiring
+#define A(i) nums[(1 + 2 * i) % (n | 1)]
+
+    for (int i = 0, j = 0, k = n - 1; i <= k;)
+      if (A(i) > median)
+        swap(A(i++), A(j++));
+      else if (A(i) < median)
+        swap(A(i), A(k--));
+      else
+        ++i;
+  }
+};
+
+
+
+public void wiggleSort(int[] nums) {
+    int n = nums.length, m = (n + 1) >> 1;
+    int median = kthSmallestNumber(nums, m);
+    
+    for (int i = 0, j = 0, k = n - 1; j <= k;) {
+        if (nums[A(j, n)] > median) {
+            swap(nums, A(i++, n), A(j++, n));
+        } else if (nums[A(j, n)] < median) {
+            swap(nums, A(j, n), A(k--, n));
+        } else {
+            j++;
+        }
+    }
+}
+
+private int A(int i, int n) {
+    return (2 * i + 1) % (n | 1);
+}
+
+
