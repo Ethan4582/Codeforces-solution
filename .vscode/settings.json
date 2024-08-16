@@ -1,0 +1,15 @@
+{
+   "files.associations": {
+      "vector": "cpp",
+      "chrono": "cpp",
+      "utility": "cpp",
+      "cmath": "cpp",
+      "complex": "cpp",
+      "valarray": "cpp",
+      "ratio": "cpp",
+      "iostream": "cpp",
+      "unordered_map": "cpp",
+      "xiosbase": "cpp",
+      "random": "cpp"
+   }
+}
