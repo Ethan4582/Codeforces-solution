@@ -10,7 +10,7 @@
 #define all(v) v.begin(), v.end()
 #define rall(v) v.rbegin(), v.rend()
 #define rep(i, a, n) for (int i = a; i < n; ++i)
-#define p(a) cout << a << " ";
+#define p(a) cout << a << "\n";
 #define YES cout << "YES\n";
 #define NO cout << "NO\n";
 
@@ -26,17 +26,8 @@ bool c[N];
 
 int main() {
     fastread();
-     int n ; 
-          cin>>n; 
-          vll a(n);
-          rep( i ,0 ,n){cin>>a[i];}
-
-          sort(all(a)); 
-          for ( int i =0 ;i < n ; i+=2){
-            swap(a[i], a[n-i]);
-          }
-          for (auto it : a){
-            p(it);
-          }
+    int a , b , sum=0;
+    cin>>a>>b;
+    p(abs(6-a-b));
     return 0;
 }
