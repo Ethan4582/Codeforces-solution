@@ -1,3 +1,42 @@
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+a[ r] [c]  is th eat the center of the matrix with endges as the boundry metion in thequestion 
+
+we can elimate  this by subatracting  the prfix sum of souranding   from the  prefix of the matrix  for a[r][c]
+
+thr prfix of the matirx of the entier thing and we are subatraing it from it  
+
+class Solution {
+public:
+    vector<vector<int>> matrixBlockSum(vector<vector<int>>& mat, int k) {
+        int rows = mat.size();
+        int cols = mat[0].size();
+        vector<vector<int>> answer(rows, vector<int>(cols, 0));
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int sum = 0;
+                for (int r = i - k; r <= i + k; r++) {
+                    if (r < 0 || r >= rows) continue;
+                    for (int c = j - k; c <= j + k; c++) {
+                        if (c < 0 || c >= cols) continue;
+                        sum += mat[r][c];
+                    }
+                }
+                answer[i][j] = sum;
+            }
+        }
+        return answer;
+    }
+};
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 // Time: O(MN)
 // Space: O(1)
 class Solution {
@@ -55,3 +94,62 @@ class Solution {
     return ans;
   }
 };
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Differenet techinqe 
+Block sum formula on integral image.
+Block-sum of red rectangle = block-sum of D - block-sum of B - block-sum of C + block-sum of A    [ strraight formula 
+
+
+
+https://leetcode.com/problems/matrix-block-sum/solutions/482730/python-js-go-c-o-m-n-integral-image-dp-w-explanation
+
+
+
+
+
+
+
+class Solution {
+public:
+    vector<vector<int>> matrixBlockSum(vector<vector<int>>& mat, int K) {
+        int R = mat.size(); // Number of rows
+        int C = mat[0].size(); // Number of columns
+        
+        // Step 1: Build the integral image with padding
+        vector<vector<int>> m(R + 1, vector<int>(C + 1, 0));
+        
+        for (int r = 1; r <= R; r++) {
+            for (int c = 1; c <= C; c++) {
+                m[r][c] = mat[r - 1][c - 1] + m[r - 1][c] + m[r][c - 1] - m[r - 1][c - 1];
+            }
+        }
+        
+        // Step 2: Compute block sum using the integral image
+        vector<vector<int>> answer(R, vector<int>(C, 0));
+        
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                // Determine the boundaries of the block
+                int min_r = max(0, i - K);
+                int max_r = min(R, i + K + 1);
+                int min_c = max(0, j - K);
+                int max_c = min(C, j + K + 1);
+                
+                // Calculate the block sum using the integral image
+                answer[i][j] = m[max_r][max_c] - m[min_r][max_c] - m[max_r][min_c] + m[min_r][min_c];
+            }
+        }
+        
+        return answer; // Return the computed block sums
+    }
+};
+
+
+
+
+
+
+
+
