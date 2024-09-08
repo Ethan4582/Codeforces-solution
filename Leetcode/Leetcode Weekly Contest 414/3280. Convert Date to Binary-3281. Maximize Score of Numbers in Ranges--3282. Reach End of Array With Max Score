@@ -113,15 +113,14 @@ public:
 
 geerdly it will be the best to to jump at the number grater then the previous 
 
-
 class Solution {
 public:
     long long findMaximumScore(vector<int>& nums) {
         long long ans = 0;
         int curr = nums[0];
         for(int i = 1; i < nums.size(); i++) {
-            ans += curr;
-            curr = max(curr, nums[i]);
+            ans += curr;// we are keep the 0 index fixed 
+            curr = max(curr, nums[i]);// this is to check if the next number is grater or thus the current never get updated 
         }
         return ans;
     }
