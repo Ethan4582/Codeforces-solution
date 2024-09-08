@@ -1,0 +1,130 @@
+class Solution {
+public:
+    string convertDateToBinary(string date) {
+        auto toBinary = [](int x) {
+            string s = "";
+            while (x > 0) {
+                s = char((x % 2) + '0') + s;  // Correct binary conversion
+                x /= 2;
+            }
+            return s.empty() ? "0" : s;  // Handle the case where x is 0
+        };
+
+        int year = stoi(date.substr(0, 4));
+        int month = stoi(date.substr(5, 2));
+        int day = stoi(date.substr(8, 2));
+
+        return toBinary(year) + "-" + toBinary(month) + "-" + toBinary(day);
+    }
+};
+
+
+3281. Maximize Score of Numbers in Ranges
+
+Complexity
+Time complexity: O(n log n + n log(max_difference))
+Space complexity: O(1)
+
+Approach
+Sorting: Sort the start array to arrange the values in increasing order for easier binary search.
+
+Binary Search: Use binary search to find the largest possible minimum difference (mid) between consecutive values. The search range for mid is from 0 to start.back() - start.front() + d.
+
+Check Function: For each mid, check if we can place all values such that the difference between consecutive values is at least mid and doesn't exceed start[i] + d. Adjust the search range based on this check.
+
+class Solution {
+public:
+    bool check(vector<int> a, int d, int mid)
+    {
+        for(int ind = 1; ind<a.size(); ind++)
+        {
+            if(a[ind]-a[ind-1]>=mid)
+                continue;
+            else
+            {
+                if(a[ind]+d-a[ind-1]<mid) return false;
+                a[ind] = a[ind-1]+mid;
+            }
+        }
+        return true;
+    }
+    int maxPossibleScore(vector<int>& a, int d) {
+        long long l = 0, r = INT_MAX;
+        long long ans;
+        sort(a.begin(),a.end());
+        while(l<=r) // log(2*10^9)
+        {
+            int mid = (l+r)>>1;
+            if(check(a,d,mid)) // n
+            {
+                ans=mid;
+                l=mid+1;
+            }
+            else r=mid-1;
+        }
+        return ans;
+    }
+    // tc - O(log2(2*10^9)*n) ~ 10^6
+    // sc - O(1)
+};
+
+
+
+class Solution {
+public:
+
+    bool check(const vector<int>& start, int d, int mid){
+        long long  prev=start[0];
+        for(int i=1 ; i<start.size(); i++){
+            long long int next=max(prev+mid, static_cast<long long>(start[i]));
+            if (next > start[i] + d) { 
+                return false;
+            }
+            prev=next;
+        }
+        return true;
+    }
+    int maxPossibleScore(vector<int>& start, int d) {
+        int n=start.size();
+        sort(start.begin(), start.end());
+        long long low=0, hi=start.back() - start.front() + d;
+        
+        long long ans=0;
+        while(low<=hi){
+            long long mid=(low+hi)/2;
+            if(check(start, d, mid)){
+                ans=mid;
+                low=mid+1;
+            }else{
+                hi=mid-1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+3282. Reach End of Array With Max Score
+
+geerdly it will be the best to to jump at the number grater then the previous 
+
+
+class Solution {
+public:
+    long long findMaximumScore(vector<int>& nums) {
+        long long ans = 0;
+        int curr = nums[0];
+        for(int i = 1; i < nums.size(); i++) {
+            ans += curr;
+            curr = max(curr, nums[i]);
+        }
+        return ans;
+    }
+    // tc - O(n)
+    // sc - O(1)
+};
