@@ -1,0 +1,50 @@
+// Time: O(N^2)
+// Space: O(C) where C is the range of character set
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int n= s.size(); 
+        int len=0 ;
+        for ( int i =0 ; i <n; i++){
+            unordered_set<char> seen ;  
+            for ( int j =i ; j<n; j++ ){
+                if(seen.find(s[j])!=seen.end()) break;
+                seen.insert(s[j]);
+                len= max(len , j-i+1); 
+            }
+        }
+        return len;
+    }
+};
+																	
+																	
+
+// Time: O(N)
+// Space: O(C) where C is the range of character set
+
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int n = s.size();          // Length of the input string
+        int left = 0;             // Left boundary of the sliding window
+        int max_len = 0;          // Maximum length of substring without repeating characters
+        unordered_map<char, int> mpp; // Map to store the most recent index of each character
+        
+        for (int right = 0; right < n; ++right) {
+            // If the character at `right` is already in the map and its index is >= `left`
+            if (mpp.find(s[right]) != mpp.end() && mpp[s[right]] >= left) {
+                // Move the `left` boundary to the right of the last occurrence of `s[right]`
+                left = mpp[s[right]] + 1;
+            }
+            // Update the map with the current index of `s[right]`
+            mpp[s[right]] = right;
+            // Calculate the length of the current substring and update `max_len` if it's larger
+            max_len = max(max_len, right - left + 1);
+        }
+        
+        return max_len;  // Return the length of the longest substring without repeating characters
+    }
+};
+
