@@ -1,0 +1,111 @@
+This  can be done using bfs and dijisrtar 
+
+BFS / priority queue 
+
+TC-  0(N*M * health)   sc-   0(N*M * health)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    bool findSafeWalk(vector<vector<int>>& grid, int health) {
+        int m = grid.size();
+        if(m ==0) return false;
+        int n = grid[0].size();
+        if(n ==0) return false;
+        
+        // Directions: up, down, left, right
+        vector<pair<int, int>> directions = { {-1,0}, {1,0}, {0,-1}, {0,1} };
+        
+        // Initialize visited matrix with -1 (unvisited)
+        vector<vector<int>> visited(m, vector<int>(n, -1));
+        
+        // Initialize queue for BFS
+        // Each element is a tuple: (i, j, current_health)
+        queue<tuple<int, int, int>> q;
+        
+        // Calculate initial health after stepping into (0,0)
+        int initial_health = health - (grid[0][0] ==1 ? 1 : 0);
+        if(initial_health <1){
+            return false; // Cannot start
+        }
+        
+        q.emplace(0, 0, initial_health);
+        visited[0][0] = initial_health;
+        
+        while(!q.empty()){
+            auto [i, j, h] = q.front();
+            q.pop();
+            
+            // If reached destination
+            if(i == m-1 && j == n-1){
+                return true;
+            }
+            
+            // Explore all possible directions
+            for(auto &[di, dj] : directions){
+                int ni = i + di;
+                int nj = j + dj;
+                
+                // Check boundaries
+                if(ni <0 || ni >=m || nj <0 || nj >=n){
+                    continue;
+                }
+                
+                // Calculate new health
+                int new_health = h - (grid[ni][nj]==1 ? 1 : 0);
+                
+                // Check if health remains positive
+                if(new_health <1){
+                    continue;
+                }
+                
+                // If this path provides more health to (ni, nj), proceed
+                if(new_health > visited[ni][nj]){
+                    visited[ni][nj] = new_health;
+                    q.emplace(ni, nj, new_health);
+                }
+            }
+        }
+        
+        // If BFS completes without reaching destination
+        return false;
+    }
+};
+	
+	
+	
+class Solution {
+public:
+    bool findSafeWalk(vector<vector<int>>& g, int h) {
+          int m = g.size(), n = g[0].size();
+        vector<vector<int>> d(m, vector<int>(n, -1)); 
+        queue<pair<int, int>> q;
+        
+        d[0][0] = h - g[0][0]; 
+        q.push({0, 0});
+
+        vector<int> dir = {0, 1, 0, -1, 0}; 
+        
+        while (!q.empty()) {
+            auto [x, y] = q.front(); q.pop();
+            
+            for (int i = 0; i < 4; ++i) {
+                int nx = x + dir[i], ny = y + dir[i+1];
+                
+                if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
+                    int nh = d[x][y] - g[nx][ny];
+                    if (nh > d[nx][ny]) {
+                        d[nx][ny] = nh;
+                        if (nh > 0) q.push({nx, ny});
+                    }
+                }
+            }
+        }
+        
+        return d[m-1][n-1] >= 1;
+    }
+};
+	
+	

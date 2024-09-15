@@ -1,0 +1,25 @@
+// C++ Code
+#include <bits/stdc++.h>
+
+using namespace std;
+typedef vector<int> vi;
+
+#define FOR(a, b, c) for (int a = b; a < c; a++)
+#define FOR1(a, b, c) for (int a = b; a <= c; ++a)
+#define Rep(i, n) FOR(i, 0, n)
+#define Rep1(i, n) FOR1(i, 1, n)
+#define pb push_back
+class Solution {
+public:
+    vector<int> stableMountains(vector<int>& height, int threshold) {
+        vi stableMountains;
+        int n = height.size();
+    
+        FOR (i, 1, n) {
+            if (height[i - 1] > threshold)
+                stableMountains.pb(i); 
+        }
+    
+        return stableMountains;
+    }
+};
