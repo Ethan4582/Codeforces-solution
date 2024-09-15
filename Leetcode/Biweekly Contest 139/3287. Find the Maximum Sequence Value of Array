@@ -12,57 +12,58 @@ Now, we check all combinations of left and right OR values.
 
 If the left OR value appears before the right one, the subsequences do not overlap and we can do XOR.
 
+class Solution {
+public:
+    // Global DP arrays for memoization
+    bool dp1[401][201][128] = {}, dp2[401][201][128] = {};
 
-
-// Global DP arrays for memoization
-bool dp1[401][201][128] = {}, dp2[401][201][128] = {};
-
-// DFS function to calculate left OR values
-void dfs1(int i, vector<int>& nums, int cnt, int k, int cur, vector<int> &vals) {
-    // If we've selected k elements, store the smallest index where this OR value can be formed
-    if (cnt == 0) {
-        vals[cur] = min(vals[cur], i - 1);
-    } 
-    // Explore further only if we can still select elements and have not computed this state
-    else if (i + k < nums.size() && !dp1[i][cnt][cur]) {
-        dp1[i][cnt][cur] = true; // Mark this state as visited
-        dfs1(i + 1, nums, cnt, k, cur, vals); // Skip current element
-        dfs1(i + 1, nums, cnt - 1, k, cur | nums[i], vals); // Take current element
-    }
-}
-
-// DFS function to calculate right OR values
-void dfs2(int i, vector<int>& nums, int cnt, int k, int cur, vector<int> &vals) {
-    // If we've selected k elements, store the largest index where this OR value can be formed
-    if (cnt == 0) {
-        vals[cur] = max(vals[cur], i + 1);
-    } 
-    // Explore further only if we can still select elements and have not computed this state
-    else if (i >= k && !dp2[i][cnt][cur]) {
-        dp2[i][cnt][cur] = true; // Mark this state as visited
-        dfs2(i - 1, nums, cnt, k, cur, vals); // Skip current element
-        dfs2(i - 1, nums, cnt - 1, k, cur | nums[i], vals); // Take current element
-    }
-}
-
-// Main function to find the maximum value
-int maxValue(vector<int>& nums, int k) {
-    int res = 0; // Variable to store the maximum result
-    vector<int> vals1(128, INT_MAX), vals2(128); // Arrays to store OR values for left and right subsequences
-
-    // Calculate OR values for the left subsequence
-    dfs1(0, nums, k, k, 0, vals1);
-    // Calculate OR values for the right subsequence
-    dfs2(nums.size() - 1, nums, k, k, 0, vals2);
-
-    // Compare all combinations of left and right OR values
-    for (int i = 0; i < 128; ++i) {
-        for (int j = 0; j < 128; ++j) {
-            // Check if the left index is less than the right index
-            if (vals1[i] < vals2[j]) {
-                res = max(res, i ^ j); // Update the result with the maximum XOR
-            }
+    // DFS function to calculate left OR values
+    void dfs1(int i, vector<int>& nums, int cnt, int k, int cur, vector<int> &vals) {
+        // If we've selected k elements, store the smallest index where this OR value can be formed
+        if (cnt == 0) {
+            vals[cur] = min(vals[cur], i - 1);
+        } 
+        // Explore further only if we can still select elements and have not computed this state
+        else if (i + k < nums.size() && !dp1[i][cnt][cur]) {
+            dp1[i][cnt][cur] = true; // Mark this state as visited
+            dfs1(i + 1, nums, cnt, k, cur, vals); // Skip current element
+            dfs1(i + 1, nums, cnt - 1, k, cur | nums[i], vals); // Take current element
         }
     }
-    return res; // Return the maximum value found
-}
+
+    // DFS function to calculate right OR values
+    void dfs2(int i, vector<int>& nums, int cnt, int k, int cur, vector<int> &vals) {
+        // If we've selected k elements, store the largest index where this OR value can be formed
+        if (cnt == 0) {
+            vals[cur] = max(vals[cur], i + 1);
+        } 
+        // Explore further only if we can still select elements and have not computed this state
+        else if (i >= k && !dp2[i][cnt][cur]) {
+            dp2[i][cnt][cur] = true; // Mark this state as visited
+            dfs2(i - 1, nums, cnt, k, cur, vals); // Skip current element
+            dfs2(i - 1, nums, cnt - 1, k, cur | nums[i], vals); // Take current element
+        }
+    }
+
+    // Main function to find the maximum value
+    int maxValue(vector<int>& nums, int k) {
+        int res = 0; // Variable to store the maximum result
+        vector<int> vals1(128, INT_MAX), vals2(128); // Arrays to store OR values for left and right subsequences
+
+        // Calculate OR values for the left subsequence
+        dfs1(0, nums, k, k, 0, vals1);
+        // Calculate OR values for the right subsequence
+        dfs2(nums.size() - 1, nums, k, k, 0, vals2);
+
+        // Compare all combinations of left and right OR values
+        for (int i = 0; i < 128; ++i) {
+            for (int j = 0; j < 128; ++j) {
+                // Check if the left index is less than the right index
+                if (vals1[i] < vals2[j]) {
+                    res = max(res, i ^ j); // Update the result with the maximum XOR
+                }
+            }
+        }
+        return res; // Return the maximum value found
+    }
+};
