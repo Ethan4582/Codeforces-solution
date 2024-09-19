@@ -1,0 +1,69 @@
+
+class Solution {
+public:
+    vector<vector<int>> findDifference(vector<int>& nums1, vector<int>& nums2) {
+        // Create sets to store unique elements
+        unordered_set<int> set1(nums1.begin(), nums1.end());
+        unordered_set<int> set2(nums2.begin(), nums2.end());
+
+        // Vectors to store the results
+        vector<int> ans1; // Elements in nums1 not in nums2
+        vector<int> ans2; // Elements in nums2 not in nums1
+
+        // Find elements in nums1 that are not in nums2
+        for (const int num : set1) {
+            if (set2.find(num) == set2.end()) {
+                ans1.push_back(num);
+            }
+        }
+
+        // Find elements in nums2 that are not in nums1
+        for (const int num : set2) {
+            if (set1.find(num) == set1.end()) {
+                ans2.push_back(num);
+            }
+        }
+
+        // Return the result as a vector of vectors
+        return {ans1, ans2};
+    }
+};
+
+
+
+Time Complexity:
+O(n + m)
+
+Space Complexity:
+O(n + m)
+
+
+class Solution {
+public:
+    vector<vector<int>> findDifference(vector<int>& nums1, vector<int>& nums2) {
+        // Create sets to store unique elements
+        unordered_set<int> set1(nums1.begin(), nums1.end());
+        unordered_set<int> set2(nums2.begin(), nums2.end());
+
+        // Vectors to store the results
+        vector<int> ans1; // Elements in nums1 not in nums2
+        vector<int> ans2; // Elements in nums2 not in nums1
+
+        // Find elements in nums1 that are not in nums2
+        for (const int num : set1) {
+            if (set2.find(num) != set2.end()) {
+                ans1.push_back(num);
+            }
+        }
+
+        // Find elements in nums2 that are not in nums1
+        for (const int num : set2) {
+            if (set1.find(num) != set1.end()) {
+                ans2.push_back(num);
+            }
+        }
+
+        // Return the result as a vector of vectors
+        return {ans1, ans2};
+    }
+};

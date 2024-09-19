@@ -1,0 +1,82 @@
+When you use the find method on a string, it returns the index of the first occurrence of the specified substring. If the substring is not found, it returns string::npos.
+
+
+class Solution {
+public:
+    bool isValid(string s) {
+        // Initialize a variable to track if any changes were made
+        bool ans = false;
+
+        // Continue until there are no more occurrences of "abc"
+        while (true) {
+            size_t pos = s.find("abc"); // Find the position of "abc"
+            
+            if (pos != string::npos) {   // If "abc" is found
+                s.erase(pos, 3);         // Remove "abc" from the string
+                ans = true;              // Mark that we made a change
+            } else {
+                break;                   // Exit the loop if no more "abc" is found
+            }
+        }
+
+        // The function returns true if the string is empty after all removals
+        return s.empty();
+    }
+};
+
+TC- O(n²) 
+SC- O(1)
+
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    bool isValid(string s) {
+        int i = 0, N = s.size();
+        for (int j = 0; j < N; ++j) {
+            s[i++] = s[j];
+            if (i >= 3 && s[i - 3] == 'a' && s[i - 2] == 'b' && s[i - 1] == 'c') i -= 3;
+        }
+        return i == 0;
+    }
+};
+
+
+
+STACK 
+
+
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> stk; // Create a stack to store characters
+        
+        for (char c : s) { // Iterate over the input string
+            stk.push(c); // Push the current character onto the stack
+            
+            // Check if the last three characters in the stack form "abc"
+            if (stk.size() >= 3 && stk.top() == 'c') {
+                // Check the last three characters
+                char third = stk.top(); stk.pop(); // Pop 'c'
+                char second = stk.top(); stk.pop(); // Pop 'b'
+                char first = stk.top(); stk.pop(); // Pop 'a'
+                
+                // If they form "abc", we don't need to push them back
+                if (first != 'a' || second != 'b') {
+                    // If they don't form "abc", push them back
+                    stk.push(first);
+                    stk.push(second);
+                    stk.push(third);
+                }
+                // If they do form "abc", we do not push anything back
+            }
+        }
+        
+        // If the stack is empty, all characters have been removed
+        return stk.empty();
+    }
+};
+
+TC- O(n)
+SC- O(n)

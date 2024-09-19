@@ -1,0 +1,49 @@
+// Time: O(N)
+// Space: O(N)
+
+
+class Solution {
+public:
+    bool canTransform(string start, string end) {
+        int N = start.size(); // Get the size of the start string
+        
+        // Create copies of start and end to remove 'X'
+        string a = start, b = end;
+        
+        // Remove all occurrences of 'X' from both strings
+        a.erase(remove(a.begin(), a.end(), 'X'), a.end());
+        b.erase(remove(b.begin(), b.end(), 'X'), b.end());
+        
+        // If the remaining characters (without 'X') are not the same, return false
+        if (a != b) return false; 
+        
+        // First pass to check positions of 'L'
+        for (int i = 0, j = 0; i < N; ++i) {
+            // When we encounter 'L' in the start string
+            if (start[i] == 'L') {
+                // Find the next 'L' in the end string
+                while (end[j] != 'L') ++j; // Move j to the next 'L'
+                
+                // If the index of 'L' in start is less than the index in end,
+                // it means 'L' cannot move to the left, so return false
+                if (i < j++) return false; // Post-increment: j is incremented after this comparison
+            }
+        }
+        
+        // Second pass to check positions of 'R'
+        for (int i = 0, j = 0; i < N; ++i) {
+            // When we encounter 'R' in the start string
+            if (start[i] == 'R') {
+                // Find the next 'R' in the end string
+                while (end[j] != 'R') ++j; // Move j to the next 'R'
+                
+                // If the index of 'R' in start is greater than the index in end,
+                // it means 'R' cannot move to the right, so return false
+                if (i > j++) return false; // Post-increment: j is incremented after this comparison
+            }
+        }
+        
+        // If all checks pass, return true
+        return true;
+    }
+};

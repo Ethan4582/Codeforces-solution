@@ -1,0 +1,36 @@
+
+
+
+
+Skipping '_': Both pointers skip the '_' characters in their respective strings since these represent empty spaces and do not affect the transformation process.
+
+
+Comparison:
+
+If both pointers point to the same character ('L' or 'R'), further checks are performed to ensure the movement rules are not violated:
+If the character is 'L', it can only move left. Thus, if i < j, the transformation is not possible because an 'L' in start appearing to the right of its position in target cannot be achieved.
+If the character is 'R', it can only move right. Therefore, if i > j, the transformation is not possible because an 'R' in start appearing to the left of its position in target cannot be achieved.
+If the characters at i and j do not match, the transformation is not possible.
+
+Time: O(n)
+Space: O(1)
+
+class Solution {
+public:
+    bool canChange(string s, string t) {
+        int i =0 , j=0 , n=s.size(), m=t.size();
+
+        
+        while(i < n || j < m) {
+            while(i < n && s[i] == '_') i++;
+            while(j < m && t[j] == '_') j++;
+            
+            if(s[i] != t[j]) return false;
+            if(s[i] == 'R' && i > j) return false;
+            if(s[i] == 'L' && i < j) return false;
+            i++, j++;
+        }
+        return true;
+    }
+};
+

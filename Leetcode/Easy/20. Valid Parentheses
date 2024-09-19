@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        int n = s.length();
+        stack<char> st; 
+
+        for (int i = 0; i < n; i++) {
+            // Push opening brackets onto the stack
+            if (s[i] == '(' || s[i] == '[' || s[i] == '{') {
+                st.push(s[i]);
+            } 
+            // Check for closing brackets
+            else {
+                // If the stack is empty, it means there's no opening bracket for the closing one
+                if (st.empty()) {
+                    return false;
+                }
+                char top = st.top(); // Get the top element of the stack
+                // Check if the top matches the corresponding opening bracket
+                if ((s[i] == ')' && top == '(') || 
+                    (s[i] == '}' && top == '{') || 
+                    (s[i] == ']' && top == '[')) {
+                    st.pop(); // If it matches, pop the opening bracket from the stack
+                } else {
+                    return false; // If it doesn't match, return false
+                }
+            }
+        }
+
+        // If the stack is empty at the end, all brackets were matched
+        return st.empty();
+    }
+};
+
+TC- 0(N)
+Space complexity:
+The space complexity of the solution is O(n), where n is the length of the input string. This is because the worst-case scenario is when all opening brackets are present in the string and the stack will have to store them all.

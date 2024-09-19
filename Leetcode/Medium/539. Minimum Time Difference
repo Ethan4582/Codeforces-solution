@@ -1,0 +1,83 @@
+Convert Time to Minutes:
+Convert each time point from "HH:MM" format to the number of minutes since midnight. This simplifies the comparison of time differences to just integer subtraction.
+
+Sort the Time Points:
+After converting times to minutes, sort these minutes. The reason for sorting is that the minimum difference between any two times in a circular timeline will be between adjacent elements in the sorted list.
+
+Calculate Differences:
+Compute the difference between each pair of adjacent elements in the sorted list. This step finds the minimum difference between consecutive times.
+
+Consider Circular Nature:
+Since the times are on a 24-hour circular clock, you must also consider the difference between the last time and the first time (after wrapping around midnight).
+
+Return Minimum Difference:
+The result is the smallest difference found among adjacent pairs and the circular wrap-around difference.
+
+
+// Time: O(NlogN)
+// Space: O(N)
+
+
+class Solution {
+public:
+    int findMinDifference(vector<string>& timePoints) {
+        vector<int> minutes(timePoints.size());
+        
+        // Convert times to minutes
+        for (int i = 0; i < timePoints.size(); ++i) {
+            int h = stoi(timePoints[i].substr(0, 2));
+            int m = stoi(timePoints[i].substr(3));
+            minutes[i] = h * 60 + m;
+        }
+
+        // Sort times in ascending order
+        sort(minutes.begin(), minutes.end());
+
+        // Find minimum difference across adjacent elements
+        int minDiff = INT_MAX;
+        for (int i = 0; i < minutes.size() - 1; ++i) {
+            minDiff = min(minDiff, minutes[i + 1] - minutes[i]);
+        }
+
+        // Consider the circular difference between last and first element
+        minDiff = min(minDiff, 24 * 60 - minutes.back() + minutes.front());
+
+        return minDiff;
+    }
+};
+
+
+
+// Time: O(NlogN)
+// Space: O(1)
+
+// Time: O(NlogN)
+// Space: O(1)
+class Solution {
+private:
+  inline int getKey(string &s) {
+    return stoi(s.substr(0, 2)) * 60 + stoi(s.substr(3, 2));
+  }
+public:
+  int findMinDifference(vector<string>& timePoints) {
+     // Sort the time points in ascending order
+        sort(timePoints.begin(), timePoints.end());
+        
+        // Initialize the minimum difference to a large value
+        int ans = INT_MAX;
+
+        // Iterate through the sorted time points to find the minimum difference
+        for (int i = 1; i < timePoints.size(); ++i) {
+            // Calculate the difference between consecutive times
+            int currentDifference = getKey(timePoints[i]) - getKey(timePoints[i - 1]);
+            ans = min(ans, currentDifference); // Update the minimum difference
+        }
+
+        // Check the difference between the last time and the first time (wrap around)
+        int wrapAroundDifference = getKey(timePoints.front()) + (24 * 60) - getKey(timePoints.back());
+        ans = min(ans, wrapAroundDifference); // Update the minimum difference if needed
+
+        return ans; // Return the minimum time difference
+  }
+};
+

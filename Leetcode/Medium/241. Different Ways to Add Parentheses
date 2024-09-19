@@ -1,0 +1,55 @@
+
+The problem becomes easier when we think about these expressions as expression trees.
+We can traverse over the experssion and whenever we encounter an operator, we recursively divide the expression into left and right part and evaluate them seperately until we reach a situation where our expression is purely a number and in this case we can simply return that number.
+Since there can be multiple ways to evaluate an expression (depending on which operator you take first) we will get a list of reults from left and the right part.
+Now that we have all the possible results from the left and the right part, we can use them to find out all the possible results for the current operator.
+
+
+Time: O(2^n)
+Space: O(n⋅2^n)
+
+class Solution {
+public:
+    // Function to perform the operation based on the operator passed
+    int perform(int x, int y, char op) {
+        if(op == '+') return x + y; // Addition
+        if(op == '-') return x - y; // Subtraction
+        if(op == '*') return x * y; // Multiplication
+        return 0; // Default return for unsupported operators
+    }
+    
+    // Function to compute all possible results from the expression
+    vector<int> diffWaysToCompute(string exp) {
+        vector<int> results; // Vector to store the results
+        bool isNumber = true; // Flag to check if the expression is a number
+
+        // Loop through each character in the expression
+        for(int i = 0; i < exp.length(); i++) {
+            // Check if the current character is an operator
+            if(!isdigit(exp[i])) {
+                // If the current character is not a digit, the expression is not purely a number
+                isNumber = false;
+                
+                // List of results from the left part of the expression
+                vector<int> left = diffWaysToCompute(exp.substr(0, i));
+                
+                // List of results from the right part of the expression
+                vector<int> right = diffWaysToCompute(exp.substr(i + 1));
+                
+                // Performing operations for each combination of left and right results
+                for(int x : left) {
+                    for(int y : right) {
+                        int val = perform(x, y, exp[i]); // Calculate the result using the operator
+                        results.push_back(val); // Store the result
+                    }
+                }
+            }
+        }
+        
+        // If the expression is purely a number, convert it to int and add to results
+        if(isNumber) results.push_back(stoi(exp));
+        
+        return results; // Return all computed results
+    }
+};
+

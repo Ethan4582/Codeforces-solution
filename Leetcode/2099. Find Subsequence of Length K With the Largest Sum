@@ -1,0 +1,57 @@
+
+// Time: O(NlogN)
+// Space: O(N)
+class Solution {
+public:
+    vector<int> maxSubsequence(vector<int>& A, int k) {
+        vector<int> id(A.size());
+        iota(begin(id), end(id), 0); // Index array 0, 1, 2, ...
+        sort(begin(id), end(id), [&](int a, int b) { return A[a] > A[b]; }); // Sort the indexes in descending order of their corresponding values in `A`
+        id.resize(k); // Only keep the first `k` indexes with the greatest `A` values
+        sort(begin(id), end(id)); // Sort indexes in ascending order
+        vector<int> ans;
+        for (int i : id) ans.push_back(A[i]);
+        return ans;
+    }
+};
+
+
+
+
+Think it like it bascket conating the k elmnent then we campare the rest of thelemnet with the smalest element of the bascket and if we find any element greater than the smalest element then we replace it with the current element
+
+
+class Solution {
+public:
+   vector<int> maxSubsequence(vector<int>& nums, int k) {
+		// Declare variables
+        int n = nums.size(), i = 0, t = k;
+		// Answer Array
+        vector<int> ans;
+		
+		// Put first k elements
+        while(t>0){
+            ans.push_back(nums[i]);
+            i++;
+            t--;
+        }
+		
+		//Loop Through Remaining Array
+        for(int j=i;j<n;j++)
+        {
+			// Calcualate minimum from ans array 
+            int mini = min_element(ans.begin(), ans.end()) - ans.begin();
+			// Comapre it with the current element
+            if(ans[mini] < nums[j]){
+                ans.erase(ans.begin()+mini);
+                ans.push_back(nums[j]);
+            }
+            
+        }
+        return ans;
+    }
+    
+};
+Time Complexity: O(n k)
+
+Space Complexity: O(k)

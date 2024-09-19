@@ -1,0 +1,43 @@
+// TC-O(n)
+// SC-O(1)
+
+class Solution {
+public:
+    int sumIndicesWithKSetBits(vector<int>& nums, int k) {
+        int n=nums.size() , ans =0;
+        for ( int i =0 ; i<n ;i++){
+            if ( __builtin_popcount(i)==k){
+                ans+=nums[i];
+            }
+        }
+        return  ans; 
+    }
+};
+
+Complexity
+Time complexity: O(n∗m)
+Space complexity: O(1)
+where,
+
+n is the number of elements in the nums array.
+m is the number of bits required to represent the maximum value in the nums array.
+
+
+class Solution {
+public:
+    int sumIndicesWithKSetBits(vector<int>& nums, int k) {
+        int res = 0;
+        for(int i = 0;i<nums.size();i++){
+        int c = 0;
+        int copy = i;
+        while(copy){
+            c+= copy & 1;
+            copy >>= 1;
+        }    
+        if(c == k){
+            res += nums[i];
+        }
+        }
+        return res;
+    }
+};

@@ -1,0 +1,32 @@
+
+
+ time complexity - O(NlogN)
+ space complexity - O(N)
+ 
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        vector<string> ans;
+
+        // Convert each integer to a string
+        for (int num : nums) {
+            ans.push_back(to_string(num));
+        }
+
+        // Custom sorting
+        sort(ans.begin(), ans.end(), [](const string &a, const string &b) {
+            return (b + a) < (a + b); // Compare concatenated strings
+        });
+
+        // If the largest number is '0', return '0'
+        if (ans[0] == "0") return "0";
+
+        // Concatenate the sorted strings to form the largest number
+        string largest;
+        for (const auto& it : ans) {
+            largest += it;
+        }
+
+        return largest;
+    }
+};
