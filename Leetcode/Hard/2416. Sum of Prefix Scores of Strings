@@ -1,0 +1,128 @@
+
+
+
+------- Hash Function Solution -------
+Tc- O(N×L).
+Sc- O(N×L).
+
+
+class Solution {
+public:
+    vector<int> sumPrefixScores(vector<string>& words) {
+        const long long M = 1e15 + 7; // Modulus
+        const long long P = 31; // Base for polynomial hashing
+        unordered_map<long long, int> prefixHashDict;
+
+        // Encode all prefixes for each word
+        for (const string& word : words) {
+            encodePrefixes(word, prefixHashDict, M, P);
+        }
+
+        // Calculate the scores for each word
+        vector<int> result;
+        for (const string& word : words) {
+            result.push_back(score(word, prefixHashDict, M, P));
+        }
+
+        return result;
+    }
+
+    // Function to get the index value of a character
+    int idx(char c) {
+        return c - 'a' + 1;
+    }
+
+    // Function to encode prefixes and store their hash counts
+    void encodePrefixes(const string& s, unordered_map<long long, int>& prefixHashDict, long long M, long long P) {
+        long long prefixHash = 0;
+        long long p = 1;
+        for (char c : s) {
+            prefixHash = (prefixHash + idx(c) * p) % M;
+            prefixHashDict[prefixHash]++;
+            p = (p * P) % M;
+        }
+    }
+
+    // Function to calculate the score for each word
+    int score(const string& s, const unordered_map<long long, int>& prefixHashDict, long long M, long long P) {
+        long long prefixHash = 0;
+        long long res = 0;
+        long long p = 1;
+        for (char c : s) {
+            prefixHash = (prefixHash + idx(c) * p) % M;
+            res += prefixHashDict.at(prefixHash); // Use .at() for safe access
+            p = (p * P) % M;
+        }
+        return res;
+    }
+};
+
+
+-- ---Trie  solution ---- 
+
+
+// Time: O(NL) where N is the length of A, and L is the max length of A[i]
+// Space: O(NL)
+struct TrieNode {
+    TrieNode *next[26] = {};
+    int cnt = 0;
+};
+class Solution {
+    void addWord(TrieNode *node, string &s) {
+        for (char c : s) {
+            if (!node->next[c - 'a']) node->next[c - 'a'] = new TrieNode();
+            node = node->next[c - 'a'];
+            node->cnt++;
+        }
+    }
+    int count(TrieNode *node, string &s) {
+        int ans = 0;
+        for (char c : s) {
+            node = node->next[c - 'a'];
+            ans += node->cnt;
+        }
+        return ans;
+    }
+public:
+    vector<int> sumPrefixScores(vector<string>& A) {
+        TrieNode root;
+        for (auto &s : A) addWord(&root, s);
+        vector<int> ans;
+        for (auto &s : A) ans.push_back(count(&root, s));
+        return ans;
+    }
+};
+
+
+
+---little bit optimized---
+class Solution {
+public:
+    vector<int> sumPrefixScores(vector<string>& words) {
+        unordered_map<string, int> prefixCount;
+
+        // Step 1: Count all prefixes
+        for (const string& word : words) {
+            string prefix = "";
+            for (char c : word) {
+                prefix += c;
+                prefixCount[prefix]++;  // Increment the count of this prefix
+            }
+        }
+
+        // Step 2: Calculate the sum of scores for each word
+        vector<int> result;
+        for (const string& word : words) {
+            string prefix = "";
+            int score = 0;
+            for (char c : word) {
+                prefix += c;
+                score += prefixCount[prefix];  // Add the score for this prefix
+            }
+            result.push_back(score);
+        }
+
+        return result;
+    }
+};
+

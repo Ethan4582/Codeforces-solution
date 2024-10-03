@@ -1,0 +1,104 @@
+
+
+--------Bruteforce--------
+
+Tc- O(m*n)
+Sc- O(1)
+
+class Solution {
+public:
+    vector<int> findPeakGrid(vector<vector<int>>& mat) {
+        int m = mat.size();
+        int n = mat[0].size();
+
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (isPeak(mat, i, j, m, n)) {
+                    return {i, j};
+                }
+            }
+        }
+        
+        return {}; // This line will never be reached as a peak is guaranteed to exist.
+    }
+
+private:
+    bool isPeak(const vector<vector<int>>& mat, int x, int y, int m, int n) {
+        int current = mat[x][y];
+        
+        if (x > 0 && mat[x - 1][y] >= current) return false; // Check above
+        if (x < m - 1 && mat[x + 1][y] >= current) return false; // Check below
+        if (y > 0 && mat[x][y - 1] >= current) return false; // Check left
+        if (y < n - 1 && mat[x][y + 1] >= current) return false; // Check right
+        
+        return true;
+    }
+};
+
+
+
+--------Binary Search--------
+
+Tc- O(m*logn)
+Sc- O(1)
+
+class Solution {
+public:
+    vector<int> findPeakGrid(vector<vector<int>>& mat) {
+        int n = mat.size(); // number of rows
+        int m = mat[0].size(); // number of columns
+        int low = 0, high = m - 1; // Initialize binary search range for columns
+
+        while (low <= high) {
+            int mid = (low + high) / 2; // Find the middle column
+            int row = maxElement(mat, n, mid); // Get the row with the maximum element in the mid column
+
+            // Check the left and right neighbors of the mid element
+            int left = (mid - 1 >= 0) ? mat[row][mid - 1] : -1; // Left neighbor (or -1 if out of bounds)
+            int right = (mid + 1 < m) ? mat[row][mid + 1] : -1; // Right neighbor (or -1 if out of bounds)
+
+            // Check if the current element is a peak
+            if (mat[row][mid] > left && mat[row][mid] > right) {
+                return {row, mid}; // Return the coordinates of the peak
+            } else if (mat[row][mid] < left) {
+                high = mid - 1; // Search in the left half
+            } else {
+                low = mid + 1; // Search in the right half
+            }
+        }
+
+        return {}; // This line will never be reached as a peak is guaranteed to exist.
+    }
+
+//this  fucntion elmminates the row by comparing the elements in the mid column
+private:
+    int maxElement(vector<vector<int>>& mat, int n, int mid) {
+        int maxRow = 0; // Initialize the row index of the maximum element
+        for (int i = 1; i < n; ++i) {
+            // Find the row with the maximum element in the mid column
+            if (mat[i][mid] > mat[maxRow][mid]) {
+                maxRow = i; // Update maxRow if a larger element is found
+            }
+        }
+        return maxRow; // Return the row index of the maximum element
+    }
+};
+
+
+// Time: O(NlogM)
+// Space: O(1)
+class Solution {
+public:
+    vector<int> findPeakGrid(vector<vector<int>>& A) {
+        int M = A.size(), N = A[0].size(), L = 0, R = M - 1;
+        while (L < R) {
+            int mid = (L + R + 1) / 2;
+            int left = mid - 1 >= 0 ? *max_element(begin(A[mid - 1]), end(A[mid - 1])) : -1;
+            int cur = *max_element(begin(A[mid]), end(A[mid]));
+            if (cur > left) L = mid;
+            else R = mid - 1;
+        }
+        return { L, int(max_element(begin(A[L]), end(A[L])) - begin(A[L])) };
+    }
+};
+

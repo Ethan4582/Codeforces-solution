@@ -1,0 +1,76 @@
+
+--- brute force ---
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // Loop through each element
+        for (int i = 0; i < nums.size(); i++) {
+            // Loop through the elements after the current element
+            for (int j = i + 1; j < nums.size(); j++) {
+                // Check if the sum of the two elements equals the target
+                if (nums[i] + nums[j] == target) {
+                    return {i, j}; // Return the indices of the two numbers
+                }
+            }
+        }
+        // If no solution is found, return an empty vector
+        return {};
+    }
+};
+
+--- optimized ---
+
+Time Complexity: O(N)
+Space Complexity: O(N)
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> numMap;
+        int n = nums.size();
+
+        // Build the hash table
+        for (int i = 0; i < n; i++) {
+            numMap[nums[i]] = i;
+        }
+
+        // Find the complement
+        for (int i = 0; i < n; i++) {
+            int complement = target - nums[i];
+            if (numMap.count(complement) && numMap[complement] != i) {
+                return {i, numMap[complement]};
+            }
+        }
+
+        return {}; // No solution found
+    }
+};
+
+
+------------------------------- optimal -------------------------------
+
+// Time Complexity: O(N)
+// Space Complexity: O(1)
+
+
+look in the table and check if the complement is present or not 
+
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> numMap;
+        int n = nums.size();
+
+        for (int i = 0; i < n; i++) {
+            int complement = target - nums[i];
+            if (numMap.count(complement)) {
+                return {numMap[complement], i};
+            }
+            numMap[nums[i]] = i;
+        }
+
+        return {}; // No solution found
+    }
+};

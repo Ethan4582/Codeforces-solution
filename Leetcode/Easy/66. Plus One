@@ -1,0 +1,44 @@
+
+Tc- O(n)
+Sc- O(1)
+
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& dig) {
+        int n= dig.size(); 
+        for( int i = n-1; i >=0 ; i--){
+            if (i==n-1){
+                dig[i]++;
+            }
+            if(dig[i]==10){
+                dig[i]=0;
+                if(i!=0){
+                    dig[i-1]++;
+                }else{
+                    //in case on one digit 
+                    dig.push_back(0);
+                    dig[i]=1;
+                }
+            }
+        }
+        return dig;
+    }
+};
+
+
+class Solution {
+ public:
+  vector<int> plusOne(vector<int>& digits) {
+    for (int i = digits.size() - 1; i >= 0; --i) {
+      if (digits[i] < 9) {
+        ++digits[i];
+        return digits;
+      }
+      digits[i] = 0;
+    }
+
+    digits.insert(digits.begin(), 1);
+    return digits;
+  }
+};

@@ -1,0 +1,24 @@
+// Time: O(B * (A + B))
+// Space: O(A + B)
+
+class Solution {
+public:
+    int repeatedStringMatch(string a, string b) {
+        int k = 1;
+        string s = a;
+        for (; s.size() < b.size(); ++k) s += a;
+        if (s.find(b) != string::npos) return k;
+        return (s + a).find(b) != string::npos ? k + 1 : -1;
+    }
+};
+
+
+The question need deep analysis , S(final string ) = A+A+A ....... .
+Logic: Keep concatinating A's with S untill S.length()>=B.length() , only then there is possiblity of B to be it's subtring as it is obvious that a string can never be a substring of another string if other string is smaller than it.
+
+This example will help u clear all this ..
+Suppose A = aaaaab and B = ba
+Now S = A (1 time) is already >= B.size()
+So we do not need to append S with A , we will directly check if "ba" is in the S or not which is not ..
+So we will append S one last time with A , Now S becomes , S = aaaaabaaaaab , again searching for B in the S will get you with solution ..
+

@@ -1,0 +1,72 @@
+
+
+
+
+-- brute force ---
+Time Complexity: O(n1 * m + n2 * m)
+Space Complexity: O(n1 * m)
+
+
+class Solution {
+public:
+    int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {
+        unordered_map<string, int> mpp;
+        
+        // Add all possible prefixes from arr1 to the map
+        for (int num : arr1) {
+            string numStr = to_string(num);
+            string prefix = "";
+            for (char ch : numStr) {
+                prefix += ch;
+                mpp[prefix]++;
+            }
+        }
+
+        // Check prefixes in arr2
+        string longestPrefix = "";
+        for (int num : arr2) {
+            string numStr = to_string(num);
+            string prefix = "";
+            for (char ch : numStr) {
+                prefix += ch;
+                if (mpp[prefix] > 0) { // Check if it's a valid prefix from arr1
+                    if (prefix.size() > longestPrefix.size()) {
+                        longestPrefix = prefix;
+                    }
+                } else {
+                    break; // Break if a prefix is not found
+                }
+            }
+        }
+
+        // Return the length of the longest common prefix
+        return longestPrefix.length();
+    }
+};
+
+
+// Time: O(NW)
+// Space: O(NW)
+class Solution {
+public:
+    int longestCommonPrefix(vector<int>& A, vector<int>& B) {
+        unordered_set<string> st;
+        int len = 0;
+        for (int n : A) {
+            auto s = to_string(n);
+            for (int len = s.size(); len >= 1; --len) {
+                st.insert(s.substr(0, len));
+            }
+            len = max(len, (int)s.size());
+        }
+        vector<string> sb;
+        for (int n : B) sb.push_back(to_string(n));
+        for (; len > 0; --len) {
+            for (auto &s : sb) {
+                s = s.substr(0, len);
+                if (s.size() == len && st.count(s)) return len;
+            }
+        }
+        return 0;
+    }
+};

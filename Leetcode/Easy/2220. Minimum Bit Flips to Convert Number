@@ -1,0 +1,11 @@
+
+// Time: O(1)
+// Space: O(1)
+class Solution {
+public:
+    int minBitFlips(int start, int goal) {
+        int k = start ^ goal; // XOR to find differing bits    XOR of two same number is 0 and 1 if different
+        int ans = __builtin_popcount(k); // Count the number of set bits
+        return ans; 
+    }
+};

@@ -1,0 +1,106 @@
+
+
+----- brute force-----
+Time Complexity: O(n²)
+Space Complexity: O(1)
+
+
+class Solution {
+public:
+    int countOfSubstrings(string s, int k) {
+        int ans = 0;
+
+        // Iterate over each character in the string as the starting point of a potential substring
+        for (int i = 0; i < s.size(); i++) {
+            // Initialize counters for vowels and consonants
+            int a = 0, e = 0, m = 0, o = 0, u = 0, c = 0;
+
+            // Iterate over each character from the current starting point to the end of the string
+            for (int j = i; j < s.size(); j++) {
+                // Increment the counter for the corresponding vowel or consonant
+                if (s[j] == 'a') {
+                    a++;
+                } else if (s[j] == 'e') {
+                    e++;
+                } else if (s[j] == 'i') {
+                    m++;
+                } else if (s[j] == 'o') {
+                    o++;
+                } else if (s[j] == 'u') {
+                    u++;
+                } else {
+                    c++;
+                }
+
+                // Check if the current substring satisfies the conditions
+                if (a && e && m && o && u && c == k) {
+                    ans++;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+------ Sliding window --------------------
+
+Key Ideas:
+Sliding Window: Two pointers (i and j) are used to define a window of characters in the string. The window expands by moving j (right pointer) and shrinks by moving i (left pointer).
+Vowel Tracking: A hash map is used to keep track of the positions of the vowels within the current window, ensuring that all vowels are present.
+Non-Vowel Tracking: The number of non-vowel characters in the window is tracked. If this count exceeds k, the window shrinks by moving i to restore the condition.
+Result Calculation: The function f(word, k) counts the number of valid substrings where there are at most k non-vowel characters and all vowels are present. The main function calculates the difference between f(word, k) and f(word, k-1) to find the number of substrings with exactly k non-vowel characters.
+
+
+
+class Solution {
+public:
+    bool isVowel(char a){
+        return a == 'a' || a == 'e' || a == 'i' || a == 'o' || a == 'u';
+    }
+
+    int f(string word, int k) {
+        if (k < 0) return 0;
+
+        unordered_map<char, int> mp;
+        int vCount = 0, totalVCount = 0;
+        int i = 0, j = 0;
+        int n = word.size();
+        int res = 0;
+
+        while (j < n) {
+            if (isVowel(word[j])) {
+                totalVCount++;
+                if (mp.find(word[j]) != mp.end()) {
+                    if (mp[word[j]] < i) {
+                        vCount++;
+                    }
+                    mp[word[j]] = j;
+                } else {
+                    mp[word[j]] = j;
+                    vCount++;
+                }
+            }
+
+            while ((j - i + 1 - totalVCount) > k) {
+                if (isVowel(word[i])) {
+                    if (mp[word[i]] == i) vCount--;
+                    totalVCount--;
+                }
+                i++;
+            }
+
+            if (vCount == 5) {
+                int x = min({mp['a'], mp['e'], mp['i'], mp['o'], mp['u']});
+                res += (x - i + 1);
+            }
+            j++;
+        }
+
+        return res;
+    }
+
+    int countOfSubstrings(string word, int k) {
+        return f(word, k) - f(word, k - 1);
+    }
+};

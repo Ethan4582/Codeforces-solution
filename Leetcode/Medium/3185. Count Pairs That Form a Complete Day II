@@ -1,0 +1,42 @@
+this  will work but not for very large test case 
+
+Time: O(n)
+Space: O(1)
+
+the Solution
+
+class Solution {
+ public:
+  // Same as 3184. Count Pairs That Form a Complete Day I
+  long long countCompleteDayPairs(vector<int>& hours) {
+    long ans = 0;
+    vector<int> count(24);
+
+    for (const int hour : hours) {
+      ans += count[(24 - hour % 24) % 24];
+      ++count[hour % 24];//incremen the reminder 
+    }
+
+    return ans;
+  }
+};
+
+
+class Solution {
+public:
+    long long countCompleteDayPairs(vector<int>& hr) {
+        int n=hr.size();
+        int cnt=0;
+        unordered_map <long long  , long long > mpp;
+        for (auto it : hr){
+            int rem= it%24;
+            if(rem==0){
+                cnt+=mpp[0];
+            }else{
+                cnt+=mpp[24-rem];
+            }
+            ++mpp[rem];
+        }
+        return cnt;
+    }
+};

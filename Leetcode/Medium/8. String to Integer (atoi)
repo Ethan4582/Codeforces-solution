@@ -1,0 +1,28 @@
+
+
+// Time: O(N)
+// Space: O(1)
+
+
+INT_MAX: The maximum value for a 32-bit signed integer is 2,147,483,647.
+Why INT_MAX / 10?:
+If ans is greater than INT_MAX / 10, multiplying it by 10 would definitely cause an overflow. For example, if ans = 214748364 and you try to multiply by 10, it exceeds INT_MAX.
+Why check ans == INT_MAX / 10?:
+If ans is exactly 214748364, you need to check the next digit (n). If n is greater than 7 (the last digit of INT_MAX), it would also cause an overflow.
+
+
+class Solution {
+public:
+    int myAtoi(string s) {
+        int i = 0, N = s.size(), sign = 1, ans = 0;
+        while (i < N && s[i] == ' ') ++i;
+        if (i < N && (s[i] == '+' || s[i] == '-')) sign = s[i++] == '+' ? 1 : -1;
+        while (i < N && isdigit(s[i])) {
+            int n = s[i++] - '0';
+            if (ans > INT_MAX / 10 || (ans == INT_MAX / 10 && n > INT_MAX % 10)) return sign == 1 ? INT_MAX : INT_MIN;
+            ans = ans * 10 + n;
+        }
+        return ans * sign;
+    }
+};
+

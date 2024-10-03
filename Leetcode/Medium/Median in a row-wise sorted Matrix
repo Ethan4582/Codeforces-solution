@@ -1,0 +1,83 @@
+
+------------------Bruteforce------------------
+-> make a linear array of size r*c and store all the elements in it
+-> sort the array
+-> return the middle element
+
+tc- O(r*c + (r*c)log(r*c))
+sc- O(r*c)
+
+class Solution{   
+public:
+    int median(vector<vector<int>> &matrix, int R, int C){
+        vector<int> arr;
+        for(int i=0;i<R;i++){
+            for(int j=0;j<C;j++){
+                arr.push_back(matrix[i][j]);
+            }
+        }
+        sort(arr.begin(),arr.end());
+        return arr[R*C/2];
+    }
+};
+
+
+------------------Binary Search------------------
+
+// we make an array which store the count of elements less than number itself like num<=7 then we store 7 in the array
+// the number of elements less than 7 is 7  or to  number of elment <= midan 
+// find the first count which is greater than  to (r*c)/2  of the imaginary arry of the number samller than the number itself and return the number that is the answer
+
+tc- 0(nlogn)
+sc- O(1)
+
+class Solution {
+public:
+    // Function to count how many numbers are less than or equal to x in a row
+    int upperBound(const vector<int>& row, int x) {
+        int low = 0, high = row.size() - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (row[mid] <= x) {
+                low = mid + 1; // Move right if current element is less than or equal to x
+            } else {
+                high = mid - 1; // Move left if current element is greater than x
+            }
+        }
+        return low; // Return the count of elements less than or equal to x
+    }
+
+    // Function to count total elements less than or equal to x in the matrix
+    int countSmallEqual(const vector<vector<int>>& matrix, int m, int n, int x) {
+        int cnt = 0;
+        for (int i = 0; i < m; i++) {
+            cnt += upperBound(matrix[i], x); // Count elements in each row
+            // upperbound alway point at the elment grater that the x or target 
+            //lowerbound point at the element less than or equal to x
+        }
+        return cnt; // Total count of elements less than or equal to x
+    }
+
+    // Function to find the median of the matrix
+    int median(vector<vector<int>>& matrix, int m, int n) {
+        int low = INT_MAX, high = INT_MIN;
+
+        // Find the minimum and maximum values in the matrix
+        for (int i = 0; i < m; i++) {
+            low = min(low, matrix[i][0]); // First element of each row
+            high = max(high, matrix[i][n - 1]); // Last element of each row
+        }
+
+        int req = (m * n) / 2; // Required count of elements to find the median
+        while (low < high) {
+            int mid = (low + high) / 2; // Middle value to check
+            int smallEqual = countSmallEqual(matrix, m, n, mid); // Count of elements <= mid
+            if (smallEqual <= req) {
+                low = mid + 1; // Search for a larger value
+            } else {
+                high = mid; // Search for a smaller value
+            }
+        }
+        return low; // The median value
+    }
+};

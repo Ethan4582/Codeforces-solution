@@ -1,0 +1,42 @@
+
+
+brute force will give tle 
+
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& nums, int k) {
+        int cnt=0;
+        for( int i=0 ;  i <nums.size(); i++){
+            int sum=0 ; 
+            for(int j=i; j<nums.size(); j++){
+                sum+=nums[j]; 
+                if(sum%k==0) cnt++;
+            }
+        }
+        return cnt; 
+    }
+};
+
+
+
+// Time Complexity:O(n) 
+// Space Complexity: O(k)
+
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& nums, int k) {
+        int count = 0; // Count of valid subarrays
+        int n = nums.size();
+        int currentSum = 0; // Cumulative sum
+        vector<int> remainderCount(k, 0); // Count of remainders
+        remainderCount[0]++; // Initialize for the case where the sum itself is divisible by k
+
+        for (int i = 0; i < n; i++) {
+            currentSum = (currentSum + nums[i] % k + k) % k; // Update cumulative sum modulo k
+            count += remainderCount[currentSum]; // Add the count of previous occurrences of this remainder
+            remainderCount[currentSum]++; // Increment the count for this remainder
+        }
+        
+        return count; 
+    }
+};

@@ -1,0 +1,46 @@
+// One way to check for the vaid string is to precomupte for x string should be ewual to trget but it will bw tle
+
+->Frequency of each string s should be greater then or equal to frequency of each character in target 
+
+
+
+Time Complexity: O(n)
+Space Complexity:O(1) because the size of the cnt2 array is constant (26 for lowercase English letters), regardless of the input size.
+
+class Solution {
+public:
+    long long validSubstringCount(string w1, string word2) {
+        vector<int> cnt2(26, 0); // Count of characters in word2
+        for (char c : word2) {
+            cnt2[c - 'a']++; // Populate the character count
+        }
+
+        long long result = 0; // To store the total valid substrings
+        int n = word2.length(); // Length of word2
+        int left = 0, right = 0; // Pointers for sliding window
+
+        while (right < w1.size()) {
+            // If current character in w1 is in word2
+            if (cnt2[w1[right] - 'a'] > 0) {
+                n--; // Decrease the count of needed characters
+            }
+            cnt2[w1[right] - 'a']--; // Decrease the count for the character
+            right++; // Move the right pointer
+
+            // While all characters from word2 are matched
+            while (n == 0) {
+                // Count valid substrings that end at 'right - 1'
+                result += (w1.size() - right + 1);
+                
+                // Move the left pointer to find new valid substrings
+                if (cnt2[w1[left] - 'a'] == 0) {
+                    n++; // Increase needed characters count
+                }
+                cnt2[w1[left] - 'a']++; // Restore the character count
+                left++; // Move the left pointer
+            }
+        }
+
+        return result; // Return the total count of valid substrings
+    }
+};

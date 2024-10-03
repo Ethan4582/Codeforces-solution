@@ -1,0 +1,30 @@
+
+
+
+
+class Solution {
+public:
+    vector<int> findWordsContaining(vector<string>& words, char x) {
+        vector<int> ans; 
+        for (int i = 0; i < words.size(); i++) {
+            // Use std::find to check if character x is in the current word
+            if (find(words[i].begin(), words[i].end(), x) != words[i].end()) {
+                ans.push_back(i); // If found, add the index to the result
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution {
+ public:
+  vector<int> findWordsContaining(vector<string>& words, char x) {
+    vector<int> ans;
+
+    for (int i = 0; i < words.size(); ++i)
+      if (words[i].find(x) != string::npos)
+        ans.push_back(i);
+
+    return ans;
+  }
+};

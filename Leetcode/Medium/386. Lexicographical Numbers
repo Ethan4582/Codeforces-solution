@@ -1,0 +1,57 @@
+
+Time: O(nlogn)
+Space: O(n)
+
+--------------------------------- Lexigrapahy mean compare based on the first digit and if same then second digit and so on 
+
+class Solution {
+
+public:
+    vector<int> lexicalOrder(int n) {
+        vector<string> c; 
+        for ( int i =1 ; i <=n; i++){
+            c.push_back(to_string(i));
+        }
+        sort(c.begin(), c.end()); 
+        vector<int> ans; 
+        for (auto it : c){
+            ans.push_back(stoi(it));
+        }
+        return ans ;
+    }
+};
+
+
+-----------------------Optmize soltion------------------------------------------------------------------------- 
+use simple recursiont to gernate all the pssoble numbe with base numbercas in the given number is less then the range justback the track 
+
+the big tree  explin the trree for the number solve(1, 0 )    the next (1, 2)  (1, 3) (1, 4) (1, 5) (1, 6) (1, 7) (1, 8) (1, 9)  after that itis repeat 
+class Solution {
+private:
+    vector<int> ans;
+    void solve(int i, int n){
+        // base conditon - where recursion gets over
+        if(i>n){
+            return;
+        }
+
+        int cur = i; // 1 
+        ans.push_back(cur);
+        for(int i=0;i<=9;i++){
+            string tmp = to_string(cur) + to_string(i); // 1 0 
+            solve(stoi(tmp),n);
+
+            // int tmp = cur*10 +  i;
+            // solve(tmp,n);
+        }
+    }
+public:
+    vector<int> lexicalOrder(int n) {
+
+        for(int i=1;i<=9;i++){
+            solve(i,n);
+        }
+
+        return ans;
+    }
+};

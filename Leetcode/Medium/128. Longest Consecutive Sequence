@@ -1,0 +1,199 @@
+
+hints 
+
+Solved using Array(Three Nested Loop). Brute Force Approach.
+
+Solved using Array + Sorting. Brute Better Approach.
+Solved using Array + Hash Table(Unordered map). Optimize Approach.
+Solved using Array + Hash Table (Unordered set). Optimize Approach.
+
+
+// Time: O(N)
+// Space: O(N)
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> seen(nums.begin(), nums.end());
+        int longest = 0;
+
+        for (int num : seen) { // Iterate over the unique elements
+            if (seen.count(num - 1) == 0) { // Check if it's the start of a sequence
+                int length = 1;
+                while (seen.count(num + length)) { // Count the length of the sequence
+                    ++length;
+                }
+                longest = max(longest, length); // Update the longest length
+            }
+        }
+
+        return longest; // Return the longest consecutive sequence length
+    }
+};
+
+
+
+// optimized approach 
+
+// Time: O(N)
+// Space: O(N) 
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int n=nums.size(); 
+    unordered_map<int, bool> map;
+        for(int i = 0; i<nums.size(); i++){
+            map[nums[i]] = true;
+        }
+        for(int i=0; i<nums.size(); i++){
+            if(map.count(nums[i]-1) > 0){
+                map[nums[i]] = false;
+            }
+        }
+        
+        int maxlen=0 ;  
+        for  ( int i=0 ;i<n; i++){
+            if(map[nums[i]]==true){
+                int j=0, cnt=0 ;
+                while(map.count(nums[i]+j)){
+                    j++;  
+                    cnt++;
+                }
+                if (cnt>maxlen){ maxlen=cnt;}
+            }
+        }
+        return maxlen;
+    }
+};
+
+
+//best approach 
+
+// Time: O(NlogN)
+// Space: O(1)
+
+// cleaner code 
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> seen(nums.begin(), nums.end());
+        int longest = 0;
+
+        for (int num : seen) { // Iterate over the unique elements
+            if (seen.count(num - 1) == 0) { // Check if it's the start of a sequence
+                int length = 1;
+                while (seen.count(num + length)) { // Count the length of the sequence
+                    ++length;
+                }
+                longest = max(longest, length); // Update the longest length
+            }
+        }
+
+        return longest; // Return the longest consecutive sequence length
+    }
+};
+
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.empty()) return 0;
+
+        // Sort the array
+        sort(nums.begin(), nums.end());
+
+        int maxLength = 1;
+        int currentLength = 1;
+
+        for (int i = 1; i < nums.size(); i++) {
+            // Skip duplicates
+            if (nums[i] == nums[i - 1]) continue;
+
+            // Check if current number is consecutive
+            if (nums[i] == nums[i - 1] + 1) {
+                currentLength++;
+            } else {
+                maxLength = max(maxLength, currentLength);
+                currentLength = 1; // Reset for new sequence
+            }
+        }
+
+        // Final check for the last sequence
+        maxLength = max(maxLength, currentLength);
+        
+        return maxLength;
+    }
+};
+
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.empty()) return 0; // Handle empty input
+
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        int currLonSeq = 1;
+        int longSeq = 1; // Initialize to 1 since a single number is a sequence
+
+        for (int i = 1; i < n; i++) {
+            if (nums[i] != nums[i - 1]) { // Avoid duplicates
+                if (nums[i] == nums[i - 1] + 1) {
+                    currLonSeq++; // Increment current sequence length
+                } else {
+                    longSeq = max(currLonSeq, longSeq); // Update longest sequence
+                    currLonSeq = 1; // Reset current sequence length
+                }
+            }
+        }
+        
+        // Final check to account for the last sequence
+        longSeq = max(currLonSeq, longSeq);
+
+        return longSeq; // Return the longest sequence found
+    }
+};
+
+
+
+//brute force approach 
+
+// Time: O(N^3)
+// Space: O(1)
+
+class Solution {
+private: 
+    bool longestConsecutive(vector<int>& nums, int target){
+        int n = nums.size();
+        for(int i=0; i<n; i++){
+            if(nums[i] == target){
+                return true;
+            }
+        }
+        return false;
+    }
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int n = nums.size();
+        int longestConsecutiveSequence = 0;
+        for(auto num : nums){
+            int currentNumber = num;
+            int currentConsecutiveSequence = 1;
+            while(longestConsecutive(nums, currentNumber+1)){
+                currentNumber += 1;
+                currentConsecutiveSequence += 1;
+            }
+            longestConsecutiveSequence = max(longestConsecutiveSequence, currentConsecutiveSequence);
+        }
+        return longestConsecutiveSequence;
+    }
+};
+
+

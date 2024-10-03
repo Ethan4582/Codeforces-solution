@@ -1,0 +1,51 @@
+// maximum time  required  by any of the worker should be  mimiumum 
+
+// wo find the time limit of the ithe worker in  so other member cna siminatnously redus the height of the mountain  to zero 
+// if the time limit of the ithe worker is less than the height of the mountain then we serach in the left and right subarray for the next greater element 
+
+Time Complexity: O(log(maxTime))
+Space Complexity: O(1)
+
+
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    long long minNumberOfSeconds(int h, vector<int>& w) {
+        // Initialize binary search bounds
+        long long left = 1; // Minimum time cannot be less than 1
+        long long right = 1e18; // Maximum time (a large upper bound)
+
+        // Perform binary search to find the minimum time needed
+        while (left < right) {
+            long long midTime = (left + right) / 2; // Midpoint of the current bounds
+            // Check if it's possible to reduce the height of the mountain to 0 in midTime
+            if (canReduceHeight(midTime, h, w)) 
+                right = midTime; // If possible, try for a smaller time
+            else 
+                left = midTime + 1; // If not possible, increase the time
+        }
+        
+        return left; // The minimum time found
+    }
+
+private:
+    bool canReduceHeight(long long maxTime, int h, const vector<int>& w) {
+        long long here = 0; // Tracks total height reduced
+        for (const auto& workTime : w) {
+            long long low = 0, high = h; // Binary search bounds for the number of units of work
+            while (low < high) {
+                long long ndh = (low + high + 1) / 2; // Midpoint for number of units of work
+                // Calculate the time required by the ith worker to reduce `ndh` height
+                if (workTime * ndh * (ndh + 1) / 2 <= maxTime) 
+                    low = ndh; // If within time limit, try for more work
+                else 
+                    high = ndh - 1; // Otherwise, reduce the work
+            }
+            here += low; // Add the maximum height this worker can reduce
+            if (here >= h) return true; // If total height reduced is enough, return true
+        }
+        return here >= h; // Final check if total height reduced is sufficient
+    }
+};

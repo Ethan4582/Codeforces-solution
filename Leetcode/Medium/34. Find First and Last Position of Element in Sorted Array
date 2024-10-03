@@ -1,0 +1,71 @@
+
+
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int start = -1, end = -1;
+
+        // Find the first occurrence
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == target) {
+                start = i;
+                break; // Stop after finding the first occurrence
+            }
+        }
+
+        // If target was not found
+        if (start == -1) {
+            return {-1, -1};
+        }
+
+        // Find the last occurrence
+        for (int i = nums.size() - 1; i >= start; i--) {
+            if (nums[i] == target) {
+                end = i;
+                break; // Stop after finding the last occurrence
+            }
+        }
+
+        return {start, end};
+    }
+};
+
+Time Complexity: O(log(n))
+Space Complexity: O(1)
+
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+         const int l = ranges::lower_bound(nums, target)-nums.begin();
+        if(l==nums.size() || nums[l]!= target) return {-1, -1}; 
+         const int r = ranges::upper_bound(nums, target) - nums.begin() - 1;
+    return {l, r};
+    }
+};
+
+
+// Time: O(logN)
+// Space: O(1)
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& A, int target) {
+        int N = A.size(), L = 0, R = N - 1;
+        while (L <= R) {
+            int M = (L + R) / 2;
+            if (A[M] < target) L = M + 1;
+            else R = M - 1;
+        }
+        if (L == N || A[L] != target) return {-1,-1};
+        int left = L;
+        R = N - 1;
+        while (L <= R) {
+            int M = (L + R) / 2;
+            if (A[M] > target) R = M - 1;
+            else L = M + 1;
+        }
+        return {left, R};
+    }
+};

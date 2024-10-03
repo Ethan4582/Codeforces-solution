@@ -1,0 +1,56 @@
+
+Time Complexity: 0(M. k)  k (the number of unique characters)   whicj is 26 
+Space Complexity: O(m) O(1)  as 26 char 
+
+
+
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        int n = p.size();
+        int m = s.size();
+        vector<int> res;
+
+        if (n > m) return res; // If p is longer than s, return empty
+
+        // Frequency map for p
+        unordered_map<char, int> pCount;
+        for (char c : p) {
+            pCount[c]++;
+        }
+
+        // Frequency map for the first window in s
+        unordered_map<char, int> sCount;
+        for (int i = 0; i < n; i++) {
+            sCount[s[i]]++;
+        }
+
+        // Check if the first window is an anagram
+        if (sCount == pCount) {
+            res.push_back(0);
+        }
+
+        // Slide the window over s
+        // we will add one elment in each interation and pop the back elment
+        for( int i=n; i<m; i++){
+            sCount[s[i]]++;
+            sCount[s[i-n]]--;
+        } 
+        for (int i = n; i < m; i++) {
+            sCount[s[i]]++; // Add the new character to the window
+            sCount[s[i - n]]--; // Remove the character going out of the window
+
+            // Clean up the map to avoid zero entries
+            if (sCount[s[i - n]] == 0) {
+                sCount.erase(s[i - n]);
+            }
+
+            // Check if current window is an anagram
+            if (sCount == pCount) {
+                res.push_back(i - n + 1);
+            }
+        }
+
+        return res;
+    }
+};

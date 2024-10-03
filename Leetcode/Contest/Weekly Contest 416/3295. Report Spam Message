@@ -1,0 +1,125 @@
+
+
+
+class Solution {
+public:
+    bool reportSpam(vector<string>& message, vector<string>& bnwrd) {
+        unordered_set<string> check(bnwrd.begin(), bnwrd.end());
+        int cnt = 0;
+
+        for (const auto& it : message) {
+            if (check.count(it)) {
+                cnt++; // Increment count for each banned word found
+                if (cnt == 2) return true; // Return true if we find 2 banned words
+            }
+        }
+        return false; // Return false if fewer than 2 banned words are found
+    }
+};
+
+
+
+Approach
+Trie Structure:
+
+We use a Trie to store the words from the message.
+Each node in the Trie contains an array of 26 pointers (one for each letter of the alphabet).
+The count field in each node indicates how many times a word ends at that node.
+Inserting Words into the Trie:
+
+For each word in the message, we insert it into the Trie by iterating through its characters.
+If a character does not already exist in the Trie, a new node is created for it.
+Once the word is fully inserted, we increment the count at the last node to mark the end of the word.
+Searching for Words in the Trie:
+
+For each banned word, we check if it exists in the Trie by traversing the Trie node by node using the word's characters.
+If the word is found, we increment the count of banned words found in the message.
+If two or more banned words are found, we classify the message as spam.
+Handling Unique Banned Words:
+
+We use a Set to ensure we are only counting unique banned words.
+Stopping Condition:
+
+As soon as we find two or more banned words, we immediately return true (indicating spam) and stop further searches.
+
+Complexity
+Time complexity:O(n)
+Space complexity:O(n)
+
+
+struct Trie {
+    int count=0;
+    Trie* list[26];
+    
+    Trie() {
+        memset(list, 0, sizeof(list));  // Initialize all pointers to NULL
+    }
+
+    void put(Trie *node, char ch) {
+        list[ch - 'a'] = node;
+    }
+
+    Trie* get(char ch) {
+        return list[ch - 'a'];
+    }
+
+    void setEnd() {
+        count++;
+    }
+
+    int isEnd() {
+        return count;
+    }
+};
+
+class Solution {
+public:
+    Trie *root;
+
+    Solution() {
+        root = new Trie();
+    }
+
+    void insert(string word) {
+        Trie *node = root;
+        for (auto ch : word) {
+            if (node->get(ch) == NULL) {
+                node->put(new Trie, ch);
+            }
+            node = node->get(ch);  // Update node after inserting/finding the character
+        }
+        node->setEnd();
+    }
+
+    int search(string word) {
+        Trie *node = root;
+        for (auto ch : word) {
+            if (node->get(ch) == NULL) {
+                return false;
+            }
+            node = node->get(ch);  // Use node instead of root
+        }
+        return node->isEnd();
+    }
+
+    bool reportSpam(vector<string>& message, vector<string>& bannedWords) {
+        // Insert all words in the message into the Trie
+        for (auto word : message) {
+            insert(word);
+        }
+
+        int count = 0;
+        // Check if banned words exist in the message
+        set<string>st;
+        for(auto word:bannedWords){
+            st.insert(word);
+        }
+        for (auto word : st) {
+            count+=search(word);
+            if (count >= 2) {
+                return true;
+            }
+        }
+        return false;
+    }
+};

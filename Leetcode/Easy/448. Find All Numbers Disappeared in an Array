@@ -1,0 +1,81 @@
+// time complexity of O(n)
+// space complexity of O(n)
+
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        int n = nums.size();
+
+        // Create a set to efficiently check for the presence of elements.
+        unordered_set<int> seen;
+
+        // Iterate through the input array and mark seen elements in the set.
+        for (int num : nums) {
+            seen.insert(num);
+        }
+
+        // Iterate from 1 to n and add missing elements to the answer vector.
+        vector<int> missing;
+        for (int i = 1; i <= n; ++i) {
+            if (seen.count(i) == 0) {
+                missing.push_back(i);
+            }
+        }
+
+        return missing;
+    }
+};
+
+--- another solution
+
+// time complexity of O(n)
+// space complexity of O(1)  -> because forst we use the set data structure 
+
+// This solution modifies the input array in-place to mark the presence of elements with a negative value.
+// It then iterates through the modified array to find indices that are still positive, indicating missing numbers.
+
+
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        unordered_set<int> seen;
+        int n = nums.size();
+
+        for (int num : nums) {
+            seen.insert(num);
+        }
+
+        vector<int> missing;
+        for (int i = 1; i <= n; ++i) {
+            if (seen.count(i) == 0) {
+                missing.push_back(i);
+            }
+        }
+
+        return missing;
+    }
+};
+
+
+
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        vector<int> results;
+        
+        // Set contents of all indices (minus 1) that appear in the array to be negative
+        for (int i = 0; i < nums.size(); ++i)
+        {
+			// Note that we have to use the absolute value in the next 2 lines, to avoid trying to access a negative index in some cases
+            if (nums[abs(nums[i]) - 1] > 0)
+                nums[abs(nums[i]) - 1] *= -1;
+        }
+        
+        // A positive element means that the element (index + 1) does not appear in the array, so save it
+        for (int i = 0; i < nums.size(); ++i)
+            if (nums[i] > 0)
+                results.push_back(i + 1);
+        
+        return results;
+    }
+};

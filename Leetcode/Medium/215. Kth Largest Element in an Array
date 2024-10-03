@@ -1,0 +1,142 @@
+-------------------------------------------------- HEAP SORT --------------------------------------------------
+// Time: O(N + klogN)
+// Space: O(1)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        make_heap(begin(A), end(A));
+        while (--k) {
+            pop_heap(begin(A), end(A));
+            A.pop_back();
+        }
+        return A[0];
+    }
+}
+
+----------------------------------------------------- BRUTE FORCE -----------------------------------------------------
+Time Complexity: O(NlogN)
+Space Complexity: O(1)
+
+class Solution {
+public:
+    int findKthLargest(std::vector<int>& nums, int k) {
+        std::sort(nums.begin(), nums.end(), std::greater<int>());
+        return nums[k-1];
+    }
+};
+
+-------------------------------------------------- MIN HEAP --------------------------------------------------
+Time Complexity: O(nlogk)
+Each of the n elements is processed once. However, heap operations take O(logk) time, leading to an overall complexity of O(nlogk).
+
+Space Complexity: O(k)
+
+// Time: O(NlogK)
+// Space: O(K)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        priority_queue<int, vector<int>, greater<>> pq;
+        for (int n : A) {
+            pq.push(n);
+            if (pq.size() > k) pq.pop();
+        }
+        return pq.top();
+    }
+};
+
+
+// Time: O(k + (N - k)logk)
+// Space: O(1)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        make_heap(begin(A), begin(A) + k, greater<int>());
+        for (int i = k; i < A.size(); ++i) {
+            if (A[i] <= A[0]) continue;
+            pop_heap(begin(A), begin(A) + k, greater<int>());
+            swap(A[i], A[k - 1]);
+            push_heap(begin(A), begin(A) + k, greater<int>());
+        }
+        return A[0];
+    }
+};
+
+-----------------------------------------------------MAX HEAP--------------------------------------------------
+
+// Time: O(N - k + klog(N - k))
+// Space: O(N - k)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        priority_queue<int> pq;
+        k = A.size() - k + 1;
+        for (int n : A) {
+            pq.push(n);
+            if (pq.size() > k) pq.pop();
+        }
+        return pq.top();
+    }
+};
+
+// Time: O((N - k) + klog(N - k))
+// Space: O(1)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        int len = A.size() - k + 1;
+        make_heap(begin(A), begin(A) + len); // maintain a max-heap in [0, N - k]
+        for (int i = len; i < A.size(); ++i) {
+            if (A[i] >= A[0]) continue;
+            pop_heap(begin(A), begin(A) + len);
+            swap(A[i], A[len - 1]);
+            push_heap(begin(A), begin(A) + len);
+        }
+        return A[0];
+    }
+};
+
+
+-------------------------------------------------- QUICK SELECT --------------------------------------------------
+Approach 3/3: QuickSelect Algorithm
+The QuickSelect algorithm is an efficient method to find the k-th smallest (or largest) element in an unordered list without sorting the entire list. 
+
+Time Complexity:
+
+Best and Average Case: O(N)
+
+// Time: O(N) on averge, O(N^2) in the worst case
+// Space: O(1)
+class Solution {
+    int partition(vector<int> &A, int L, int R) {
+        int i = L, pivotIndex = L + rand() % (R - L + 1), pivot = A[pivotIndex];
+        swap(A[pivotIndex], A[R]);
+        for (int j = L; j < R; ++j) {
+            if (A[j] > pivot) swap(A[i++], A[j]);
+        }
+        swap(A[i], A[R]);
+        return i;
+    }
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        int L = 0, R = A.size() - 1;
+        while (true) {
+            int M = partition(A, L, R);
+            if (M + 1 == k) return A[M];
+            if (M + 1 > k) R = M - 1;
+            else L = M + 1;
+        }
+    }
+};
+
+
+// Time: O(N) on average, O(N^2) in the worst case
+// Space: O(1)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        nth_element(begin(A), begin(A) + k - 1, end(A), greater<>());
+        return A[k - 1];
+    }
+};
+

@@ -1,0 +1,104 @@
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        // Check if the needle is empty
+        if (needle.empty()) {
+            return 0;
+        }
+
+        // Find the position of the needle in the haystack
+        size_t pos = haystack.find(needle);
+
+        // If found, return the position; otherwise, return -1
+        return (pos != string::npos) ? pos : -1;
+    }
+};
+
+Time: O((m−n)n), where m=∣haystack∣ and n=∣needle∣
+Space: O(1)
+
+class Solution {
+ public:
+  int strStr(string haystack, string needle) {
+    const int m = haystack.length();
+    const int n = needle.length();
+
+    for (int i = 0; i < m - n + 1; i++)
+      if (haystack.substr(i, n) == needle)
+        return i;
+
+    return -1;
+  }
+};
+
+In navie solution you check the string2 whole exist in string 1 then if yes move pointer of string 1  now this is waste of time as we have already check it in check 1  of  sting 2  this KPS help us here
+
+WOrst case - aaaaaaaaaaan  the targt aan mutiple search 
+
+->KMP we make suffis and prefix of  string 
+-> is  the begining of the string 2 appern in  and part of string again 
+
+// Time: O(M+N)
+// Space: O(N)
+
+
+class Solution {
+    // Function to compute the Longest Prefix Suffix (LPS) array
+    
+    vector<int> getLps(string &s) {
+        int N = s.size();  // Length of the pattern
+        int j = -1;       // Length of the previous longest prefix suffix
+        vector<int> lps(N + 1, -1); // LPS array initialized to -1
+        
+        // Build the LPS array
+        for (int i = 1; i <= N; ++i) {
+            // Adjust j until we find a match or j becomes -1
+            while (j >= 0 && s[i - 1] != s[j]) {
+                j = lps[j]; // Fall back to the previous longest prefix suffix
+            }
+            lps[i] = ++j; // Update the LPS value
+        }
+        return lps; // Return the computed LPS array
+    }
+
+public:
+    // Function to find the first occurrence of t in s
+    int strStr(string s, string t) {
+        // If the needle (t) is empty, return 0
+        if (t.empty()) return 0;
+
+        int M = s.size(); // Length of the haystack
+        int N = t.size(); // Length of the needle
+        int i = 0; // Index for haystack
+        int j = 0; // Index for needle
+
+        // Get the LPS array for the needle
+        auto lps = getLps(t);
+
+        // Start searching for the needle in the haystack
+        while (i < M) {
+            // If characters match, move both pointers
+            if (s[i] == t[j]) {
+                ++i;
+                ++j;
+            }
+
+            // If we found the whole needle, return the starting index
+            if (j == N) return i - j;
+
+
+            // If there's a mismatch after some matches
+            if (i < M && s[i] != t[j]) {
+                if (j) {
+                    j = lps[j]; // Use the LPS to skip unnecessary comparisons
+                } else {
+                    ++i; // Move to the next character in haystack
+                }
+            }
+        }
+        return -1; // Return -1 if the needle is not found
+    }
+};

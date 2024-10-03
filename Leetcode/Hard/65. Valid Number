@@ -1,0 +1,59 @@
+
+
+// TC- O(n)
+// SC- O(1)
+
+class Solution {
+public:
+    bool isNumber(std::string s) {
+        // Remove leading spaces
+        int start = 0;
+        while (start < s.length() && s[start] == ' ') {
+            start++;
+        }
+        
+        // Remove trailing spaces
+        int end = s.length() - 1;
+        while (end >= start && s[end] == ' ') {
+            end--;
+        }
+
+        // Check if the string is empty after trimming
+        if (start > end) return false;
+
+        bool seenNum = false, seenDot = false, seenE = false;
+
+        for (int i = start; i <= end; ++i) {
+            switch (s[i]) {
+                case '.':
+                    if (seenDot || seenE) return false;
+                    seenDot = true;
+                    break;
+                case 'e':
+                case 'E':
+                    if (seenE || !seenNum) return false;
+                    seenE = true;
+                    seenNum = false; // Reset for digits after 'e'
+                    break;
+                case '+':
+                case '-':
+                    if (i > start && s[i - 1] != 'e' && s[i - 1] != 'E') return false;
+                    seenNum = false; // Reset for digits after sign
+                    break;
+                default:
+                    if (!isdigit(s[i])) return false;
+                    seenNum = true;
+            }
+        }
+
+        return seenNum; // Must have seen at least one digit
+    }
+
+    
+// private:
+//     void trim(std::string& s) {
+//         s.erase(0, s.find_first_not_of(' ')); // Remove leading spaces
+//         s.erase(s.find_last_not_of(' ') + 1); // Remove trailing spaces
+//     }
+// };
+};

@@ -1,0 +1,86 @@
+
+
+Time complexity:O(nlogn)
+Space complexity:O(1)
+
+class Solution {
+public:
+    int minOperations(vector<int>& nums, vector<int>& numsD) {
+        sort(nums.begin(),nums.end());
+        int n=nums.size(),m=numsD.size();
+        int gcd_num=numsD[0];
+        for(int i=1;i<m;i++){
+          gcd_num=gcd(gcd_num,numsD[i]);
+        }
+        int c=0;
+        for(int i=0;i<n;i++){
+            if(gcd_num%nums[i])
+             c++;
+             else break;
+        }
+
+        return (c==n)?-1:c;
+    }
+};
+
+
+class Solution {
+public:
+ int gcd( int a , int b){while(b!=0){int temp =b;  b=a%b; a=temp;} return a;} // gcd 
+
+ int find_gcd(vector<int> arr  ){
+    int res=arr[0]; 
+    for ( int i=1 ; i <arr.size() ; i++){
+        res= gcd(res, arr[i]);
+    }
+    return res;
+ }
+    int minOperations(vector<int>& nums, vector<int>& numsDiv) {
+         if (numsDiv.empty()) return -1; // Edge case: empty numsDiv
+
+        int gcdval = find_gcd(numsDiv);
+        int cnt = 0;
+
+        // Sort nums to find the smallest valid divisor
+        sort(nums.begin(), nums.end());
+     
+       for (int i=0; i < nums.size() ; i++){
+        if((gcdval%nums[i])==0){
+            return cnt;
+        }
+        cnt++;
+       }
+       return -1; 
+    }
+};
+
+
+------------------- alternate solution 
+
+ Time Complexity: O(n log n + m)
+Space Complexity: O(n)
+
+
+class Solution {
+public:
+    int minOperations(vector<int>& nums, vector<int>& numsDivide) {
+        // Step 1: Calculate the GCD of numsDivide
+        int gcdValue = 0;
+        for (const auto& num : numsDivide) {
+            gcdValue = gcd(gcdValue, num);
+        }
+
+        // Step 2: Create a priority queue to find the smallest elements in nums
+        priority_queue<int, vector<int>, greater<int>> minHeap(nums.begin(), nums.end());
+
+        // Step 3: Count deletions until we find a valid divisor
+        int deletions = 0;
+        while (!minHeap.empty() && gcdValue % minHeap.top() != 0) {
+            deletions++;
+            minHeap.pop();
+        }
+
+        // Step 4: Check if we found a valid divisor
+        return minHeap.empty() ? -1 : deletions;
+    }
+};

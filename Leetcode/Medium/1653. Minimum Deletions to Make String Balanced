@@ -1,0 +1,19 @@
+Time complexity: O(n)
+Space complexity: O(1)
+
+
+class Solution {
+public:
+    int minimumDeletions(string s) {
+        int res=0 ; int cnt=0 ; 
+        for (char it : s){
+            if (it=='b'){
+                cnt++;
+            }else if (cnt){//cnt is not zero and we enconnter the conditon where the exist b before a 
+            res++;  
+            cnt--;
+            }
+        }
+        return res; 
+    }
+};

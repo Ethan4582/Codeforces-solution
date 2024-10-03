@@ -1,0 +1,34 @@
+
+--brute force-------------
+
+ time complexity of O(k^2)
+  space complexity of O(k)
+
+class Solution {
+public:
+    char kthCharacter(int k) {
+        string s ="a"; 
+        while(s.length()<k){
+            string temp="";
+            for(char c: s){
+                if(c=='z'){
+                    temp.push_back('a');
+                }
+                temp.push_back(c+1);
+            }
+            s+=temp;
+        }
+        return s[k-1]; 
+    }
+};
+
+
+----------No idea it solved but is most optmized Solution
+
+Time O(logk)
+Space O(1)
+
+    char kthCharacter(int k) {
+        return 'a' + __builtin_popcount(k - 1);
+    }
+    

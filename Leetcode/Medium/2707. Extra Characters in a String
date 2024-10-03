@@ -1,0 +1,127 @@
+
+
+---------------------------Solution 1. Trie + Bottom-up DP---------------------------
+
+
+// Time: O(DL + N^2) where D is the length of dictionary, L is the maximum length of words in dictionary,
+//                      N is the length of S.
+// Space: O(DL)
+struct TrieNode {
+    TrieNode *next[26] = {};
+    bool end = false;
+};
+class Solution {
+    void addWord(TrieNode *node, string &s) {
+        for (char c : s) {
+            if (!node->next[c - 'a']) node->next[c - 'a'] = new TrieNode();
+            node = node->next[c - 'a'];
+        }
+        node->end = true;
+    }
+public:
+    int minExtraChar(string s, vector<string>& A) {
+        TrieNode root;
+        for (auto &s : A) addWord(&root, s);
+        int N = s.size(), ans = N;
+        vector<int> dp(N + 1, INT_MAX);
+        dp[N] = 0;
+        for (int i = N - 1; i >= 0; --i) {
+            auto node = &root;
+            int j = i;
+            while (j < N && node->next[s[j] - 'a']) {
+                node = node->next[s[j] - 'a'];
+                dp[i] = min(dp[i], (node->end ? 0 : j - i + 1) + dp[j + 1]);
+                ++j;
+            }
+            if (dp[i] == INT_MAX) dp[i] = dp[i + 1] + 1;
+        }
+        return dp[0];
+    }
+};
+
+
+
+---------------------------Solution 2. Unordered Set + Top-down DP---------------------------
+// Time: O(DL + N^2)
+// Space: O(DL + N)
+class Solution {
+public:
+    int minExtraChar(string s, vector<string>& A) {
+        unordered_set<string> dict(begin(A), end(A));
+        int N = s.size();
+        vector<int> m(N, INT_MAX);
+        function<int(int)> dfs = [&](int start) {
+            if (start == N) return 0;
+            if (m[start] != INT_MAX) return m[start];
+            m[start] = 1 + dfs(start + 1);
+            for (int i = start; i < N; ++i) {
+                auto sub = s.substr(start, i - start + 1);
+                if (dict.count(sub)) m[start] = min(m[start], dfs(i + 1));
+            }
+            return m[start];
+        };
+        return dfs(0);
+    }
+};
+
+
+
+class Solution {
+public:
+    int minExtraChar(const string &s, vector<string>& dict) {
+        memset(dp, -1, sizeof(dp)); // Initialize dp array with -1
+        
+        return minExtraCharHelper(s, dict, 0);
+    }
+    
+private:
+    int dp[51]; // Initialize dp array to store memoization values
+
+    int minExtraCharHelper(const string &s, vector<string>& dict, int i) {
+        if (i == s.size())
+            return 0;
+
+        if (dp[i] == -1) {
+            dp[i] = 1 + minExtraCharHelper(s, dict, i + 1); // Initialize with one extra character.
+
+            for (const auto &w : dict) {
+                if (s.compare(i, w.size(), w) == 0) {
+                    dp[i] = min(dp[i], minExtraCharHelper(s, dict, i + w.size())); // Update if a word in the dictionary is found.
+                }
+            }
+        }
+
+        return dp[i]; // Return the minimum extra characters starting from position i.
+    }
+};
+
+
+---------------------------Code Bottom-up dynamic programming---------------------------
+
+class Solution {
+public:
+    int minExtraChar( string &s, vector<string>& dictionary) {
+        int dp[51] = {}; // Initialize an array to store the minimum extra characters.
+        int n = s.size();
+        
+        for (int i = n - 1; i >= 0; --i) {
+            dp[i] = 1 + dp[i + 1]; // Initialize with one extra character.
+            
+            for (const auto &w : dictionary) {
+                if (i + w.size() <= n && s.compare(i, w.size(), w) == 0) {
+                    dp[i] = min(dp[i], dp[i + w.size()]); // Update if a word in the dictionaryionary is found.
+                }
+            }
+        }
+        
+        return dp[0]; // Return the minimum extra characters for the entire string.
+    }
+
+};
+
+
+
+
+
+
+

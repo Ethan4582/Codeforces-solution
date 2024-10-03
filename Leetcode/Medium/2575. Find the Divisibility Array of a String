@@ -1,0 +1,24 @@
+
+Time Complexity: O(n)
+Space Complexity: O(n) or 0(1)
+
+class Solution {
+public:
+    vector<int> divisibilityArray(string word, int m) {
+        vector<int> ans(word.size(), 0); // Initialize answer array with zeros
+        long long currNum = 0; // Current number in modulo m
+
+        for (int i = 0; i < word.size(); i++) {
+            // Update currNum by appending the current digit
+           currNum= (currNum*10 +(word[i]-'0'))%m;
+            // Check divisibility and set the corresponding index in ans
+            if (currNum == 0) {
+                ans[i] = 1; // Divisible
+            } else {
+                ans[i] = 0; // Not divisible
+            }
+        }
+        
+        return ans;
+    }
+};

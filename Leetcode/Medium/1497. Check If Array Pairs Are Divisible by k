@@ -1,0 +1,23 @@
+
+
+
+class Solution {
+public:
+    bool canArrange(vector<int>& a, int k) {
+        int n = a.size();
+
+        unordered_map<int, int> freq;
+        for (int num : a) {
+            int mod = ((num % k) + k) % k; // Handle negative numbers
+            freq[mod]++;
+        }
+
+        for (int i = 1; i < k; i++) {
+            if (freq[i] != freq[k - i]) {
+                return false;
+            }
+        }
+
+        return freq[0] % 2 == 0; // Check pairs of zeros
+    }
+};

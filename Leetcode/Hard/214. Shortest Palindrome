@@ -1,0 +1,131 @@
+Intuition Behind the Logic:
+The core idea is to find the longest prefix of the original string s that matches a suffix of its reverse. This is because a palindrome reads the same forwards and backwards, so the beginning of s should ideally mirror the end of its reverse.
+By checking prefixes of the reversed string, we can determine how many characters from the beginning of s need to be appended to the end to make the entire string a palindrome.
+The algorithm efficiently constructs the shortest palindrome by leveraging string comparisons and avoids unnecessary computations.
+
+Time Complexity: O(n^2)
+Space Complexity: O(n)
+----------> TLE on this soltion 
+
+
+class Solution {
+public:
+    std::string shortestPalindrome(std::string s) {
+        std::string r = std::string(s.rbegin(), s.rend()); // Reverse the string
+        for (int i = 0; i <= s.size(); ++i) {
+            // Check if the original string starts with the suffix of the reversed string
+            if (s.substr(0, s.size() - i) == r.substr(i)) {
+                return r.substr(0, i) + s; // Append the necessary characters to form a palindrome
+            }
+        }
+        return s; // If s is already a palindrome
+    }
+};
+
+
+class Solution {
+ public:
+  string shortestPalindrome(string s) {
+    const string t = {s.rbegin(), s.rend()};
+    const string_view sv_s(s);
+    const string_view sv_t(t);
+
+    for (int i = 0; i < s.length(); ++i)
+      if (sv_s.substr(0, s.length() - i) == sv_t.substr(i))
+        return t.substr(0, i) + s;
+
+    return t + s;
+  }
+};
+TC- O(N^2)
+SC- O(N)
+
+
+------------------------------------------Optimal Solution---------------------------------------------------------------------------------------------------
+ Intuition:
+The goal is to make the given string s a palindrome by adding the fewest characters to the front. To do this efficiently, we should find the largest part of s that is already a palindrome starting from the beginning, then just append the necessary characters to the front from the remaining part of s.
+
+By reversing the string, we can check how much of the reversed string matches the original, helping us identify the minimum characters needed.
+
+
+
+Reverse the String: We reverse the string and append it to the original string, separated by a # (to avoid matching over the middle).
+
+KMP Algorithm:
+
+We use the KMP algorithm to build a partial match table (lps) on the new string (s + '#' + reverse(s)).
+The last value in the lps array will tell us the length of the longest palindromic prefix in the original string s.
+Construct Result:
+
+Once we know the length of the longest palindromic prefix, we can append the remaining characters from the reverse of s to the front of the original string.
+
+
+Example Walkthrough
+Example 1:
+
+Input: "aacecaaa"
+
+Reverse: "aaacecaa"
+
+New String: "aacecaaa#aaacecaa"
+
+KMP Table for "aacecaaa#aaacecaa": [0, 1, 0, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+The last value in the KMP table is 8, which means the longest palindromic prefix is "aacecaaa".
+
+No extra characters are added, so the result is "aaacecaaa".
+
+Example 2:
+
+Input: "abcd"
+
+Reverse: "dcba"
+
+New String: "abcd#dcba"
+
+KMP Table for "abcd#dcba": [0, 0, 0, 0, 0, 0, 0, 0]
+
+The last value is 0, so there is no palindromic prefix.
+
+The result is the reverse of "bcd" prepended to the original string: "dcbabcd".
+
+
+
+
+class Solution {
+public:
+    std::string shortestPalindrome(std::string s) {
+        // Get the length of the original string
+        int n = s.size();
+        
+        // Create a new string that combines the original string, a separator, and the reversed string
+        // Example: if s = "abc", then ss = "abc#cba"
+        std::string ss = s + '#' + std::string(s.rbegin(), s.rend());
+        
+        // Initialize a vector to store the lengths of the longest prefix suffix (LPS) for the combined string
+        std::vector<int> lps(ss.size());
+
+        // Build the LPS array
+        for(int i = 1; i < ss.size(); i++) {
+            int j = lps[i - 1]; // Start with the length of the previous longest prefix suffix
+
+            // While there is a mismatch and j is greater than 0, backtrack in the LPS array
+            while(j > 0 && ss[i] != ss[j]) {
+                j = lps[j - 1]; // Update j to the length of the next longest prefix suffix
+            }
+
+            // If there's a match, increment the length of the current longest prefix suffix
+            if(ss[i] == ss[j]) {
+                j++;
+            }
+
+            // Store the length of the longest prefix suffix for the current position
+            lps[i] = j;
+        }
+
+        // Calculate the number of characters to append to make the shortest palindrome
+        // lps.back() gives the length of the longest palindromic prefix in the original string
+        // We take the characters from the reversed string that are not part of this prefix
+        return std::string(s.rbegin(), s.rend()).substr(0, n - lps.back()) + s;
+    }
+};

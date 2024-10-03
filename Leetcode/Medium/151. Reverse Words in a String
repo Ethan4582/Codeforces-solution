@@ -1,0 +1,100 @@
+// tc- O(n)
+// sc- O(n)
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        stack<string> st; // Stack to hold words
+        string word; // Temporary string to hold each word
+
+        // Use a stringstream to split the string into words
+        stringstream ss(s);
+        while (ss >> word) { // Read words from the string
+            st.push(word); // Push each word onto the stack
+        }
+
+        string res; // Result string to store the reversed words
+
+        // Pop words from the stack to create the reversed string
+        while (!st.empty()) {
+            res += st.top(); // Add the top word to the result
+            st.pop(); // Remove the top word from the stack
+            if (!st.empty()) {
+                res += ' '; // Add a space between words, but not after the last word
+            }
+        }
+
+        return res; // Return the final reversed string
+    }
+};
+
+
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        stack<string> st; // Stack to hold words
+        string word; // Temporary string to hold each word
+        int n = s.size();
+
+        // Iterate through the string to extract words
+        for (int i = 0; i < n; i++) {
+            if (s[i] != ' ') {
+                word += s[i]; // Build the current word
+            } else if (!word.empty()) {
+                st.push(word); // Push the word onto the stack
+                word.clear(); // Clear the current word
+            }
+        }
+
+        // Push the last word if it exists
+        if (!word.empty()) {
+            st.push(word);
+        }
+
+        string res; // Result string to store the reversed words
+
+        // Pop words from the stack to create the reversed string
+        while (!st.empty()) {
+            res += st.top(); // Add the top word to the result
+            st.pop(); // Remove the top word from the stack
+            if (!st.empty()) {
+                res += ' '; // Add a space between words, but not after the last word
+            }
+        }
+
+        return res; // Return the final reversed string
+    }
+};
+
+
+------------------------------   Optimized Approach  ------------------------------
+
+tc- O(1)
+sc- O(1)
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        reverse(s.begin(), s.end());
+        int n = s.size();
+        int left = 0;
+        int right = 0;
+        int i = 0;
+        while (i < n) {
+            while (i < n && s[i] == ' ')
+                i++;
+            if (i == n)
+                break;
+            while (i < n && s[i] != ' ') {
+                s[right++] = s[i++];
+            }
+            reverse(s.begin() + left, s.begin() + right);
+            s[right++] = ' ';
+            left = right;
+            i++;
+        }
+        s.resize(right - 1);
+        return s;
+    }
+};

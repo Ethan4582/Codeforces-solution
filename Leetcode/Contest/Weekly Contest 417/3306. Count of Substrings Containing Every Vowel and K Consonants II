@@ -1,0 +1,46 @@
+
+Two Helper Functions:
+
+isVowel: Checks if a character is a vowel (a, e, i, o, u).
+countSubstrings: This function counts the substrings that have exactly K non-vowel characters.
+
+Time Complexity: O(n),
+Space Complexity: O(1) 
+
+Key Concept:
+countSubstrings(K): This function counts the total number of substrings that have at least K non-vowel characters.
+countSubstrings(K + 1): This function counts the total number of substrings that have at least K + 1 non-vowel characters
+
+
+class Solution {
+public:
+    long long countOfSubstrings(string word, int K) {
+        int n = word.size();
+        auto isVowel = [&](char c) {
+            return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+        };
+
+        auto countSubstrings = [&](int K) {
+            long long result = 0;
+            int vowels[26] = {0}, numVowels = 0, nonVowels = 0;
+            for (int i = 0, j = 0; i < n; i++) {
+                while (j < n && (numVowels < 5 || nonVowels < K)) {
+                    if (isVowel(word[j])) {
+                        if (vowels[word[j] - 'a']++ == 0) numVowels++;
+                    } else {
+                        nonVowels++;
+                    }
+                    j++;
+                }
+                if (numVowels == 5 && nonVowels >= K) result += n - j + 1;
+                if (isVowel(word[i])) {
+                    if (--vowels[word[i] - 'a'] == 0) numVowels--;
+                } else {
+                    nonVowels--;
+                }
+            }
+            return result;
+        };
+        return countSubstrings(K) - countSubstrings(K + 1);
+    }
+};

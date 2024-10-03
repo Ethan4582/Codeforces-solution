@@ -1,0 +1,34 @@
+
+
+class Solution {
+public:
+    int largestAltitude(std::vector<int>& gain) {
+        int n = gain.size(); 
+        std::vector<int> altitudes(n + 1);
+        altitudes[0] = 0;
+
+        for (int i = 1; i <= n; i++) {
+            altitudes[i] = altitudes[i - 1] + gain[i - 1]; // Accumulate altitude
+        }
+
+        return *std::max_element(altitudes.begin(), altitudes.end());
+    }
+};
+
+
+Time: O(n)
+Space: O(1)
+class Solution {
+public:
+    int largestAltitude(vector<int>& gain) {
+        int maxAltitude = 0;
+        int currentAltitude = 0;
+        
+        for (int i = 0; i < gain.size(); i++) {
+            currentAltitude += gain[i];
+            maxAltitude = max(maxAltitude, currentAltitude);
+        }
+        
+        return maxAltitude;
+    }
+};

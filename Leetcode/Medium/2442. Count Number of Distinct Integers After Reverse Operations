@@ -1,0 +1,37 @@
+
+// TC-Time: O(n⋅m),
+// SC-Space: O(n)
+
+class Solution {
+public:
+    int countDistinctIntegers(vector<int>& nums) {
+        unordered_set<int> st; // Use a set to store distinct integers
+        for (int num : nums) {
+            st.insert(num); // Insert the original number
+            string s = to_string(num);
+            reverse(s.begin(), s.end()); // Reverse the string
+            st.insert(stoi(s)); // Convert back to integer and insert
+        }
+        return st.size(); // Return the size of the set
+    }
+};
+
+
+// Time: O(ND) where D is the maximum number of digits of numbers in `A`
+// Space: O(N)
+class Solution {
+    int reverse(int n) {
+        int ans = 0;
+        while (n) {
+            ans = ans * 10 + n % 10;
+            n /= 10;
+        }
+        return ans;
+    }
+public:
+    int countDistinctIntegers(vector<int>& A) {
+        unordered_set<int> s(begin(A), end(A));
+        for (int n : A) s.insert(reverse(n));
+        return s.size();
+    }
+};

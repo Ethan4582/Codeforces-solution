@@ -1,0 +1,112 @@
+
+----- brute force -----
+
+Execution Steps
+Booking Event 1 (start = 10, end = 20):
+
+The method checks time points from 10 to 19 (inclusive).
+Since m is empty, there are no conflicts.
+It adds {10, 11, 12, 13, 14, 15, 16, 17, 18, 19} to m.
+Return Value: true
+State of m: {10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
+Booking Event 2 (start = 15, end = 25):
+
+The method checks time points from 15 to 24 (inclusive).
+It finds that 15 is already in m, indicating a conflict.
+The method returns false without modifying m.
+Return Value: false
+State of m: {10, 11, 12, 13, 14, 15, 16, 17, 18, 19} (unchanged)
+
+
+Time Complexity: O(n),
+
+Space Complexity: O(S+n)
+
+class MyCalendar {
+public:
+    unordered_set<int> m; // Stores individual time points
+
+    MyCalendar() {}
+
+    bool book(int start, int end) {
+        unordered_set<int> subset; // Temporary set to store current interval
+        for (int i = start; i < end; i++) {
+            if (m.count(i) > 0) { // Check if any point is already booked
+                return false;
+            }
+            subset.insert(i);
+        }
+        for (auto x : subset) { // Insert current interval points into main set
+            m.insert(x);
+        }
+        return true;
+    }
+};
+
+-----Approach 2 : Brute Force Booking with pair -----
+
+Time Complexity: O(k) (where k is the number of booked intervals)
+Space Complexity: O(k) (for storing booked intervals in the ranges vector)
+
+
+class MyCalendar {
+public:
+vector<pair<int, int>> ranges;
+    MyCalendar() { }
+    
+    bool book(int start, int end) {
+        for(auto it : ranges){
+            int r_start= it.first;
+            int r_end=it.second; 
+            if(r_end>start && r_start<end)return false;
+        }
+        ranges.push_back(make_pair(start , end));
+        return true ; 
+    }
+};
+
+---------------------------little bit optimized ------------------------------
+// Time:
+//      MyCalendar: O(1)
+//      book: O(logN)
+// Space: O(N)
+
+class MyCalendar {
+    // Map to store the start time as key and end time as value for each booked event
+    map<int, int> m;
+
+public:
+    // Constructor initializes the calendar
+    MyCalendar() {}
+
+    // Method to book an event from 'start' to 'end'
+    bool book(int start, int end) {
+        // If the calendar is empty, add the first event and return true
+        if (m.empty()) {
+            m[start] = end; // Store the event in the map
+            return true;
+        }
+
+        // Find the first event that starts after the 'start' time
+        auto it = m.upper_bound(start);
+
+        // Check for overlap with the previous event (if it exists)
+        // 'prev(it)' gives the last event before 'it'
+        if (it != m.begin() && prev(it)->second > start) return false;
+
+        // Check for overlap with the next event (if it exists)
+        // 'it->first' is the start time of the next event
+        if (it != m.end() && it->first < end) return false;
+
+        // If no overlaps are found, add the event to the map
+        m[start] = end;
+        return true; // Booking was successful
+    }
+};
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar* obj = new MyCalendar();
+ * bool param_1 = obj->book(start,end);
+ */
+
