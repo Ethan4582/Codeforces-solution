@@ -24,21 +24,36 @@ using namespace std;
 int a[N]; 
 bool c[N]; 
 
+using namespace std;
+
 int main() {
     fastread();
-    int t ; 
-    cin >>t ; 
-    while(t--){
-      int x, y , k; cin>>x>>y>>k ; 
-      int xi=0, yi=0, i=0 ;
-      while( xi!=x  && yi!=y){
-         i++; 
-         if(i%2!=0){
-            if(xi+d<x)
-         }
-      }
+    int t, n;
 
-   
-  }
+    auto check = [&]() {
+        cin >> n;
+        multiset<int> s;
+        vi arr(n);
+        
+        for (int i = 0; i < n; ++i) {
+            cin >> arr[i];
+            s.insert(arr[i]);
+        }
+
+        while (s.size() > 1) {
+            auto b2 = s.begin();
+            auto a1 = next(b2);
+            int a = *b2; s.erase(b2);
+            int b = *a1; s.erase(a1);
+            s.insert((a + b) / 2);
+        }
+        p(*s.begin())
+    };
+
+    cin >> t;
+    while (t--) {
+        check();
+    }
+
     return 0;
 }

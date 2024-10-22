@@ -24,21 +24,18 @@ using namespace std;
 int a[N]; 
 bool c[N]; 
 
-int main() {
-    fastread();
-    int t ; 
-    cin >>t ; 
-    while(t--){
-      int x, y , k; cin>>x>>y>>k ; 
-      int xi=0, yi=0, i=0 ;
-      while( xi!=x  && yi!=y){
-         i++; 
-         if(i%2!=0){
-            if(xi+d<x)
-         }
-      }
+int main()
+{int n; 
 
+	cin>>n;
+	if(n==0)return
    
-  }
-    return 0;
+    cout<<1,0;
+	n--;
+	if(n%4==0)cout<<8;
+	else if(n%4==1)p(4)  
+	else if(n%4==2)p(2)  
+	else p(6);
+	return 0;
 }
+
