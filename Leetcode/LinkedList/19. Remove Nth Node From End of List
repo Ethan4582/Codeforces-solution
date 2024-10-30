@@ -1,0 +1,116 @@
+My brute force 
+
+Tc- 0(2l-n)  as 0(l)  and then 0(l-n)
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if (!head || n < 1) {
+            return nullptr; // Handle edge case
+        }
+
+        int sz = 0;
+        ListNode* temp = head;
+
+        // Calculate the size of the linked list
+        while (temp) {
+            sz++;
+            temp = temp->next;
+        }
+
+        // If n is equal to the size, remove the head
+        if (n == sz) {
+            ListNode* toDelete = head;
+            head = head->next;
+            delete toDelete; // Free the memory
+            return head;
+        }
+
+        temp = head;
+        ListNode* prev = nullptr;
+        int crr = 0;
+
+        // Traverse to find the node to remove
+        while (temp) {
+            crr++;
+            if (sz - crr + 1 == n) {
+                // Remove the N-th node from the end
+                prev->next = temp->next;
+                delete temp; // Free the memory
+                break;
+            }
+            prev = temp;
+            temp = temp->next;
+        }
+
+        return head; 
+    }
+};
+
+
+cleaner code 
+
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        // Create a dummy node that points to the head of the list
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+
+        ListNode* temp = head;
+        int sz = 0;
+
+        // Calculate the size of the linked list
+        while (temp != nullptr) {
+            sz++;
+            temp = temp->next;
+        }
+
+        // Reset temp to dummy node
+        temp = dummy;
+
+        // Calculate the position of the node to remove (from the beginning)
+        int len = sz - n; 
+
+        // Traverse to the node just before the one we want to remove
+        while (len--) {
+            temp = temp->next;
+        }
+
+        // Remove the N-th node from the end
+        temp->next = temp->next->next;
+
+        // Return the new head, which is the next of the dummy node
+        return dummy->next;
+    }
+};
+
+
+-----------------Two Pointer Approach – Slow and Fast Pointers 
+
+
+Tc- 0(n);
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode* first = dummy;
+        ListNode* second = dummy;
+
+        for (int i = 0; i <= n; ++i) {
+            first = first->next;
+        }
+
+        while (first != nullptr) {
+            first = first->next;
+            second = second->next;
+        }
+
+        ListNode* temp = second->next;
+        second->next = second->next->next;
+        delete temp;
+
+        return dummy->next;
+    }
+};

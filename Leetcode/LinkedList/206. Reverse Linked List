@@ -1,0 +1,88 @@
+
+
+Brute force 
+
+Time Complexity: O(2N) 
+Space Complexity: O(N) 
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        std::stack<ListNode*> nodeStack; // Create a stack to hold the nodes
+
+        // Push all nodes onto the stack
+        ListNode* curr = head;
+        while (curr) {
+            nodeStack.push(curr);
+            curr = curr->next;
+        }
+
+        // If the stack is empty, return nullptr
+        if (nodeStack.empty()) return nullptr;
+
+        // Pop nodes from the stack to reverse the list
+        ListNode* newHead = nodeStack.top(); // The new head is the last node
+        nodeStack.pop();
+        curr = newHead;
+
+        // Re-link nodes
+        while (!nodeStack.empty()) {
+            curr->next = nodeStack.top(); // Set the next of the current node
+            nodeStack.pop();
+            curr = curr->next; // Move to the next node
+        }
+
+        curr->next = nullptr; // Set the last node's next to nullptr
+        return newHead; // Return the new head of the reversed list
+    }
+};
+
+
+
+Optimal Approach 1 -  In place 
+
+Tc- 0(N)
+SC- 0(1)
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+          ListNode* prev=nullptr;
+          ListNode* temp= head; 
+
+          while(temp){
+             ListNode* front =  temp->next; // we need to store in oder to perform the smae task for the next elment 
+             temp->next= prev;  // link to back for rever 
+             prev=temp; // we need this prveious in order to link and perform the same task for the next element 
+             // prserve the previous elment
+             temp=front;// moving the pointer that is not link
+          }
+
+          return prev;
+    }
+};
+
+
+// Recursive 
+
+Tc- 0(N)
+SC- 0(N)
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        //base case 
+        if(head==nullptr || head->next==nullptr ){// for 1 and 0 node
+            return head ; // smallest elment is alread rversed 
+        }
+
+        ListNode* nehead= reverseList(head->next); // we recursive call to inorder to reach base case and make recursive tree rev(4)->rev(3)->rev(2)->rev(1) and go the deapth
+
+        // after recurv call we get the tail of the rever list 
+        ListNode* front=head->next;  // the front pointer to the tail of trevers list 
+        front->next=head;// now link the tail to the currrent head 
+        head->next= nullptr; // curr heaad rever
+
+        return nehead; 
+    }
+};
+
+ 

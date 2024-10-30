@@ -1,0 +1,16 @@
+
+Copy the value of the next node to the current node.
+Adjust the next pointer to skip the next node.
+
+ Time complexity: O(1), as we're only modifying the current node
+🧺Space complexity: O(1), no extra space is used.
+
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        node->val = node->next->val;
+        node->next = node->next->next;
+
+    
+    }
+};

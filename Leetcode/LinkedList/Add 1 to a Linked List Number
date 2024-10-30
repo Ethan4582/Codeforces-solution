@@ -1,0 +1,87 @@
+https://www.geeksforgeeks.org/problems/add-1-to-a-number-represented-as-linked-list/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=add-1-to-a-number-represented-as-linked-list
+
+Time complexity : O(n)
+space complexity : O(1)
+
+class Solution {
+
+  public:
+    Node* reverse(Node* head) {
+        Node* prev = NULL;
+        Node* current = head;
+        Node* next;
+
+        while (current != NULL) {
+            next = current->next; // storing next node
+            current->next = prev; // linking current node to previous
+            prev = current;       // updating prev
+            current = next;       // updating current
+        }
+
+        return prev;
+    }
+
+  public:
+    Node* addOne(Node* head) {
+        head = reverse(head); // reversing list to make addition easy
+
+        Node* current = head;
+        int carry = 1;
+
+        while (carry) {
+            current->data += 1; // adding one to current node
+
+            if (current->data < 10)
+                return reverse(head);
+            // if no carry we can reverse back list and return it
+            else
+                current->data = 0;
+            // else we continue with taking carry forward
+
+            if (current->next == NULL)
+                break;
+            // if, end of list, we break from loop
+            else
+                current = current->next;
+            // else we move to next node
+        }
+// this meean the last lemnt is grater than 10 
+        current->next = new Node(1); // adding new node for the carried 1
+        return reverse(head);
+    }
+};
+
+
+
+Recursive 
+Time complexity : O(n), 
+space complexity : O(1), 
+
+class Solution {
+  public:
+  
+      int addCarry(Node* head) {
+        if (head == nullptr)
+            return 1;
+        // Add carry returned by next node call
+        int res = head->data + addCarry(head->next);
+        // Update data and return new carry
+        head->data = res % 10;
+        return res / 10;
+    }
+
+
+    Node* addOne(Node* head) {
+        // Your Code here
+        // return head of list after adding one
+         int carry = addCarry(head);
+        // If there is carry after traversing all nodes then add new node to the linked list
+        if (carry != 0) {
+         //in case if the fial elment is =10 
+            Node* newNode = new Node(carry);
+            newNode->next = head;
+            return newNode;
+        }
+        return head;
+    }
+};

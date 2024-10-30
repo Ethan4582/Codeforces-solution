@@ -1,0 +1,90 @@
+
+
+Brute force 
+Time Complexity: O(N)
+Space Complexity: O(N)
+
+->can impmen the code using stack logic 
+
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        vector<int> arr;
+        ListNode* temp = head;
+
+        while (temp != nullptr) {
+            arr.push_back(temp->val);
+            temp = temp->next;
+        }
+
+        int left = 0, right = arr.size() - 1;
+        while (left < right) {
+            if (arr[left] != arr[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+};
+
+//Tourtes and here [ slow and fast pointer]
+
+Tc- 0(N)
+Sc-0(1)
+
+Sameimpmnetion cleaner code 
+
+class Solution {
+private:
+ListNode *reverse(ListNode *head) {
+        ListNode dummy(0);
+        while (head) {
+            ListNode *node = head;
+            head = head->next;
+            node->next = dummy.next;
+            dummy.next = node;
+        }
+        return dummy.next;
+    }
+
+     int getLength(ListNode *head) {
+        int len = 0;
+        for (; head; head = head->next, ++len);
+        return len;
+    }
+
+public:
+    bool isPalindrome(ListNode* head) {
+        if (!head) return true;
+        int len = (getLength(head) + 1) / 2;
+        ListNode* slow = head;  
+        ListNode* fast = head ;
+        // to find the middle of list 
+        while(--len>0){
+            slow=slow->next; 
+            fast= fast->next->next;
+        }
+
+        ListNode* headOfReverseSecondHalf = reverse(slow->next);
+
+        ListNode* first =head;
+        ListNode* second= headOfReverseSecondHalf;
+        //now the second is pointer at the reverse head
+        // even after the rvers is till point to next hal 
+        // 1->2->3   1->2->3->x
+        //        |--------|
+        while(second!=nullptr){
+            if(first->val!=second->val){
+                reverse( headOfReverseSecondHalf); 
+                return false ;
+            }
+            first=first->next;
+            second=second->next;
+        }
+         reverse( headOfReverseSecondHalf); 
+        return true; 
+    }
+};

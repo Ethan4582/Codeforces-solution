@@ -1,0 +1,23 @@
+https://www.geeksforgeeks.org/problems/linked-list-insertion-1587115620/0
+
+
+class Solution {
+  public:
+    Node *insertAtEnd(Node *head, int x) {
+       Node* newNode= new Node(x);
+       if(head==nullptr){
+           return newNode;// return new node as the head
+       }
+       
+       //make temp point to keep the track 
+       
+       Node* temp= head; // pointing at the head
+       while(temp->next!=nullptr){
+           temp= temp->next;// move the tempforward
+       }
+       
+       temp->next= newNode;
+       return head;
+        
+    }
+};

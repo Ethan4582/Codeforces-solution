@@ -1,0 +1,56 @@
+
+
+Time Complexity: O(N)
+
+Space Complexity: O(N)
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        unordered_set<ListNode*> visited;
+        ListNode* curr = head;
+        
+        while (curr) {
+            if (visited.count(curr)) {
+                return curr; // Cycle detected
+            }
+            visited.insert(curr);
+            curr = curr->next;
+        }
+        
+        return nullptr; // No cycle found
+    }
+};
+
+
+Why are we sure that we coilde if yes then why starting point ?
+
+L is lenght of the loop , d is the distance of the menting pointer from the  loop intersection and  L1 is the remain prtion of the of the loop 
+ 
+ l= L1+d  ;  L1 =  distance head->to->first intersrtion thus they aleays meet  [= this is the prrof ]
+
+Time Complexity: O(N)
+
+Space Complexity: O(1)
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode * slow =head; 
+        ListNode * fast=head;
+
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next; 
+            if(slow==fast){
+                slow= head; 
+                while(slow!=fast){
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return slow;
+            }
+        }
+        return nullptr; 
+    }
+};

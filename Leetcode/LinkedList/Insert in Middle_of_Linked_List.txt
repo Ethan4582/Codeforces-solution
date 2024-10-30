@@ -1,0 +1,73 @@
+
+https://www.geeksforgeeks.org/problems/insert-in-middle-of-linked-list/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
+
+
+class Solution {
+public:
+    Node* insertInMiddle(Node* head, int x) {
+        Node* newNode = new Node(x); // Create a new node with the value x
+        if (head == nullptr) {
+            return newNode; // If the list is empty, return the new node as head
+        }
+
+        int cnt = 0; // To count the number of nodes
+        Node* temp = head;
+
+        // Count the number of nodes in the linked list
+        while (temp != nullptr) {
+            cnt++;
+            temp = temp->next;
+        }
+
+        int mid = (cnt % 2 == 0) ? (cnt / 2) : (cnt / 2) + 1; // Calculate middle index
+        mid--; // Adjust for zero-based index
+
+        temp = head; 
+        // Traverse to the node before the middle
+        while (mid--) {
+            temp = temp->next;
+        }
+
+        // Insert the new node in the middle
+        newNode->next = temp->next; // Link new node to the next node
+        temp->next = newNode; // Link the previous node to the new node
+
+        return head; // Return the head of the modified list
+    }
+};
+
+
+->    [Expected Approach – 2] Using Single Traversal – O(n) Time and O(1) Space:
+
+ 
+
+
+class Solution {
+  public:
+    Node *insertInMiddle(Node *head, int x) {
+        // if list is empty, we just return the new node.
+        if (head == NULL)
+            return (new Node(x));
+        else {
+            // creating new node.
+            Node *newNode = new Node(x);
+
+            // we take two pointers one of which moves to next node in each
+            // iteration and the other moves two nodes in one iteration.
+            Node *slow = head;
+            Node *fast = head->next;
+
+            // therefore when fast will reach end, slow will be at the middle point.
+            while (fast && fast->next) {
+                slow = slow->next;
+                fast = fast->next->next;
+            }
+            // we store the next node after slow in link part of the new node.
+            newNode->next = slow->next;
+
+            // we also store the new node in link part of the slow node.
+            slow->next = newNode;
+        }
+        return head;
+    }
+};

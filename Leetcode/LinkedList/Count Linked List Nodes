@@ -1,0 +1,38 @@
+
+https://www.geeksforgeeks.org/problems/count-nodes-of-linked-list/0?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=count-nodes-of-linked-list
+
+
+class Solution {
+  public:
+    // Function to count nodes of a linked list.
+    int getCount(struct Node* head) {
+        int cnt=1;
+        if(head==nullptr) return cnt;
+        
+        Node* temp= head; 
+        
+        while(temp->next!=nullptr){
+            temp=temp->next;
+            cnt++;
+        }
+        return cnt ; 
+    }
+};
+
+//Recersively 
+
+// Time Complexity: O(n), where n is the length of Linked List.
+// Auxiliary Space: O(n), Extra space is used in the recursion call stack.
+
+class Solution {
+  public:
+    // Function to count nodes of a linked list.
+    int getCount(struct Node* head) {
+        if (head == NULL) {
+        return 0;
+    }
+
+    // Count this node plus the rest of the list
+    return 1 + getCount(head->next);
+    }
+};

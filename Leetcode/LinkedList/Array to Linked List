@@ -1,0 +1,31 @@
+
+https://www.geeksforgeeks.org/problems/introduction-to-linked-list/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=introduction-to-linked-list
+
+
+class Solution {
+  public:
+    Node* constructLL(vector<int>& arr) {
+         // Check if the input array is empty
+        if (arr.empty()) {
+            return nullptr; // Return null if there are no elements to create the list
+        }
+
+        // Create the head node using the first element of the array
+        Node* head = new Node(arr[0]);
+        // Pointer to traverse the linked list
+        Node* mover = head;
+
+        // Iterate through the remaining elements in the array
+        for (int i = 1; i < arr.size(); i++) {
+            // Create a new node for each element in the array
+            Node* temp = new Node(arr[i]);
+            // Link the current node to the new node
+            mover->next = temp;
+            // Move the pointer to the new node
+            mover = mover->next; // mover= temp  is the same 
+        }
+
+        // Return the head of the constructed linked list
+        return head;
+    }
+};

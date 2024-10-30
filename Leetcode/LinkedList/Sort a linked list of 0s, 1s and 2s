@@ -1,0 +1,85 @@
+https://www.geeksforgeeks.org/problems/given-a-linked-list-of-0s-1s-and-2s-sort-it/1
+
+
+Brute force -> dat replacment 
+
+Tc- 0(2n)
+sc-0(1)
+
+class Solution {
+  public:
+    // Function to sort a linked list of 0s, 1s and 2s.
+    Node* segregate(Node* head) {
+         Node* temp= head; 
+         int cnt0 =0 ,cnt1 =0 , cnt2 =0 ;
+         while(temp!=nullptr){
+             if(temp->data==0) cnt0++;
+             else if(temp->data==1)cnt1++;
+             else cnt2++;
+             temp=temp->next;
+         }
+         
+         temp=head; 
+         while(temp!=nullptr){
+             if(cnt0){
+                 temp->data=0; 
+                 cnt0--;
+             }else if(cnt1){
+                 temp->data=1; 
+                cnt1--;
+             }else{
+                 temp->data=2;
+                 cnt2--;
+             }
+             temp=temp->next;
+         }
+        
+        return head;
+    }
+};
+
+
+optmizied [ chain the given link ]
+
+Time Complexity: O(n), where n is the number of nodes in the linked list.
+Auxiliary Space: O(1)
+
+class Solution {
+public:
+    Node* segregate(Node* head) {
+        if (!head || !(head->next))
+            return head;
+
+        Node *zeroD = new Node(0);
+        Node *oneD = new Node(0);
+        Node *twoD = new Node(0);
+
+        Node *zero = zeroD, *one = oneD, *two = twoD;
+        Node *curr = head;
+
+        while (curr != nullptr) {
+            if (curr->data == 0) {
+                zero->next = curr;
+                zero = zero->next;
+            } else if (curr->data == 1) {
+                one->next = curr;
+                one = one->next;
+            } else {
+                two->next = curr;
+                two = two->next;
+            }
+            curr = curr->next;
+        }
+
+        // Combine the three lists
+        zero->next = (oneD->next) ? oneD->next : twoD->next;
+        one->next = twoD->next;
+        two->next = nullptr;
+
+        head = zeroD->next;
+        delete zeroD; // Free the dummy node
+        delete oneD;  // Free the dummy node
+        delete twoD;  // Free the dummy node
+        return head;
+    }
+};

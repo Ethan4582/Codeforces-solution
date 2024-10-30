@@ -1,0 +1,42 @@
+brute force 
+
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        unordered_set<ListNode*> visited;
+        ListNode* curr = head;
+
+        while (curr) {
+            if (visited.count(curr)) {
+                return true; // Cycle detected
+            }
+            visited.insert(curr);
+            curr = curr->next;
+        }
+
+        return false; // No cycle
+    }
+};
+
+
+optmial 
+
+Tc-0(N); 
+Sc-0(1)
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode *slow = head, *fast = head;
+
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if (slow == fast) {
+                return true; // Cycle detected
+            }
+        }
+
+        return false; // No cycle
+    }
+};

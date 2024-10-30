@@ -1,0 +1,74 @@
+https://www.geeksforgeeks.org/problems/find-length-of-loop/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=find-length-of-loop
+
+
+Brute force 
+
+Tc-O(N)
+Sc- O(N)
+
+class Solution {
+public:
+    int countNodesinLoop(Node *head) {
+        unordered_set<Node*> visited;
+        Node* temp = head;
+
+        while (temp) {
+            if (visited.find(temp) != visited.end()) {
+                // Loop detected
+                break;
+            }
+            visited.insert(temp);
+            temp = temp->next;
+        }
+
+        // If no loop, temp will be null
+        if (!temp) {
+            return 0;
+        }
+
+        // Count the nodes in the loop
+        int count = 1;
+        temp = temp->next;
+        while (temp != visited.begin()->first) {
+            count++;
+            temp = temp->next;
+        }
+
+        return count;
+    }
+};
+
+
+
+//  Slow and fast pointer 
+
+class Solution {
+public:
+    int countNodesinLoop(Node *head) {
+        Node *slow = head, *fast = head;
+
+        // Detect the loop using slow and fast pointers
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast) {
+                break; // Loop detected
+            }
+        }
+
+        // If no loop, return 0
+        if (!fast || !fast->next) {
+            return 0;
+        }
+
+        // Find the length of the loop
+        int count = 1;
+        slow = slow->next;
+        while (slow != fast) {
+            count++;
+            slow = slow->next;
+        }
+
+        return count;
+    }
+};

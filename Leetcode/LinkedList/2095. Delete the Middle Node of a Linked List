@@ -1,0 +1,46 @@
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+    int getLength(ListNode *head) {
+        int ans = 0;
+        for (; head; ++ans, head = head->next);
+        return ans;
+    }
+public:
+    ListNode* deleteMiddle(ListNode* head) {
+        ListNode dummy, *p = &dummy;
+        dummy.next = head;
+        int len = getLength(head) / 2;
+        for (int i = 0; i < len; ++i, p = p->next);
+        p->next = p->next->next;
+        return dummy.next;
+    }
+};
+
+
+Optimal Approach- 
+Time Complexity: O(N/2) 
+Space Complexity: O(1) 
+
+class Solution {
+public:
+    ListNode* deleteMiddle(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return nullptr; // Handle edge cases of empty or single-node list
+        }
+
+        ListNode *slow = head, *fast = head, *prev = nullptr;
+
+        while (fast && fast->next) {
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        prev->next = slow->next; // Delete the middle node
+        delete slow;
+
+        return head;
+    }
+};

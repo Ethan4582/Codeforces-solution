@@ -1,0 +1,96 @@
+https://leetcode.com/problems/add-two-numbers/description/
+
+
+
+// Tc- 0(max(m,n))
+// Sc- 0(1)
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        // Create a new linked list to store the sum
+        ListNode* dummyNode = new ListNode(0); // First dummy node to simplify the process
+        ListNode* current = dummyNode; // Pointer to build the new list
+        int carry = 0; // Variable to keep track of carry
+
+        // Traverse both linked lists until both are finished
+        while (l1 != nullptr || l2 != nullptr || carry > 0) {
+            int sum = carry; // Start with carry
+            if (l1 != nullptr) { // Add value from l1 if available
+                sum += l1->val;
+                l1 = l1->next; // Move to the next node in l1
+            }
+            if (l2 != nullptr) { // Add value from l2 if available
+                sum += l2->val;
+                l2 = l2->next; // Move to the next node in l2
+            }
+
+            // Calculate new carry and the digit to store in the new node
+            carry = sum / 10; // Update carry for the next iteration
+            current->next = new ListNode(sum % 10); // Create a new node with the digit
+            current = current->next; // Move current to the new node
+        }
+
+        // The first node was a dummy node, so return the next node
+        return dummyNode->next; 
+    }
+};
+
+
+
+https://www.geeksforgeeks.org/problems/add-two-numbers-represented-by-linked-lists/1
+
+Time Complexity: O(n+m)
+SC- O(n+m)
+class Solution {
+public:
+    // Function to reverse a linked list and return the head of the reversed linked list
+    Node* reverseLinkedList(Node* head) {
+        Node* prev = nullptr;
+        Node* curr = head;
+        while (curr != nullptr) {
+            Node* nextNode = curr->next; // Store the next node
+            curr->next = prev;            // Reverse the link
+            prev = curr;                  // Move prev and curr one step forward
+            curr = nextNode;
+        }
+        return prev; // New head of the reversed list
+    }
+
+    // Function to add two numbers represented by linked lists
+    Node* addTwoLists(Node* num1, Node* num2) {
+        // Reverse both linked lists
+        Node* l1 = reverseLinkedList(num1); 
+        Node* l2 = reverseLinkedList(num2); 
+         
+        Node* dummyNode = new Node(0); // Dummy node to simplify the result list
+        Node* curr = dummyNode; // Pointer to build the new list
+        int carry = 0; // Variable to keep track of carry
+
+        // Traverse both linked lists until both are finished
+        while (l1 != nullptr || l2 != nullptr || carry > 0) {
+            int sum = carry; // Start with carry
+            if (l1 != nullptr) {
+                sum += l1->data; // Add value from l1 if available
+                l1 = l1->next; // Move to the next node in l1
+            }
+            if (l2 != nullptr) {
+                sum += l2->data; // Add value from l2 if available
+                l2 = l2->next; // Move to the next node in l2
+            }
+            
+            // Calculate new carry
+            carry = sum / 10; 
+            Node* newNode = new Node(sum % 10); // Create a new node with the digit
+            curr->next = newNode; // Link the new node
+            curr = curr->next; // Move current to the new node
+        }
+
+        // Reverse the result linked list to get the final answer
+        Node* ansList = reverseLinkedList(dummyNode->next); 
+        delete dummyNode; // Clean up the dummy node
+
+        return ansList; // Return the head of the final linked list
+    }
+};
+

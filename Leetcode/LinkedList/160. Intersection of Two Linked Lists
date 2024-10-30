@@ -1,0 +1,86 @@
+
+Time Complexity: O(M + N), where M and N are the lengths of the two linked lists.
+Space Complexity: O(M), where M is the length of the first linked list.
+
+
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        unordered_set<ListNode*> visited;
+
+        while (headA) {
+            visited.insert(headA);
+            headA = headA->next;
+        }
+
+        while (headB) {
+            if (visited.count(headB)) {
+                return headB;
+            }
+            headB = headB->next;
+        }
+
+        return nullptr;
+    }
+};
+
+
+//2   pointer [ align it first node of the smaller to the node align to it   ]
+
+
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        int lenA = length(headA);
+        int lenB = length(headB);
+
+        // Find the difference in lengths
+        int diff = abs(lenA - lenB);
+
+        // Make the longer list start diff nodes later
+        ListNode* longer = lenA > lenB ? headA : headB;
+        ListNode* shorter = lenA > lenB ? headB : headA;
+
+        for (int i = 0; i < diff; ++i) {
+            longer = longer->next;
+        }
+
+        // Iterate both lists simultaneously until they meet or reach the end
+        while (longer != shorter) {
+            longer = longer->next;
+            shorter = shorter->next;
+        }
+
+        return longer;
+    }
+
+private:
+    int length(ListNode* head) {
+        int len = 0;
+        while (head) {
+            len++;
+            head = head->next;
+        }
+        return len;
+    }
+};
+
+
+
+// -------------------New pattern 
+
+Tc- 0(n); 
+sc- 0(1)
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *pA = headA, *pB = headB;
+
+        while (pA != pB) {
+            pA = pA == nullptr ? headB : pA->next; // mpmnet any of it reaches the null we transfer it diffelist head
+            pB = pB == nullptr ? headA : pB->next;// this movemnet ensure that become similar and thus comes momnet the point at the same elmen this we get the intersection 
+        }
+
+        return pA;
+    }
+};
