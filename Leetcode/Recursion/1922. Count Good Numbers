@@ -1,0 +1,44 @@
+
+
+Use of binary expotional 
+
+Time Complexity: O(logn)
+Space Complexity: O(logn)
+
+class Solution {
+private:
+    ///binary expantion
+    long pow(int x, long y, long mod) { // Added mod as a parameter
+        long temp; // to store the answer
+
+        if (y == 0) return 1; 
+        temp = pow(x, y / 2, mod); // Pass mod to the recursive call
+        if (y & 1) // Check if y is odd
+            return (x * temp * temp) % mod; // Use mod
+        else 
+            return (temp * temp) % mod; // Use mod
+    }
+public:
+    int countGoodNumbers(long long n) {
+        // 1-> _ we have 5 option so 5c1
+        // 2->_ _  we have   0 is at ever index then we have  5C1 * 4C1 number 
+        // 3 -> _ _ _   5c1* 4c1 * 5c1 
+
+        // if n is even ex= 4  we have  2 odd and 2 even so general formula would be 5^(n/2)* 4^(n/2)
+        // if n is odd ex= 3  2 even and 1  odd so general formula would be 5^((n/2)+1) * 4^(n/2)
+
+        // as n is too big goes up to 10^15 directly power calculation will take O(n) we use divide and conquer that takes O(log(n))
+
+        // is n even or not 
+
+        long mod = (int)1e9 + 7; // Changed to long to avoid overflow
+        long first = (n & 1) ? ((n / 2) + 1) : (n / 2); // Fixed the condition for odd/even check
+        long second = n / 2; // for 4 power
+        long mul1 = pow(5, first, mod) % mod; // Pass mod to pow
+        long mul2 = pow(4, second, mod) % mod; // Pass mod to pow
+        long ans = 1; 
+        ans = (ans * mul1) % mod;
+        ans = (second != 0) ? (ans * mul2) % mod : ans; // edge case just 1 digit the even place 
+        return (int)(ans % mod);
+    } 
+};

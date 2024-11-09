@@ -1,0 +1,66 @@
+
+brute force
+
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        int n = arr.size();
+        long long ans = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                long minVal = *min_element(arr.begin() + i, arr.begin() + j + 1);
+                ans += minVal;
+            }
+        }
+        return ans % ((int)pow(10, 9) + 7);
+    }
+};
+
+
+// optmized solution 
+
+
+-> we see thr contribution of each elment in  the each subbary  
+-> for that we use i -> on right idx of next_samller elment   on left next_prev samler elment index  curr   4   ->  (7-4) * (4-0)= 12 time elmet at 4 idex  which is 3 has contiributes   so 36 we do this foe each elment
+
+-> edge case -  if not next or prev smaller elmeent exist  nextsamller to  N and prev to -1
+
+
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        long long ans = 0;
+        vector<int> left(n, -1), right(n, n);
+        stack<int> st;
+        long long mod = (int)1e9 + 7;
+
+        // Find the next smaller element index from the current index
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && arr[st.top()] >= arr[i]) {
+                //we are kkep putting thelemnt in ht stack until that in not while loop are definall samller elment that are pushed in stack  jsut before conditon the last elment which is the samllest we update in the right 
+                right[st.top()] = i;
+                st.pop();
+            }
+            st.push(i);
+        }
+
+        st = stack<int>();
+
+        // Find the previous smaller element index from the current index
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && arr[st.top()] > arr[i]) {
+                left[st.top()] = i;
+                st.pop();
+            }
+            st.push(i);
+        }
+
+        for (int i = 0; i < n; i++) {
+            long long l = left[i] + 1;
+            long long r = right[i];
+            ans = (ans + ((r - i) * (i - l + 1) * arr[i]) % mod) % mod;
+        }
+
+        return ans;
+    }
+};

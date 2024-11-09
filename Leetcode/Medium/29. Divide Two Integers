@@ -1,0 +1,92 @@
+
+BRUTE FORCE APPRACH
+
+// this linear search 
+
+-> the quotion is the number if divisor-dividend >0;
+4/2
+
+4-2=2
+2-2=0
+2 subtraction if no divsibel it will give the int value 
+
+--Edge case if  dividend=-2^31  and divsior -1  the ans= 2^31  >   [-2^31 , 2^31-1]
+
+ if (dividend == INT_MIN && divisor == -1) {
+            return INT_MAX; // Return the maximum value for overflow
+        }
+
+Tc-0(n)
+sc-0(1)
+
+the code fail for test case  dividend= 10^6  divided =1
+
+
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        // Edge case if INT_MIN / -1, which causes overflow
+        if (dividend == INT_MIN && divisor == -1) {
+            return INT_MAX; // Return the maximum value for overflow
+        }
+
+        // Determine the sign of the result
+        int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1; // XOR to determine the sign
+
+        // Use long long to avoid overflow issues
+        long long absDividend = std::abs(static_cast<long long>(dividend));
+        long long absDivisor = std::abs(static_cast<long long>(divisor));
+
+        long long ans = 0;
+
+        // Count how many times the divisor can be subtracted from the dividend
+        while (absDividend >= absDivisor) {
+            absDividend -= absDivisor;
+            ans++;
+        }
+
+        return sign * ans; // Apply the sign to the result
+    }
+};
+
+
+// ------------Expoentail search
+
+- do the serach ae linear exapntion just in term of divsior * 2^i  i =0 , 1, ..    till dividend- divsior * 2^i  <0 then subtract this from curr dtate of the number we do for the next elment  divsior * 2^i-1   which is samler that  divsior * 2^i  if it postible >0  we subtract keep on doing 
+ans+= divsior * 2^i until possible >0  
+
+// Time: O(logD) where D is |dividend|
+// Space: O(1)
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        // Edge case if INT_MIN / -1, which causes overflow
+        if (dividend == INT_MIN && divisor == -1) {
+            return INT_MAX; // Return the maximum value for overflow
+        }
+
+        // Determine the sign of the result
+        int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1; // XOR to determine the sign
+
+        // Use long long to avoid overflow issues
+        long long absDividend = std::abs(static_cast<long long>(dividend));
+        long long absDivisor = std::abs(static_cast<long long>(divisor));
+
+        long long ans = 0;
+
+        while(absDividend >= absDivisor) {
+            int cnt = 0; // the power of 2 value
+            // Find the largest power of 2 that is less than or equal to the dividend
+            while (absDividend >= (absDivisor << cnt)) { // div*2^cnt
+                cnt++;
+            }
+            // Subtract the largest possible multiple of the divisor from the dividend
+            ans += (1 << (cnt - 1));
+            absDividend -= (absDivisor << (cnt - 1));
+        }
+
+        return static_cast<int>(sign * ans); // Apply the sign to the result
+    }
+};

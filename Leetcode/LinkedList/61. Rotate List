@@ -1,0 +1,51 @@
+
+
+// Time: O(N)
+// Space: O(1)
+
+class Solution {
+private:
+    // Helper function to calculate the length of the linked list
+    int len(ListNode* head) {
+        int length = 0;
+        while (head) {
+            length++;
+            head = head->next;
+        }
+        return length;
+    }
+
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        // If the list is empty or k is 0, return the head
+        if (!head || k == 0) return head;
+
+        int length = len(head);  // Get the length of the list
+        k = k % length;  // Normalize k to avoid unnecessary rotations
+
+        // If k is 0 after normalization, return the head
+        if (k == 0) return head;
+
+        // Find the tail of the list
+        ListNode* tail = head;
+        while (tail->next) {
+            tail = tail->next;  // Move to the last node
+        }
+
+        // Connect the tail to the head to make it circular
+        tail->next = head;
+
+        // Find the new tail: (length - k - 1) steps from the head
+        int newTailPos = length - k - 1;
+        ListNode* newTail = head;
+        while (newTailPos--) {
+            newTail = newTail->next;  // Move to the new tail position
+        }
+
+        // Update the new head and break the circular link
+        ListNode* newHead = newTail->next;  // The new head is the next node
+        newTail->next = nullptr;  // Break the link to form a new list
+
+        return newHead;  // Return the new head of the rotated list
+    }
+};

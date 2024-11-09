@@ -1,0 +1,58 @@
+
+
+Binary Exponetation 
+
+Tc- 0(long(n))
+Sc- 0(long(n))
+
+class Solution {
+public:
+    double binaryExp(double x, long long n) {
+        if (n == 0) {
+            return 1;
+        }
+
+        if (n < 0) {
+            return 1.0 / binaryExp(x, -n);
+        }
+
+        if (n % 2 == 1) {
+            return x * binaryExp(x * x, (n - 1) / 2);
+        } else {
+            return binaryExp(x * x, n / 2);
+        }
+    }
+
+    double myPow(double x, int n) {
+        return binaryExp(x, (long long)n);
+    }
+};
+
+
+optmized   [ Iterative solution]   we just chage the recusive function to for loop 
+
+
+// Time: O(logN)
+// Space: O(1)
+
+class Solution {
+public:
+    double myPow(double x, int n) {
+        long long N = n;
+        if (N < 0) {
+            N = -N;
+            x = 1 / x;
+        }
+
+        double ans = 1.0;
+        while (N > 0) {
+            if (N % 2 == 1) {
+                ans *= x;
+            }
+            x *= x;   // if n is odd we jsut muiltiple curr by x and reduce n by 1 by deviding then n/2  
+            N /= 2;
+        }
+
+        return ans;
+    }
+};

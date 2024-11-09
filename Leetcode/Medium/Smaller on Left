@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> leftSmaller(int n, int a[]) {
+        vector<int> ans(n, -1);  // Initialize answer vector with -1
+        stack<int> st;  // Stack to keep track of elements
+        
+        for (int i = 0; i < n; i++) {
+            // While stack is not empty and the top element is greater than or equal to the current element
+            while (!st.empty() && st.top() >= a[i]) {
+                st.pop();  // Pop elements from the stack
+            }
+            
+            // If stack is not empty, the top element is the left smaller element
+            if (!st.empty()) {
+                ans[i] = st.top();  // Store the left smaller element
+            }
+            
+            // Push the current element onto the stack
+            st.push(a[i]);
+        }
+        
+        return ans;  // Return the result
+    }
+};

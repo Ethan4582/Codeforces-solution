@@ -1,0 +1,83 @@
+
+// reason we can use simple apprach like use dummy list then just copy it becaue it random pointer so their is posisbilty the its point at some thisng that is not created 
+
+Tc- 0(2N)
+Sc-0(N)+0(N)
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        unordered_map<Node*, Node*> mpp; // this used for making the dummy node
+        //  origianl val , copy linkeslist 
+        // now iterate and make the link according to the pointer
+        Node* temp = head; 
+        while (temp) {
+            Node* newnode = new Node(temp->val);
+            mpp[temp] = newnode;
+            temp = temp->next; 
+        }
+
+        temp = head;
+        while (temp) {
+            Node* copynode = mpp[temp]; 
+            copynode->next = mpp[temp->next]; //the copy node should point to the original next  
+            copynode->random = mpp[temp->random];
+            temp = temp->next;
+        }
+
+        return mpp[head];
+    }
+};
+
+
+Optimal Solution
+
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(!head) return nullptr;
+
+        Node* original = head; // itr for original
+        Node* cloned = nullptr; // itr for cloed
+        Node* temp = nullptr; // temporary for node creation
+
+        // First pass: clone nodes and link them next to origial
+        while(original) {
+            temp = new Node(original->val);
+            temp->next = original->next;
+            original->next=temp;
+            original = temp->next;
+        }
+
+        original = head;
+        Node* newHead = head->next;
+
+        // Second pass: Assign random pointers to cloned nodes
+        while(original) {
+            if(original->random) {
+                original->next->random = original->random->next;
+            } else {
+                original->next->random = nullptr;
+            }
+            original = original->next->next; // skip copy
+        }
+        
+        original = head;
+
+        // Third Pass: Seperate original and cloned 
+        while(original) {
+            temp = original->next; 
+            original->next = temp->next; 
+            original = original->next;
+
+            if(original) {
+                temp->next = original->next;
+            } else {
+                temp->next = nullptr;
+            }
+        }
+
+    return newHead;
+    }
+};

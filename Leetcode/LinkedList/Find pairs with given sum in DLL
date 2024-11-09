@@ -1,1 +1,98 @@
 https://www.geeksforgeeks.org/problems/find-pairs-with-given-sum-in-doubly-linked-list/0
+
+
+Brute force 
+
+class Solution {
+public:
+    vector<pair<int, int>> findPairsWithGivenSum(Node *head, int target) {
+        // Create a set to store the values
+        set<int> st;
+        set<pair<int, int>> uniquePairs; // To store unique pairs
+        Node *temp = head; 
+        
+        // Populate the set with node values
+        while (temp) {
+            st.insert(temp->data);
+            temp = temp->next;
+        }
+        
+        temp = head; 
+        
+        // Find pairs that sum to the target
+        while (temp) {
+            int complement = target - temp->data;
+            // Ensure we don't add duplicates
+            if (st.count(complement) && complement != temp->data) {
+                // Create a sorted pair to avoid duplicates
+                pair<int, int> currentPair = {min(temp->data, complement), max(temp->data, complement)};
+                uniquePairs.insert(currentPair);
+            }
+            temp = temp->next;
+        }
+        
+        // Convert set to vector for the result
+        vector<pair<int, int>> ans(uniquePairs.begin(), uniquePairs.end());
+        return ans;
+    }
+};
+
+
+next - brute force 
+
+class Solution {
+public:
+    vector<pair<int, int>> findPairsWithGivenSum(Node *head, int target) {
+        vector<pair<int, int>> ans; 
+        Node *temp = head;
+        
+        while (temp) {
+            Node *temp2 = temp->next; 
+            while (temp2 && (temp->data + temp2->data) <= target) { 
+                if (temp->data + temp2->data == target) { 
+                    ans.push_back({temp->data, temp2->data});
+                } 
+                temp2 = temp2->next;
+            }
+            temp = temp->next;
+        }
+        
+        return ans;
+    }
+};
+
+
+
+Optmized  -
+Tc-0(n)
+Sc-0(1)
+
+class Solution {
+public:
+    vector<pair<int, int>> findPairsWithGivenSum(Node *head, int target) {
+        vector<pair<int, int>> ans;
+        Node *left = head; 
+        Node *right = head;
+
+        // Move right pointer to the end of the list
+        while (right && right->next) {
+            right = right->next;
+        }
+
+        // Find pairs
+        while (left && right && left != right && left->prev != right) {
+            int sum = left->data + right->data;
+            if (sum > target) {
+                right = right->prev; // Move left if sum is greater
+            } else if (sum < target) {
+                left = left->next; // Move right if sum is lesser
+            } else {
+                ans.push_back({left->data, right->data}); // Corrected syntax for push_back
+                left = left->next; // Move both pointers after finding a pair
+                right = right->prev;
+            }
+        }
+
+        return ans;
+    }
+};

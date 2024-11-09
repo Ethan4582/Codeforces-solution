@@ -1,0 +1,29 @@
+https://www.geeksforgeeks.org/problems/remove-duplicates-from-a-sorted-doubly-linked-list/1
+
+
+
+class Solution {
+public:
+    Node* removeDuplicates(Node* head) {
+        Node* temp = head;
+
+        while (temp && temp->next) {
+            // Check if the current node's data is equal to the next node's data
+            if (temp->data == temp->next->data) {
+                // Duplicate found, link current node to the node after the duplicate
+                Node* duplicateNode = temp->next; // Node to be deleted
+                temp->next = duplicateNode->next; // Skip the duplicate
+                
+                if (duplicateNode->next) { // If there's a next node, update its prev pointer
+                    duplicateNode->next->prev = temp;
+                }
+                
+                delete duplicateNode; // Delete the duplicate node
+            } else {
+                temp = temp->next; // Move to the next node
+            }
+        }
+
+        return head; // Return the modified list
+    }
+};

@@ -1,0 +1,7 @@
+https://www.geeksforgeeks.org/problems/consecutive-1s-not-allowed1912/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
+
+
+// we add zero to all the possible number that eith end with 0 or 1   but we add 1 to only the number that end with 0 this endusre no consective  elment 
+we do this for all the szie number from 1 .... N 
+
+Total numbr is Tc-  Ta+ T1 

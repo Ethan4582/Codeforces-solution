@@ -1,0 +1,48 @@
+
+
+keep a 2 stack on to put al the elment and then otjer stack to track thr min elmen in sorted odered
+
+Tc- 0(1)
+sc- 0(N)
+
+class MinStack {
+    std::stack<int> st; // Main stack to store values
+    std::stack<int> minSt; // Auxiliary stack to store minimum values
+
+public:
+    MinStack() {}
+
+    void push(int val) {
+        st.push(val);
+        // Push to minSt only if it's the new minimum
+        if (minSt.empty() || val <= minSt.top()) {
+            minSt.push(val);
+        }
+    }
+
+    void pop() {
+        if (st.empty()) return; // Check if stack is empty
+        if (st.top() == minSt.top()) {
+            minSt.pop(); // Pop from minSt if it's the minimum
+        }
+        st.pop();
+    }
+
+    int top() {
+        return st.top(); // Return the top value of the main stack
+    }
+
+    int getMin() {
+        return minSt.top(); // Return the top value of the min stack, which is the minimum
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+

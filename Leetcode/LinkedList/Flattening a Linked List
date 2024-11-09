@@ -1,0 +1,97 @@
+
+// Brute force 
+
+// Time Complexity: O(N log N) 
+// Space Complexity: O(N) 
+class Solution {
+public:
+    Node *flatten(Node *root) {
+        vector<int> ans;
+        Node *temp = root; 
+        
+        while (temp != nullptr) {
+            Node *t2 = temp; 
+            while (t2 != nullptr) {
+                ans.push_back(t2->data);
+                t2 = t2->bottom;  // Use bottom to traverse
+            }
+            temp = temp->next; 
+        }
+        
+        sort(ans.begin(), ans.end()); 
+        Node *dummy = new Node(-1); 
+        Node *current = dummy;  // Use current to link new nodes
+        
+        for (int i = 0; i < ans.size(); i++) {  // Start from 0
+            Node *newNode = new Node(ans[i]); 
+            current->bottom = newNode;  // Link new node
+            current = newNode;  // Move to the new node
+        }
+        
+        return dummy->bottom;  // Return the flattened list
+    }
+};
+
+
+// Merger + recurssion 
+
+
+ //! recurseivel call the merging of list 
+ // the bas for the tail fo hortizontail as it already the lfaterned list  so it will give itself back thenrecursive call it merge with a list  then  agisn recursive 
+
+
+                 |------------------base case already fatterned list 
+    f(2)->f(1)->f(0)->null
+           |-----|
+              |-------  meger(f(1), f(0))= f(r)
+      |------------------------|
+              |--------------------------merger(f(2), f(r))-> result 
+
+
+Time Complexity: O( N*(2M) ) ~ O(2 N*M)
+
+Space Complexity : O(1)
+
+
+
+
+class Solution {
+private:
+    Node* merge(Node* l1, Node* l2) {
+        Node* dummy = new Node(-1);
+        Node* res = dummy; // Resultant flattened list
+
+        while (l1 != nullptr && l2 != nullptr) {
+            if (l1->data < l2->data) {
+                res->bottom = l1;
+                l1 = l1->bottom; // Move l1 down
+            } else {
+                res->bottom = l2;
+                l2 = l2->bottom; // Move l2 down
+            }
+            res = res->bottom; // Move the result pointer down
+        }
+
+        // If some elements are left in either list
+        if (l1) res->bottom = l1;
+        else res->bottom = l2;
+
+        return dummy->bottom; // Return the new head
+    }
+
+public:
+    Node* flatten(Node* root) {
+        // Base case
+        if (root == nullptr || root->next == nullptr) {
+            return root;
+        }
+
+        // Flatten the next list first
+        Node* mergeHead = flatten(root->next); 
+        
+        // Merge the current list with the flattened next list
+        return merge(root, mergeHead);
+    }
+};
+
+

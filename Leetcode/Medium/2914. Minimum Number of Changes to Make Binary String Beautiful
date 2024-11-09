@@ -1,0 +1,24 @@
+
+
+
+
+
+
+optmial solution 
+
+we see the patter to make smallest pssoible string of size 2 to make good array it itrate over the string to make it 
+Time complexity: O(n)
+Space complexity: O(1)
+
+class Solution {
+public:
+    int minChanges(string s) {
+        int cnt =0 ;
+        for( int  i =0 ; i<s.length(); i+=2){
+            if(s[i]!=s[i+1]){
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+};

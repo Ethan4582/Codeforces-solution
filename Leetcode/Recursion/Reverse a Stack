@@ -1,0 +1,53 @@
+
+Time Complexity: O(n*n)
+Space Complexity: O(1)
+
+class Solution {
+private:
+    void insertinlaspos(stack<int>& st, int x) { // Changed to reference
+        if (st.empty()) {
+            st.push(x);
+            return; // Added return to exit after pushing
+        }
+
+        int currtop = st.top();
+        st.pop(); // Pop the current top before the recursive call
+        insertinlaspos(st, x);
+        st.push(currtop); // Push the saved top element back
+    }
+public:
+    void Reverse(stack<int>& St) { // Changed parameter to reference
+        if (St.empty()) return; // Base case: check if stack is empty
+
+        int topEl = St.top(); // Moved this line after the empty check
+        St.pop(); // Pop the top element
+
+        Reverse(St); // Recursive call to reverse the remaining stack
+        insertinlaspos(St, topEl); // Insert the top element in the last position
+    }
+};
+
+
+
+Time Complexity : O(n), 
+Space Complexity : O(n), 
+
+class Solution{
+public:
+    void Reverse(stack<int> &St){
+        
+    queue<int>q;
+    while(!St.empty())
+    {
+        q.push(St.top());
+        St.pop();
+    }
+    
+    while(!q.empty())
+    {
+        St.push(q.front());
+        q.pop();
+    }
+    
+    }
+};

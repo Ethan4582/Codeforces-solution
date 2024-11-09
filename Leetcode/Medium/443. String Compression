@@ -1,0 +1,30 @@
+
+
+Time complexity: 0(1)
+Space complexity: 0(1)
+
+
+class Solution {
+    public:
+        int compress(vector<char>& chars) {
+            int i =0  , res=0;
+            while( i <chars.size()){
+                int grouplen=1; 
+                while(i+grouplen<chars.size() && chars[i+grouplen]==chars[i]){
+                    grouplen++; // check fot he condtion and itertion of valid 
+                }
+                //this to complress the string of len inplace and add the string that complress
+                chars[res++]=chars[i] ; //  chars[0]=chars[i]  ot chars[0]="a"
+                //we use res to add stirng ans and inres the pointer res=1
+    
+                if(grouplen>1){
+                    for(char x: to_string(grouplen)){
+                        chars[res++]=x;
+                    }
+                }
+    
+                i+=grouplen;//skip the consectaive char 
+            }
+            return res;// the result of is store in res a move and compress 
+        }
+    };

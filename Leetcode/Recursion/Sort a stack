@@ -1,0 +1,29 @@
+
+https://www.geeksforgeeks.org/problems/sort-a-stack/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=sort-a-stack
+
+
+class SortedStack {
+public:
+    stack<int> s;
+
+    void sort() {
+        if (s.empty()) {
+            return;
+        }
+
+        int topElement = s.top();
+        s.pop();
+        finPosition(topElement, s);
+    }
+
+private:
+    void finPosition(int currTop, stack<int>& s) {
+        if (s.empty() || currTop <= s.top()) {
+            s.push(currTop);
+            return;
+        }
+
+        finPosition(currTop, s);
+        s.push(currTop);
+    }
+};

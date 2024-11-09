@@ -1,0 +1,62 @@
+
+
+Brute force 
+Tc- 0(n^2)
+sc- 0(n)
+
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& s) {
+        vector<int> ans(s.size(), -1); 
+        int n = s.size(); 
+
+       
+        for (int i = 0; i < n; i++) {
+            int curr = s[i];
+           
+            for (int j = 1; j < n; j++) { 
+                int index = (i + j) % n; // Wrap around using modulo
+                if (s[index] > curr) {
+                    ans[i] = s[index]; // Store the next greater element
+                    break; 
+                }
+            }
+        }
+
+        return ans; 
+    }
+};
+
+
+// optmial  
+
+- 2 twice the array my  add the copy 
+- for each i th idex the circular aray will be  is from  i to  n+i-1
+
+
+
+// What we do is start form back we start putting elment from the back if   the st.top()<s[i] we pop till we find the next biig eklment in the stacl 
+
+// if i<n then  we look for if top stack is amller then < s[i] we pop whcih  was the rever logic as we itearting from the back 
+
+// if  close see the patter for the moment for the idex i  <  n the the stack contain the next greter elment for  the n elmen in the bottm of thestack   if no elmen int he stack mean no greter elmen is found
+
+// Time: O(N)
+// Space: O(N)
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& A) {
+        stack<int> s;
+        int N = A.size();
+        vector<int> ans(N, -1);
+        for (int i = 0; i < 2 * N; ++i) {
+            int n = A[i % N];
+            while (s.size() && A[s.top()] < n) {
+                ans[s.top()] = n;
+                s.pop();
+            }
+            s.push(i % N);
+        }
+        return ans;
+    }
+};

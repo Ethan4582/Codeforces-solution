@@ -1,0 +1,199 @@
+
+BRUTE FORCE 
+ Time Complexity: O(N + N log N) ≈ O(N log N)
+Space Complexity:O(N) 
+
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        vector<int> nums;
+        ListNode* curr = head;
+        while (curr) {
+            nums.push_back(curr->val);
+            curr = curr->next;
+        }
+
+        sort(nums.begin(), nums.end());
+
+        ListNode* dummy = new ListNode(-1);
+        curr = dummy;
+        for (int num : nums) {
+            curr->next = new ListNode(num);
+            curr = curr->next;
+        }
+
+        return dummy->next;
+    }
+};
+
+
+Which Sorting Algorithm is best for Linked Lists?
+For linked lists, Merge Sort is often the best choice because:
+
+Merge Sort guarantees a time complexity of O(nlogn) in the average, best, and worst cases.
+Merge Sort is Stable
+Merge Sort naturally fits well with Linked List because it traverses items in sequential manner (no random access)
+
+
+Edge case -  merge sort the slow and pointer alog we  need the first middle
+
+//edge case slow and fast pinter in case of even length it return always second middle but here we need the frst middle in mergesort
+     ListNode* slow=head; 
+      ListNode* fast=head->next; // ingererrall algo slow and fast always start from same postion 
+      //more early it reaches it reaches the first middle alow it point
+
+
+      recursion depth will be  log(N)
+      merelist take 0(N)
+      findMiddle take 0(n/2)
+
+      Tc- logN( N+N/2)
+      Space: O(logN)
+
+
+class Solution {
+private:
+    ListNode* findMiddle(ListNode* head) { // mid does not take any time 
+      //edge case slow and fast pinter in case of even length it return always second middle but here we need the frst middle in mergesort
+
+        ListNode* slow = head;
+        ListNode* fast = head->next; // Start fast pointer from the second node
+// ingererrall algo slow and fast always start from same postion 
+      //more early it reaches it reaches the first middle alow it point
+
+
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow;
+    }
+
+    ListNode* mergeList(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode(-1);
+        ListNode* temp = dummy;
+
+        while (l1 != nullptr && l2 != nullptr) {
+            if (l1->val < l2->val) {
+                temp->next = l1;
+                l1 = l1->next;
+            } else {
+                temp->next = l2;
+                l2 = l2->next;
+            }
+            temp = temp->next;
+        }
+
+        temp->next = l1 ? l1 : l2;
+
+        return dummy->next;
+    }
+
+public:
+    ListNode* sortList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) { // Base case: empty or single-node list
+            return head;
+        }
+
+        ListNode* middle = findMiddle(head);
+        ListNode* left = head;
+        ListNode* right = middle->next;
+
+        // Break the link between the two halves
+        middle->next = nullptr;
+
+        left = sortList(left); // Recursively sort the left half
+        right = sortList(right); // Recursively sort the right half
+
+        return mergeList(left, right); // Merge the sorted halves
+    }
+};
+
+
+Solution 3. Bottom-up Merge Sort
+
+https://www.youtube.com/watch?v=Mpjm_5wEBrM
+
+
+// Time: O(NlogN)
+// Space: O(1)
+
+
+class Solution {
+public:
+  // Merges two sorted linked lists and returns the head and tail of the merged list
+  pair<ListNode*, ListNode*> mergeList(ListNode* a, ListNode* b) {
+    ListNode dummy, *tail = &dummy; // Create a dummy node for the merged list
+
+    while (a || b) { // Loop until both lists are empty
+      ListNode* node;
+      if (!b || (a && a->val <= b->val)) { // Choose smaller node
+        node = a;
+        a = a->next; // Advance pointer in the smaller list
+      } else {
+        node = b;
+        b = b->next; // Advance pointer in the larger list
+      }
+      tail->next = node; // Append the chosen node to the merged list
+      tail = node; // Update tail pointer to the last appended node
+    }
+
+    return {head.next, tail}; // Return head and tail of the merged list
+  }
+
+  // Gets the length of the linked list
+  int getLength(ListNode* head) {
+    int length = 0;
+    while (head) {
+      head = head->next;
+      length++;
+    }
+    return length;
+  }
+
+public:
+  // Sorts a linked list using bottom-up merge sort
+  ListNode* sortList(ListNode* head) {
+    ListNode dummy; // Create a dummy node for convenience
+    dummy.next = head;
+
+    int length = getLength(head); // Get the length of the linked list
+
+    // Loop until we merge sublists of size 1 (already sorted)
+    for (int len = 1; len < length; len *= 2) {
+      auto p = dummy.next; // Pointer to the current sublist start
+      auto prev = &dummy;  // Pointer to the previous sublist's tail
+
+      while (p) { // Iterate through sublists
+        auto a = p; // Pointer to the first half of the sublist
+        // Advance `p` to the potential second half
+        for (int i = 1; i < len && p->next; ++i) p = p->next;
+
+        auto b = p->next; // Pointer to the second half (if exists)
+        p->next = NULL;  // Temporarily break the linked list
+
+        // Skip to the next sublist if only one element remains
+        if (b == NULL) break;
+
+        // Advance `p` to the potential next sublist
+        p = b;
+        for (int i = 1; i < len && p->next; ++i) p = p->next;
+
+        auto next = p->next; // Store the next sublist
+        p->next = NULL;     // Break the linked list before merging
+
+        // Merge the first and second halves (or just the first half if b is NULL)
+        auto [h, t] = mergeList(a, b);
+        prev->next = h; // Connect the merged sublist to the previous sublist
+        t->next = next; // Connect the merged sublist to the next sublist
+
+        // Update pointers for the next iteration
+        p = next;
+        prev = t;
+      }
+    }
+
+    return dummy.next; // Return the head of the sorted list (excluding the dummy)
+  }
+};
