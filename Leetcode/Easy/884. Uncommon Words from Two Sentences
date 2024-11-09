@@ -1,0 +1,53 @@
+What is stringstream?:
+stringstream is a class in the C++ Standard Library (part of the <sstream> header) that allows you to read from and write to strings as if they were input/output streams.
+It provides functionality similar to cin and cout, but instead of dealing with console input/output, it works with string data.
+Initialization:
+When you create a stringstream object with stringstream ss(s), you initialize it with the string s. This means that the contents of s can now be treated like a stream of data.
+You can use ss to read from the string s as if it were a stream of characters.
+Reading Words:
+
+The line while (ss >> word) uses the extraction operator (>>) to read words from the stringstream ss.
+This operator automatically handles whitespace (spaces, newlines, etc.) and splits the string into words. Each time it reads a word, it stores it in the variable word.
+The loop continues until there are no more words to read (i.e., until the end of the string is reached).
+
+
+
+stringstream ss(s) initializes a stream containing "hello world hello".
+The loop starts:
+First iteration: ss >> word reads "hello", and wordCount["hello"] becomes 1.
+Second iteration: ss >> word reads "world", and wordCount["world"] becomes 1.
+Third iteration: ss >> word reads "hello" again, and wordCount["hello"] becomes 2.
+
+class Solution {
+public:
+    vector<string> uncommonFromSentences(string s1, string s2) {
+        unordered_map<string, int> wordCount; // Map to count occurrences of each word
+        
+        // Helper function to split a sentence into words and count them
+        auto countWords = [&](const string& s) {
+            stringstream ss(s);
+            string word;
+            while (ss >> word) { // Read words from the string stream
+                wordCount[word]++; // Increment the count for the word
+            }
+        };
+        
+        // Count words from both sentences
+        countWords(s1);
+        countWords(s2);
+        
+        vector<string> result; // Vector to store uncommon words
+        
+        // Collect words that appear exactly once
+        for (const auto& entry : wordCount) {
+            if (entry.second == 1) {
+                result.push_back(entry.first); // Add the word to the result
+            }
+        }
+        
+        return result; // Return the list of uncommon words
+    }
+};
+
+Tc- O(n+m)
+Sc- O(n+m)

@@ -1,0 +1,35 @@
+
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        // Negative numbers are not palindromes
+        if (x < 0) return false;
+
+        // Convert integer to string
+        string s = to_string(x);
+        
+        // Create reversed string
+        string k(s.rbegin(), s.rend());
+
+        // Compare original and reversed strings
+        return k == s;
+    }
+};
+
+
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if (x < 0) return false;
+        long long a = x, b = 0;
+        while (x) {
+            b = b * 10 + x % 10;
+            x /= 10;
+        }
+        return a == b;
+    }
+};

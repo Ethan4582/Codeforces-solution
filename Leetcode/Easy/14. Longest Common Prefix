@@ -1,0 +1,58 @@
+Time Complexity: O(n⋅m)
+Space Complexity: O(1)
+
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if (strs.empty()) return ""; 
+        string prefix= strs[0]; 
+        for ( int i=1 ; i < strs.size(); i++){
+            while(strs[i].find(prefix)!=0){
+                prefix= prefix.substr(0 , prefix.size()-1);
+                 if (prefix.empty()) return "";
+            }
+        }
+        return prefix ; 
+    }
+};
+
+
+
+-------using hashmap--------
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        unordered_map<string, int> prefixMap;
+        
+        // Iterate over each string in the vector
+        for (const string& s : strs) {
+            string prefix = "";
+            // Generate all prefixes for the current string and store them in the map
+            for (char ch : s) {
+                prefix += ch;
+                prefixMap[prefix]++;
+            }
+        }
+        
+        string result = "";
+        // Iterate over the first string in the list to check for the common prefix
+        string currentPrefix = "";
+        for (char ch : strs[0]) {
+            currentPrefix += ch;
+            if (prefixMap[currentPrefix] == strs.size()) {
+                result = currentPrefix;
+            } else {
+                break; // Stop if a prefix is not common among all strings
+            }
+        }
+        
+        return result;
+    }
+};
+
+
+Time Complexity: O(N * M), 
+Space Complexity: O(N * M)
+

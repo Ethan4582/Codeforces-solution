@@ -1,0 +1,121 @@
+//2 sum problem 
+https://leetcode.com/problems/two-sum/description/
+-  either   yes or no    ------   give the number itself 
+
+
+//////////////////////optimal most   ---------using greedy two pointer approcah    without using map
+
+two pinter of sum is more   increment  in index  --- if sum  is  less  decres the pointer index  [ use this only if you have to give answer in yes for no 
+
+
+
+
+
+Tc---   0(n ) +0(nlogn)
+sc- 0(1 ) 
+
+string twoSum(int n, vector<int> &arr, int target) {
+    sort(arr.begin(), arr.end());
+    int left = 0, right = n - 1;
+    while (left < right) {
+        int sum = arr[left] + arr[right];
+        if (sum == target) {
+            return "YES";
+        }
+        else if (sum < target) left++;
+        else right--;
+    }
+    return "NO";
+}
+
+
+
+
+
+
+
+//brut force 
+
+-------------------------------Bettrr  ---------------------hshing 
+
+
+hash   -> elment will be the key   , index of the array 
+
+Tc-  0(n  or  log(n))   or    and  0(n)  in cse of unodered map  and goup to o(n^2)
+sc- 0(n)
+
+
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int n = nums.size();
+        map<int, int> mpp; // Map to store number-frequency pairs
+        
+        // Iterate through the array
+        for (int i = 0; i < n; i++) {
+            int a = nums[i];
+            int diff = target - a; // Calculate the difference required for the sum
+            
+            // Check if the difference exists in the map
+            if (mpp.find(diff) != mpp.end()) {
+                // If found, return the indices of the two numbers
+                return {mpp[diff], i};
+            }
+            
+            // Store the current number and its index in the map
+            mpp[a] = i;
+        }
+        
+        // If no solution is found, return {-1, -1}
+        return {-1, -1};
+    }
+};
+
+
+
+
+string twoSum(int n, vector<int> &arr, int target) {
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (arr[i] + arr[j] == target) return "YES";
+        }
+    }
+    return "NO";
+}
+
+
+
+
+-------------------------
+Time Complexity: O(N2), where N = size of the array.
+Reason: There are two loops(i.e. nested) each running for approximately N times.
+
+Space Complexity: O(1) as we are not using any extra space.
+------------------------------------
+
+class Solution {
+public:
+    // Function to find the indices of two numbers in the array
+    // that add up to the target value.
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> ans; // Vector to store the indices of the two numbers
+        
+        int n = nums.size(); // Size of the input array
+        
+        // Nested loops to iterate through all pairs of numbers
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                // If the sum of the current pair equals the target
+                if (nums[i] + nums[j] == target) {
+                    ans.push_back(i); // Add the index of first number to the answer
+                    ans.push_back(j); // Add the index of second number to the answer
+                    return ans; // Return the indices
+                }
+            }
+        }
+        
+        // If no such pair is found, return {-1, -1}
+        return { -1, -1 };
+    }
+};
