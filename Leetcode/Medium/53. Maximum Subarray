@@ -1,0 +1,69 @@
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        long long ans = INT_MIN; 
+
+        for (int i = 0; i < nums.size(); i++) {
+            for (int j = i; j < nums.size(); j++) {
+                long long currSubArraySum = accumulate(nums.begin() + i, nums.begin() + j + 1, 0LL);
+                ans = max(ans, currSubArraySum);
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        partial_sum(nums.begin(), nums.end(), nums.begin());
+        int minSum = 0, ans = INT_MIN;
+        for (int n : nums) {
+            ans = max(ans, n - minSum);
+            minSum = min(minSum, n);
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+//////////////          kadams Algo  //////////////////////////////////
+
+
+-> we campre  the sum with  INT_MIN   and if also if sum<0  i will drop the elmemnt and take the next element and start from there 
+
+Time Complexity: O(N), 
+Space Complexity: O(1) 
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int n = nums.size();
+        long long sum = 0, maxi = LONG_MIN;
+
+        for (int i = 0; i < n; i++) {
+            sum += nums[i];  // adding the number and then checking 
+            if (sum > maxi) {
+                maxi = sum;  // Update maximum if the current sum is greater
+            }
+
+            // Make sure the sum is positive, then only consider it
+            if (sum < 0) {
+                sum = 0;
+            }
+        }
+
+        return maxi;  // Return the maximum sum found
+    }
+};
+
+
+

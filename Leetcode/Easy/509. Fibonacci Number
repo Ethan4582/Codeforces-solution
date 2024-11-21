@@ -1,0 +1,58 @@
+
+Solution 1 - Recursive Approach
+
+Time Complexity - O(2^N)
+Space Complexity - O(N) 
+
+
+class Solution {
+public:
+    int fib(int n) {
+        if(n<=0) return 0; 
+        else if  (n==1) return 1;
+        else{
+            return fib(n-1)+fib(n-2);
+        }
+    }
+};
+
+
+Solution 3 - Imperative Approach (Bottom Up DP)
+
+
+Time Complexity - O(N)
+Space Complexity - O(1)
+
+class Solution {
+public:
+        int fib(int N) {
+        if(N < 2) 
+            return N;
+    	int a = 0, b = 1, c = 0;
+        for(int i = 1; i < N; i++)
+        {
+            c = a + b;
+            a = b;
+            b = c;
+        }
+        return c;
+    }
+};
+
+
+Solution 4 - Binet's Nth-term Formula
+Using Binet's Formula for the Nth Fibonacci involves the usage of our golden section number Phi.
+Phi = ( sqrt(5) + 1 ) / 2
+Using approximation equation is good enough here, since we know N >= 0 && N <= 30, we can safely use the following rounded function
+Fib(N) = round( ( Phi^N ) / sqrt(5) )
+Full mathematical explanation of Binet's Formula here
+Time Complexity - O(1)
+Space Complexity - O(1)
+
+class Solution {
+public:
+           int fib(int N) {
+        double phi = (sqrt(5) + 1) / 2;     
+        return round(pow(phi, N) / sqrt(5));
+    }
+};

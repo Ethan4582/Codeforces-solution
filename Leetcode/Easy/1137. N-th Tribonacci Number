@@ -1,0 +1,40 @@
+class Solution {
+private:
+    int recall(int k) {
+        if (k == 0) return 0; 
+        if (k == 1 || k == 2) return 1; 
+        return recall(k - 1) + recall(k - 2) + recall(k - 3); // Fixed logic
+    }
+
+public:
+    int tribonacci(int n) {
+        return recall(n); // Fixed syntax
+    }
+};
+
+// Time complexity: O(3^n) (exponential due to recursive calls)
+// Space complexity: O(n) (due to call stack in recursion)
+
+
+
+class Solution {
+public:
+    int tribonacci(int n) {
+        if (n == 0) return 0; 
+        if (n == 1 || n == 2) return 1;
+
+        int t0 = 0, t1 = 1, t2 = 1, nth = 0;
+
+        for (int i = 3; i <= n; ++i) {
+            nth = t0 + t1 + t2; // T(n) = T(n-1) + T(n-2) + T(n-3)
+            t0 = t1; // Move forward in the sequence
+            t1 = t2; // Move forward in the sequence
+            t2 = nth; // Update T(n-1) to T(n)
+        }
+        
+        return nth; // Return T(n)
+    }
+};
+
+// Time complexity: O(n) (linear due to the loop)
+// Space complexity: O(1) (constant space since we only use a fixed number of variables)

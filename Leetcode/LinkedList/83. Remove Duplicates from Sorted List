@@ -1,0 +1,44 @@
+
+
+This directly skip 
+
+
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head || !head->next) {
+            return head;
+        }
+
+        ListNode* curr = head;
+        while (curr) {
+            while (curr->next && curr->val == curr->next->val) {
+                curr->next = curr->next->next;
+            }
+            curr = curr->next;
+        }
+
+        return head;
+    }
+};
+
+-> the differnce is it delte all the duplicate elment
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode *p = head;
+        while (p) {
+            ListNode *q = p->next;
+            while (q && q->val == p->val) {
+                p->next = q->next;
+                delete q;
+                q = p->next;
+            }
+            p = p->next;
+        }
+        return head;
+    }
+};

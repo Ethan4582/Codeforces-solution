@@ -1,0 +1,93 @@
+
+class Solution {
+public:
+    bool backspaceCompare(std::string s, std::string t) {
+        stack<char> st1, st2;
+
+        // Process first string
+        for (char it : s) {
+            if (it == '#') {
+                if (!st1.empty()) {
+                    st1.pop(); // Pop if backspace
+                }
+            } else {
+                st1.push(it); // Push character if not backspace
+            }
+        }
+
+        // Process second string
+        for (char it : t) {
+            if (it == '#') {
+                if (!st2.empty()) {
+                    st2.pop(); // Pop if backspace
+                }
+            } else {
+                st2.push(it); // Push character if not backspace
+            }
+        }
+
+        // Compare sizes of the stacks
+        if (st1.size() != st2.size()) {
+            return false; // Different sizes, not equal
+        } else {
+            // Check all elements in the stack are equal
+            while (!st1.empty()) {
+                if (st1.top() != st2.top()) return false; // Mismatch found
+                st1.pop();
+                st2.pop();
+            }
+        }
+
+        return true; // All characters match
+    }
+};
+
+// Time Complexity: O(n + m) where n and m are the lengths of s and t respectively
+// Space Complexity: O(n + m) for the stacks used to store characters
+
+
+
+
+2 Poiinter 
+
+// Time: O(N)
+// Space: O(1)
+
+
+class Solution {
+public:
+    bool backspaceCompare(string s, string t) {
+        int k =0, p=0;
+
+        for(int i =0 ; i < s.size(); i++){
+            if(s[i]=='#'){
+                k--; // basically asking to skip the part of thr stringmove thr ptr back
+                k=max(0 ,k);
+            }
+            else{
+                s[k]=s[i];
+                k++;
+            }
+        }
+        
+        
+        for(int i =0 ; i < t.size(); i++){
+            if(t[i]=='#'){
+                p--; // basically asking to skip the part of thr stringmove thr ptr back
+                p=max(0 , p);
+            }
+            else{
+                t[p]=t[i];
+                p++;
+            }
+        }
+
+        if(k!=p){//lenght of the string is not equal noot worth checking 
+        return false;
+        }
+        for( int i =0 ; i <k;i++){
+            if(s[i]!=t[i]) return false;
+        }
+        return true ;
+    }
+};

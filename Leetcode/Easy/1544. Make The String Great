@@ -1,0 +1,48 @@
+
+class Solution {
+public:
+    string makeGood(string s) {
+        stack<char> stk; // Use a stack to manage characters
+
+        for (char c : s) {
+            // Check if the stack is not empty and the top character is the opposite case of the current character
+            if (!stk.empty() && (stk.top() == c + ('a' - 'A') || stk.top() == c - ('a' - 'A'))) {
+                stk.pop(); // Remove the top character from the stack
+            } else {
+                stk.push(c); // Add the current character to the stack
+            }
+        }
+
+        // Construct the result string from the stack
+        string result;
+        while (!stk.empty()) {
+            result += stk.top(); // Add characters from the stack to the result
+            stk.pop(); // Remove the character from the stack
+        }
+
+        // Since we added characters in reverse order, we need to reverse the result
+        reverse(result.begin(), result.end());
+        
+        return result; // Return the final string
+    }
+};
+
+// Time complexity: O(n)
+// Space complexity: O(n) for the stack
+
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    string makeGood(string s) {
+        string ans;
+        for (char c : s) {
+            if (ans.size() && ans.back() != c && toupper(ans.back()) == toupper(c)) ans.pop_back();
+            else ans.push_back(c);
+        }
+        return ans;
+    }
+};
+
+

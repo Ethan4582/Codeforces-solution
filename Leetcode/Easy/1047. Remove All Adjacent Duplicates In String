@@ -1,0 +1,50 @@
+
+simple stack 
+
+Time Complexity: O(N)
+Space Complexity: O(N) in the worst case, but often less as the result string may be 
+
+class Solution {
+public:
+    string removeDuplicates(string s) {
+        stack<char> st;
+        for (char c : s) {
+            if (!st.empty() && st.top() == c) {
+                st.pop();
+            } else {
+                st.push(c);
+            }
+        }
+
+        string result;
+        while (!st.empty()) {
+            result += st.top();
+            st.pop();
+        }
+
+        // Reverse the result to get the correct order
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
+
+
+
+class Solution {
+public:
+    string removeDuplicates(string s) {
+        string result; // To store the final result
+        for (char c : s) {
+            // If the result is not empty and the last character is the same as the current character
+            if (!result.empty() && result.back() == c) {
+                result.pop_back(); // Remove the last character
+            } else {
+                result.push_back(c); // Add the current character to the result
+            }
+        }
+        return result; // Return the modified string
+    }
+};
+
+// Time complexity: O(n)
+// Space complexity: O(n) (in the worst case, if no characters are removed)

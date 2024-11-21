@@ -1,0 +1,124 @@
+
+
+navie Solution
+
+for each index i try to find the possible reactangle area the find the max
+-> how do it find it 
+  for each i the next smaller index is the boundry same thr previous samller as the boundary 
+  heigth is arr[i]   * width -> next samller index- prev samller idx is the width  -1 
+
+
+Time Complexity: O( N )
+
+Space Complexity: O(3N) where 3 is for the stack, left small array and a right small array
+
+  class Solution {
+private:
+  vector<int> nextSmallerElement(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> right(n, n);
+    stack<int> st;
+
+    // Find next smaller element indices
+    for (int i = 0; i < n; i++) {
+      while (!st.empty() && arr[st.top()] >= arr[i]) {
+        right[st.top()] = i;
+        st.pop();
+      }
+      st.push(i);
+    }
+
+    return right;
+  }
+
+  vector<int> previousSmallerElement(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> left(n, -1);
+    stack<int> st;
+
+    // Find previous smaller element indices (similar to NSE)
+    for (int i = n - 1; i >= 0; i--) {
+      while (!st.empty() && arr[st.top()] > arr[i]) {
+        left[st.top()] = i;
+        st.pop();
+      }
+      st.push(i);
+    }
+
+    return left;
+  }
+
+public:
+  int largestRectangleArea(vector<int>& h) {
+    int n = h.size();
+    vector<int> nse = nextSmallerElement(h);
+    vector<int> pse = previousSmallerElement(h);
+    int maxArea = INT_MIN;
+
+    for (int i = 0; i < n; i++) {
+      int currentArea = h[i] * (nse[i] - pse[i] - 1);
+      maxArea = max(maxArea, currentArea);
+    }
+
+    return maxArea;
+  }
+};
+
+
+
+
+Most Optmial 
+
+like previous we are just compute onthe go 
+
+
+How do we dot it 
+  we use stack to peform the computing 
+
+->   ans(i) *( next- prev-1)
+    for previus it easy  we push the elment along wiht idx  now move forward if the next elmnt is samller than the value along with idx is grater  we pop the thegrater part then  for that idx we  while poping out the elment all the grater elment we have push  can be used to calcuate the next grater elment for the previusix idx that has not explore the previous idx  then jsut update the max area while update the formaual along 
+
+    We check the opt value of the idx if it grater we pop and caluate the next prev for  all the prev idx next smaller idx 
+
+    edge case  the smallest height will not be touched or the element  left in the stack  then do idivula for them 
+
+
+
+    class Solution {
+public:
+  int largestRectangleArea(vector<int>& heights) {
+    int n = heights.size();
+    stack<int> st; 
+    int maxArea = INT_MIN; 
+
+    for (int i = 0; i < n; i++) {
+      // Process elements in the stack while current element is smaller
+      while (!st.empty() && heights[st.top()] > heights[i]) {
+        int topElement = st.top(); // Get the element being popped
+        st.pop();
+
+        // Calculate potential area using the popped element
+        int currentHeight = heights[topElement];
+        int nextSmallerIndex = i; // Current index is the next smaller element
+        int previousSmallerIndex = st.empty() ? -1 : st.top(); // Handle empty stack
+        maxArea = max(maxArea, currentHeight * (nextSmallerIndex - previousSmallerIndex - 1));
+      }
+
+      // Push the current element's index onto the stack
+      st.push(i);
+    }
+
+    // Handle remaining elements in the stack (no smaller elements to the right)
+    while (!st.empty()) {
+      int topElement = st.top();
+      st.pop();
+
+      int currentHeight = heights[topElement];
+      int nextSmallerIndex = n; // No smaller element to the right (end of array)
+      int previousSmallerIndex = st.empty() ? -1 : st.top();
+      maxArea = max(maxArea, currentHeight * (nextSmallerIndex - previousSmallerIndex - 1));
+    }
+
+    return maxArea;
+  }
+};

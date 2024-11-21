@@ -1,0 +1,61 @@
+we are square ing the digit i know for the fact one cyncle only 2 and 3 does not  make digit which further ioen cyncle of making sum 
+i know 2 is false and 2 
+-> evry number has do altleast on recursive call ir go back to sum cycle'in 2 cycle if 4 then false the the number is 2 rest all fo teh are false 
+
+Tc -0(Log(n))
+
+class Solution {
+public:
+    bool isHappy(int n) {
+        if (n == 1) {
+            return true;
+        }
+        if (n == 4) { // A cycle is detected
+            return false;
+        }
+
+        int sum = 0;
+        while (n > 0) {
+            int digit = n % 10;
+            sum += digit * digit;
+            n /= 10;
+        }
+
+        return isHappy(sum);
+    }
+};
+
+
+
+---> this can be done use slow and fast pointer  to detec the cycle 
+
+if the nunber itself then it comes in cycle we just deotect need to cycle 
+
+Time Complexity: O(log n)
+Space Complexity: O(1)
+
+class Solution {
+private:
+ int next( int n ){
+    int sum =0 ; 
+    while(n!=0){
+        int dig=n%10;
+        sum+=dig * dig;
+        n/=10;
+    }
+    return sum ;
+ }
+public:
+    bool isHappy(int n) {
+        int slow=n ; int   fast = next(n);
+        // if the in cycle thenare comes situtation they are eqaul then will be cycle false
+        while(slow!=fast){
+            slow=next(slow);
+            fast=next(next(fast));
+        }
+
+        // return true
+        return slow ==1;
+    }
+};
+

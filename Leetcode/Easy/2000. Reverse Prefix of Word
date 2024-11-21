@@ -1,0 +1,16 @@
+
+
+
+class Solution {
+public:
+    string reversePrefix(string word, char ch) {
+        
+        for( int i =0; i< word.size(); i++){
+            if(word[i]==ch){
+                reverse(word.begin()+0, word.begin()+i+1);// revers that portion 
+                break;
+            }
+        }
+        return word;
+    }
+};

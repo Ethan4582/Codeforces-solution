@@ -1,0 +1,150 @@
+
+----it want use to impmnet wihtout it 
+
+
+Most opmized 
+
+// Time: O(1)
+// Space: O(1)
+class MyHashSet {
+    bitset<1000001> bs;
+public:
+    MyHashSet() {}
+    void add(int key) { bs.set(key); }
+    void remove(int key) { bs.reset(key); }
+    bool contains(int key) { return bs.test(key); }
+};
+
+
+Approach 3: Troll Implementation
+class MyHashSet {
+private:
+	vector<bool> table;
+public:
+	MyHashSet() : table(1e6 + 1, false) {}
+	
+	void add(int key) {
+		table[key] = true;
+	}
+	
+	void remove(int key) {
+		table[key] = false;
+	}
+	
+	bool contains(int key) {
+		return table[key];
+	}
+};
+
+Complexity
+
+Time: O(1)
+Space: O(n)
+
+
+
+• hash function: the goal of the hash function is to assign an address to store a given value. Ideally, each unique
+value should have a unique hash value.
+
+
+• collision handling:
+
+Separate Chaining: for values with the same hash key, we keep them in a bucket, and each bucket is independent of
+each other.
+
+Open Addressing: whenever there is a collision, we keep on probing on the main space with certain strategy until a
+free slot is found.
+2-Choice Hashing: we use two hash functions rather than one, and we pick the generated address with fewer
+collision.
+
+
+we use bucket 
+
+The time complexity of the operations in this implementation is as follows:
+
+add(key): O(1)
+remove(key): O(1)
+contains(key): O(1)
+
+class MyHashSet {
+private:
+    struct Bucket {
+        list<int> set;
+
+        bool insert(int key) {
+            if (find(set.begin(), set.end(), key) == set.end()) {
+                set.push_front(key);
+                return true;
+            }
+            return false;
+        }
+
+        bool erase(int key) {
+            auto it = find(set.begin(), set.end(), key);
+            if (it != set.end()) {
+                set.erase(it);
+                return true;
+            }
+            return false;
+        }
+
+        bool contains(int key) {
+            return find(set.begin(), set.end(), key) != set.end();
+        }
+    };
+
+    vector<Bucket> bucketArray;
+    int keyRange;
+
+public:
+    /** Initialize your data structure here. */
+    MyHashSet() {
+        keyRange = 769;
+        bucketArray.resize(keyRange);
+    }
+
+    int _hash(int key) {
+        return key % keyRange;
+    }
+
+    void add(int key) {
+        int bucketIndex = _hash(key);
+        bucketArray[bucketIndex].insert(key);
+    }
+
+    void remove(int key) {
+        int bucketIndex = _hash(key);
+        bucketArray[bucketIndex].erase(key);
+    }
+
+    bool contains(int key) {
+        int bucketIndex = _hash(key);
+        return bucketArray[bucketIndex].contains(key);
+    }
+};
+
+
+
+
+
+
+brute  if you canuse hastable 
+
+class MyHashSet {
+    // I will use an unordered_set
+    unordered_set<int> st;
+public:
+    MyHashSet() {}
+    
+    void add(int key) {
+        st.insert(key);
+    }
+    
+    void remove(int key) {
+        st.erase(key);
+    }
+    
+    bool contains(int key) {
+        return st.find(key) != st.end();
+    }
+};

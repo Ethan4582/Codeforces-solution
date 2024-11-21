@@ -20,10 +20,10 @@ public:
 // optmized solution 
 
 
--> we see thr contribution of each elment in  the each subbary  
--> for that we use i -> on right idx of next_samller elment   on left next_prev samler elment index  curr   4   ->  (7-4) * (4-0)= 12 time elmet at 4 idex  which is 3 has contiributes   so 36 we do this foe each elment
 
--> edge case -  if not next or prev smaller elmeent exist  nextsamller to  N and prev to -1
+
+so contibution of k elmnt in the sum is = num if subarr*  k elment 
+
 
 
 class Solution {

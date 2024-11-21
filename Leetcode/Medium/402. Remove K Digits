@@ -1,0 +1,40 @@
+
+
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        stack<char> st; 
+        for (char it : num) {
+            while (!st.empty() && st.top() > it && k > 0) {
+                st.pop();
+                k--;
+            }
+            st.push(it);
+        }
+
+        // If k is still greater than 0, remove from the end
+        while (k > 0 && !st.empty()) {
+            st.pop();
+            k--;
+        }
+
+        string ans = "";
+        while (!st.empty()) {
+            ans += st.top();
+            st.pop();
+        }
+
+        reverse(ans.begin(), ans.end()); // Reverse the string to get the correct order
+
+        // Remove leading zeros
+        while (ans.size() > 1 && ans[0] == '0') {
+            ans.erase(ans.begin());
+        }
+
+        return ans.empty() ? "0" : ans; // Return "0" if ans is empty
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(n) for the stack
+

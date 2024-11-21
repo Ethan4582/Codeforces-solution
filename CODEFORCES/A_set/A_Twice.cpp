@@ -16,34 +16,36 @@
 
 #define fastread() (ios_base::sync_with_stdio(false), cin.tie(NULL));
 
-const ll mod = 1e9 + 7;
-const int N = 1e5 + 5; 
 
 using namespace std;
 
-int a[N]; 
-bool c[N]; 
-
 int main() {
-    fastread();
-    int t ; 
-    cin >>t ; 
-    while(t--){
-  int n, sum=0;
-     cin>>n;
-     vi a(n+1);
-     for(int i=0;i<=n;i++){
-         cin>>a[i];
-     }
-     sort(a.begin(),a.begin()+n);
-     
-     rep( i ,0 , n){
-       if(a[i]<=a[n])continue;   if(a[i]>2*a[n])break;
-       swap(a[i],a[n]);
-     }
-     int ans= accumulate(a.begin()+0, a.end()-1, 0);
-     p(ans);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        unordered_map<int, int> freq;
+        for (int num : a) {
+            freq[num]++;
+        }
+
+         int ans = 0;
+    for(auto it:freq) ans+= it.second/2;
+    cout<<ans<<endl;
+    }
+
    
-  }
+
     return 0;
 }

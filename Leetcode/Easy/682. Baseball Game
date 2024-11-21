@@ -1,0 +1,60 @@
+
+My brute force 
+
+Time Complexity: O(n), 
+Space Complexity: O(n) 
+
+class Solution {
+public:
+    int calPoints(vector<string>& op) {
+        stack<int> st; 
+        int sum = 0;
+
+        for (int i = 0; i < op.size(); i++) {
+            if (isdigit(op[i][0]) || (op[i][0] == '-' && op[i].size() > 1)) {
+                // An integer x. Record a new score of x.
+                int score = stoi(op[i]);
+                st.push(score);
+                sum += score;
+            } else if (op[i] == "+" && st.size() >= 2) {
+                // Record a new score that is the sum of the previous two scores.
+                int prev1 = st.top(); 
+                st.pop(); // pop the last score
+                int prev2 = st.top(); 
+                int newScore = prev1 + prev2;
+                sum += newScore;
+                st.push(prev1); // push back the last score
+                st.push(newScore); // push the new score
+            } else if (op[i] == "D" && !st.empty()) {
+                // Record a new score that is double the previous score.
+                int newScore = 2 * st.top();
+                sum += newScore;
+                st.push(newScore); // add the new score
+            } else if (op[i] == "C" && !st.empty()) {
+                // Invalid the previous recorded score.
+                sum -= st.top();
+                st.pop();
+            }
+        }
+        return sum;
+    }
+};
+
+
+----- Much cleaner 
+
+class Solution {
+public:
+    int calPoints(vector<string>& op) {
+        vector<int > ans ; 
+        for (auto c :op ){
+            if(isdigit(c.back()))ans.push_back(stoi(c)); 
+            else if(c=="+") ans.push_back(ans.back() + ans[ans.size()-2]);
+            else if(c=="D") ans.push_back(2* ans.back());
+            else {
+                ans.pop_back();
+            }
+        }
+        return accumulate(ans.begin(), ans.end(), 0);
+    }
+};

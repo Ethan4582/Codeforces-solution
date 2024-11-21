@@ -1,0 +1,60 @@
+
+
+class Solution {
+public:
+    string clearDigits(string s) {
+        stack<char> st; 
+
+     
+        for (char it : s) {
+            if (isdigit(it) && !st.empty()) { // Check if the character is a digit
+                st.pop(); // Pop the last character if it's a digit
+            } else {
+                st.push(it); // Push the current character onto the stack
+            }
+        }
+
+        string ans = ""; 
+     
+        while (!st.empty()) { 
+            ans += st.top(); 
+            st.pop();
+        }
+
+        reverse(ans.begin(), ans.end());
+        return ans; 
+    }
+};
+
+// Time Complexity: O(n) where n is the length of the string s
+// Space Complexity: O(n) for the stack used to store characters
+
+
+
+
+
+class Solution {
+public:
+    std::string clearDigits(std::string s) {
+        int ptr = 0; 
+        
+        for (int i = 0; i < s.size(); i++) {
+            if (isdigit(s[i])) {
+                
+                if (ptr > 0) {
+                    ptr--; 
+                }
+            } else {
+                s[ptr] = s[i];
+                ptr++;
+            }
+        }
+
+        // Resize the string to the new length
+        s.resize(ptr);
+        return s; 
+    }
+};
+
+// Time Complexity: O(n) where n is the length of the string s
+// Space Complexity: O(1) for in-place modifications

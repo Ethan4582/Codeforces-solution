@@ -1,0 +1,56 @@
+
+
+
+class Solution {
+public:
+    int countStudents(vector<int>& students, vector<int>& sandwiches) {
+        int len = students.size();
+        queue<int> studentQueue;
+        for(auto i:students)
+            studentQueue.push(i);
+        stack<int> sandwichStack;
+        for(int i=len-1;i>=0;i--) 
+            sandwichStack.push(sandwiches[i]);
+        int served=0;
+        while(!studentQueue.empty() && served < studentQueue.size()) {
+            if (sandwichStack.top() == studentQueue.front()) {
+                sandwichStack.pop();
+                studentQueue.pop(); 
+                served = 0;
+            } else {
+                studentQueue.push(studentQueue.front());
+                studentQueue.pop();
+                served++;
+            }
+        }
+        return studentQueue.size();
+    }
+};
+
+
+
+// Time: O(N)
+// Space: O(1)
+
+
+
+class Solution {
+public:
+    int countStudents(vector<int>& students, vector<int>& sandwiches) {
+        vector<int> counts(2, 0);
+        for (int student : students)
+            counts[student]++;
+
+        int rem = sandwiches.size();
+        for (int it : sandwiches) {
+            if (counts[it] == 0)
+                break;
+            if (rem == 0)
+                break;
+            counts[it]--;
+            rem--;
+        }
+
+        return rem;
+    }
+};

@@ -1,0 +1,48 @@
+
+Time Complexity: O(1)
+Space Complexity: O(1)
+
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if (n <= 0) {
+            return false; // Check for non-positive numbers
+        }
+        // Check if log2(n) is an integer
+        return (log2(n) == floor(log2(n))); 
+    }
+};
+
+
+optmial or main solution 
+
+
+for any power of 2 it will be alway  1 floowed  by some 0s  lie  2= 10  , 4= 100, 6=1000  exception is 0 
+
+--------------get isolate the right most bit 
+
+x & ~x
+
+~x= is complement =  means rverse the bit of x  then add  1 -> -x=1
+
+
+We know for the fact a power of 2 will have  only 1 then floowed by 0 s so taking complmnet reversing then add 1 thus  the rigt most bit of compment and the origanl numbe are 1 then they are  power fo 2 
+
+6 ->  0 0 0 0 0 1 1 0
+~6  -> 1 1 1 1 1 0 0 1
+~6+1 ->1 1 1 1 1 0 1 0   -> the ight most bit will be the same 
+
+
+----->n & -n =  n  the main logic 
+
+
+ime Complexity: O(1)
+Space Complexity: O(1)
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        return n>0 && !( n- (n& -n));
+    }
+};

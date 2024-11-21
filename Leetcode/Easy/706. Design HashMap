@@ -1,0 +1,73 @@
+
+
+Brute force 
+
+
+// Time: O(1)
+// Space: O(1)
+class MyHashMap {
+    const static int N = 1000001;
+    int m[N];
+public:
+    MyHashMap() {
+        for (int i = 0; i < N; ++i) m[i] = -1;
+    }
+    void put(int key, int value) {
+        m[key] = value;
+    }
+    int get(int key) {
+        return m[key];
+    }
+    void remove(int key) {
+        m[key] = -1;
+    }
+};
+
+
+
+To avoid duplicate elment 
+
+-> we make vector pair of all the key and value as hah map  
+
+class MyHashMap {
+private:
+    static const int kSize = 1000001;
+    vector<pair<int, int>> map;
+
+public:
+    MyHashMap() : map(kSize, {-1, -1}) {}
+
+    void put(int key, int value) {
+        int index = key % kSize;
+        if (map[index].first == -1) {
+            map[index] = {key, value};
+        } else {
+            while (map[index].first != -1 && map[index].first != key) {
+                index = (index + 1) % kSize;
+            }
+            map[index] = {key, value};
+        }
+    }
+
+    int get(int key) {
+        int index = key % kSize;
+        while (map[index].first != -1) {
+            if (map[index].first == key) {
+                return map[index].second;
+            }
+            index = (index + 1) % kSize;
+        }
+        return -1;
+    }
+
+    void remove(int key) {
+        int index = key % kSize;
+        while (map[index].first != -1) {
+            if (map[index].first == key) {
+                map[index] = {-1, -1};
+                return;
+            }
+            index = (index + 1) % kSize;
+        }
+    }
+};
