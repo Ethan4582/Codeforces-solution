@@ -1,0 +1,19 @@
+
+// Time: O(NW)
+// Space: O(N)
+
+class Solution {
+public:
+    int countPrefixes(vector<string>& words, string s) {
+        int cnt = 0;
+
+        for (const string& word : words) {
+            // Check if the word is long enough and matches the prefix
+            if (s.size() >= word.size() && s.compare(0, word.size(), word) == 0) {
+                cnt++;
+            }
+        }
+        
+        return cnt;
+    }
+};

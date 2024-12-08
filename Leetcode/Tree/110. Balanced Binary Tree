@@ -1,0 +1,32 @@
+
+ Balanced Binary Tree
+
+for every node height(left)- height(right)<=1
+
+
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        return checkHeight(root) != -1;
+    }
+
+private:
+    int checkHeight(TreeNode* node) {
+        if (node == nullptr) return 0; // Base case: null node has height 0
+
+        int leftHeight = checkHeight(node->left);
+        if (leftHeight == -1) return -1; // Left subtree not balanced
+
+        int rightHeight = checkHeight(node->right);
+        if (rightHeight == -1) return -1; // Right subtree not balanced
+
+        if (abs(leftHeight - rightHeight) > 1) return -1; // Current node not balanced
+
+        return 1 + max(leftHeight, rightHeight); // Return height of the current node
+    }
+};
+
+/*
+Time Complexity: O(n), where n is the number of nodes in the tree.
+Space Complexity: O(h), where h is the height of the tree (due to recursion stack).
+*/

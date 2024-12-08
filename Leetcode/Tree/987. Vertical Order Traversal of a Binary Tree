@@ -1,0 +1,126 @@
+
+
+//level order trvaeral [ BFS]
+
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        // Store the actual node, column, level
+        queue<pair<TreeNode*, pair<int, int>>> q; 
+        // Map to store the list of elements in the same vertical order
+        // Vertical order: they are the list of the elements at that level. 
+        // We store here what we get from the queue 
+        map<int, map<int, multiset<int>>> ans; 
+        if (root == nullptr) return {}; // Corrected base case
+
+        q.push({root, {0, 0}}); // Use queue to store nodes with their vertical and level positions
+
+        while (!q.empty()) {
+            auto p = q.front(); // To store the front to put the next element 
+            q.pop();
+            TreeNode* node = p.first; // The node used to push next element 
+            int x = p.second.first, y = p.second.second; // Vertical pos and level pos 
+            ans[x][y].insert(node->val); // Insert the popped out element that is in vertical order 
+
+            // Check for upcoming nodes and insert 
+            if (node->left) {
+                q.push({node->left, {x - 1, y + 1}});
+            }
+            if (node->right) {
+                q.push({node->right, {x + 1, y + 1}});
+            }
+        }
+
+        vector<vector<int>> res; 
+        for (auto& it : ans) {
+            vector<int> col; 
+            // Iterate over all the numbers in the same column
+            for (auto& it1 : it.second) {
+                // Push the duplicate elements in the back in the sorted order
+                col.insert(col.end(), it1.second.begin(), it1.second.end()); // Insert the elements in order
+            }
+            res.push_back(col);
+        }
+        return res; // Return result
+    }
+};
+
+// Time Complexity: O(N log N) due to sorting in multiset
+// Space Complexity: O(N) for storing the nodes and the result
+
+
+
+class Solution {
+public:
+    void dfs(TreeNode* node, int x, int y, map<int, map<int, multiset<int>>>& ans) {
+        if (!node) return; // Base case
+
+        ans[x][y].insert(node->val); // Insert node value
+
+        // Traverse left and right children
+        dfs(node->left, x - 1, y + 1, ans);
+        dfs(node->right, x + 1, y + 1, ans);
+    }
+
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        map<int, map<int, multiset<int>>> ans; 
+        dfs(root, 0, 0, ans); // Start DFS from root
+
+        vector<vector<int>> res; 
+        for (auto& it : ans) {
+            vector<int> col; 
+            for (auto& it1 : it.second) {
+                col.insert(col.end(), it1.second.begin(), it1.second.end()); 
+            }
+            res.push_back(col);
+        }
+        return res; 
+    }
+};
+
+// Time Complexity: O(N log N) due to sorting in multiset
+// Space Complexity: O(N) for storing the nodes and the result
+
+
+
+class Solution {
+public:
+    void dfs(TreeNode* node, int x, int y, map<int, map<int, multiset<int>>>& ans) {
+        if (!node) return; // Base case: if node is null
+
+        ans[x][y].insert(node->val); // Insert node value into the map
+
+        // Traverse left child (x - 1 for vertical, y + 1 for level)
+        dfs(node->left, x - 1, y + 1, ans);
+        // Traverse right child (x + 1 for vertical, y + 1 for level)
+        dfs(node->right, x + 1, y + 1, ans);
+    }
+
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        map<int, map<int, multiset<int>>> ans; 
+        dfs(root, 0, 0, ans); // Start DFS from root at position (0, 0)
+
+        vector<vector<int>> res; 
+        for (auto& it : ans) {
+            vector<int> col; 
+            for (auto& it1 : it.second) {
+                col.insert(col.end(), it1.second.begin(), it1.second.end()); // Collect sorted elements
+            }
+            res.push_back(col); // Add column to result
+        }
+        return res; 
+    }
+};
+
+// Time Complexity: O(N log N) due to sorting in multiset
+// Space Complexity: O(N) for storing the nodes and the result
+
+
+
+Time Complexity: O(N * log2N * log2N * log2N) where N represents the number of nodes in the Binary Tree.
+
+Postorder Traversal performed using BFS as a time complexity of O(N) as we are visiting each and every node once.
+Multiset Operations to insert overlapping nodes at a specific vertical and horizontal level also takes O(log2N) complexity.
+Map operations involve insertion and retrieval of nodes with their vertical and level as their keys. Since there are two nested maps, the total time complexity becomes O(log2N)*O(log2N).
+Space Complexity: O(N + N/2) vertical and level space complexity of O(N) as it stores all N nodes of the Binary Tree.
+The queue for breadth first traversal occupies a space proportional to the maximum level of the tree which can be O(N/2) in the worst case of a balanced tree.

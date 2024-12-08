@@ -1,0 +1,111 @@
+https://www.geeksforgeeks.org/problems/fruit-into-baskets-1663137462/1
+
+
+Brute force / is also optmial 
+
+Tc- 0(n)  as we use set it will always very small number 
+
+class Solution {
+public:
+    int totalFruits(std::vector<int>& arr) {
+        int n = arr.size();
+        int ans = 0; // Initialize to 0
+
+        // Iterate through all possible starting points of the subarray
+        for (int i = 0; i < n; i++) {
+            std::set<int> fruitSet; // To store unique fruit types
+            
+            // Expand the subarray from the starting point i
+            for (int j = i; j < n; j++) {
+                fruitSet.insert(arr[j]); // Add the fruit type to the set
+                
+                // If we have more than 2 types of fruits, break the loop
+                if (fruitSet.size() <=2) {
+                     // Update the maximum length of the valid subarray
+                ans = std::max(ans, j - i + 1);
+                }else{
+                    break;
+                }
+
+               
+            }
+        }
+
+        return ans; 
+    }
+};
+
+
+sliding window
+
+TC -0(2N)  N [ while ] + N[ to make the valid subaary the worst case 1, 1,1,...... 1]  so 0(2N)
+SC -0(1)  as we earsing 
+
+class Solution {
+public:
+    int totalFruits(std::vector<int>& arr) {
+        int n = arr.size();
+        int maxlen = 0; // Initialize to 0
+        int l = 0, r = 0;
+        int k = 2; // We want at most 2 types of fruits
+        std::unordered_map<int, int> mpp;
+
+        while (r < n) {
+            mpp[arr[r]]++; // Add the current fruit to the map
+            
+            // Check if the current window is valid
+            while (mpp.size() > k) {
+                mpp[arr[l]]--; // Decrease the count of the leftmost fruit
+                if (mpp[arr[l]] == 0) {
+                    mpp.erase(arr[l]); // Remove the fruit type if its count is 0
+                }
+                l++; // Move the left pointer to the right
+            }
+            
+            // Update the maximum length of the valid subarray
+            maxlen = std::max(maxlen, r - l + 1);
+            r++; // Move the right pointer to the right
+        }
+
+        return maxlen; 
+    }
+};
+
+
+
+->  Optmize 0(2N) [  same concet as  max consecative one like window floating]
+
+same concept but we moce the window expand and shrink both and keep the max same  move the window expand and shrink at same until is ivalid and keep on updating we , if foud the valid update the max and keep on doing the window update only if the window is valid 
+
+
+class Solution {
+public:
+    int totalFruits(std::vector<int>& arr) {
+        int n = arr.size();
+        int maxlen = 0; // Initialize to 0
+        int l = 0, r = 0;
+        int k = 2; // We want at most 2 types of fruits
+        std::unordered_map<int, int> mpp;
+
+        while (r < n) {
+            mpp[arr[r]]++; // Add the current fruit to the map
+            
+            // Check if the current window is valid
+            if(mpp.size() > k) {
+                mpp[arr[l]]--; // Decrease the count of the leftmost fruit
+                if (mpp[arr[l]] == 0) {
+                    mpp.erase(arr[l]); // Remove the fruit type if its count is 0
+                }
+                l++; // Move the left pointer to the right
+            }
+            
+            // Update the maximum length of the valid subarray
+            maxlen = std::max(maxlen, r - l + 1);
+            r++; // Move the right pointer to the right
+            
+        }
+
+        return maxlen; 
+    }
+};
+

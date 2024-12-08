@@ -1,0 +1,62 @@
+
+
+Brute force 
+
+
+class Solution {
+public:
+    int subarraysWithKDistinct(std::vector<int>& a, int k) {
+        int n = a.size();
+        int cnt = 0;
+
+        for (int i = 0; i < n; i++) {
+            std::set<int> st; 
+            for (int j = i; j < n; j++) {
+                st.insert(a[j]); 
+                if (st.size() == k) {
+                    cnt++; 
+                }
+            }
+        }
+        return cnt;
+    }
+};
+
+
+Opmized 
+
+find all the subaary that cnt less the k  becuae as we use genral use of the map we skip the cruical map itslef  so we go with apprach goal (a, k)- goal(a, k-1)
+
+
+class Solution {
+private:
+    // Find all the subarrays that count less than or equal to k
+    int goal(vector<int>& a, int k) {
+        int n = a.size();
+        int cnt = 0, ans = 0;
+        unordered_map<int, int> mpp;
+        int l = 0, r = 0;
+        while (r < n) {
+            mpp[a[r]]++;
+            if (mpp[a[r]] == 1) cnt++; // Count distinct elements
+            while (cnt > k) {
+                mpp[a[l]]--;
+                if (mpp[a[l]] == 0) {
+                    mpp.erase(a[l]);
+                    cnt--; // Decrease count of distinct elements
+                }
+                l++;
+            }
+            ans += r - l + 1; 
+            r++;
+        }
+        return ans; 
+    }
+public:
+    int subarraysWithKDistinct(vector<int>& a, int k) {
+        return goal(a, k) - goal(a, k - 1); // Subarrays with exactly k distinct
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(k)

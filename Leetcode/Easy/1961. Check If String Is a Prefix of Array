@@ -1,0 +1,36 @@
+class Solution {
+public:
+    bool isPrefixString(string s, vector<string>& words) {
+        string ans = "";
+
+        for(auto& word:words){
+            ans += word;
+            if(ans == s) return true;
+            if(ans.length()>s.length()) return false;
+        }
+        return false;
+    }
+};
+
+sc- 0(1)
+
+class Solution {
+public:
+    bool isPrefixString(string s, vector<string>& words) {
+        int index = 0; 
+
+        for (const string& word : words) {
+           
+            if (index + word.length() > s.length()) return false;
+            
+            if (s.substr(index, word.length()) != word) return false;
+
+            // Move the index forward
+            index += word.length();
+            // If we've matched the entire string s, return true
+            if (index == s.length()) return true;
+        }
+        
+        return false;
+    }
+};

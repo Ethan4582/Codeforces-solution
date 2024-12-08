@@ -1,0 +1,57 @@
+
+Brute force 
+
+Time Complexity: O(n^2) - The algorithm checks all possible substrings, resulting in a quadratic time complexity.
+Space Complexity: O(1) 
+
+class Solution {
+public:
+    int characterReplacement(std::string s, int k) {
+        int n = s.size(); 
+        int maxLen = 0;
+        for (int i = 0; i < n; i++) {
+            std::unordered_map<char, int> mpp; 
+            int maxCount = 0; 
+            for (int j = i; j < n; j++) {
+                mpp[s[j]]++; 
+                maxCount = std::max(maxCount, mpp[s[j]]); 
+                int totalChars = j - i + 1; 
+                int charsToReplace = totalChars - maxCount; // Characters other than the most frequent
+                if (charsToReplace <= k) {
+                    maxLen = std::max(maxLen, totalChars); // Update maxLen if valid
+                }
+            }
+        }
+
+        return maxLen;
+    }
+};
+
+
+optmial
+ - TC - (2N) for -> TC-0(N)  change while -> if 
+
+class Solution {
+public:
+    int characterReplacement(std::string s, int k) {
+        int n = s.size();
+        int maxLen = 0;
+        int left = 0;
+        int count[26] = {0};
+        int maxCount = 0;
+
+        for (int right = 0; right < n; right++) {
+            count[s[right] - 'A']++;
+            maxCount = std::max(maxCount, count[s[right] - 'A']);
+
+            if (right - left + 1 - maxCount > k) {
+                count[s[left] - 'A']--;
+                left++;
+            }
+
+            maxLen = std::max(maxLen, right - left + 1);
+        }
+
+        return maxLen;
+    }
+};

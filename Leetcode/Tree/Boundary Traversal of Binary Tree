@@ -1,0 +1,124 @@
+https://www.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1
+
+https://github.com/akhilkammila/leetcode-screenshotter/blob/main/editorial-screenshots/1-999/545.%20Boundary%20of%20Binary%20Tree.png
+
+Anti -Clock - Wise 
+
+
+1-> left Boundary exculding leaf 
+  We traver and pu the vaue is  stack until we het to leaf where the left and right are null 
+
+2-> leaf Node 
+  -> the resaon we do not went woith level order is beacue their can be case where the one level end earlier diferent level 
+
+  -> we use preorder  root_> left -> right  check which are the node that are left node or both left and right are null that put in stack 
+   
+3-> right Boundary in rever order  excluding the leaf node
+
+-> we got to right only if not no righ tthen we got to left 
+
+
+
+struct Node {
+    int data;
+    Node* left, * right;
+};
+
+class Solution {
+    bool isLeaf(Node* root) { // Corrected function signature and logic
+        return root && !root->left && !root->right; // Returns true if it's a leaf
+    }
+
+    void addLeftBoundary(Node* root, vector<int>& ans) { // Fixed function name
+        Node* curr = root;
+        while (curr) {
+            if (!isLeaf(curr)) ans.push_back(curr->data); // Only add non-leaf nodes
+            curr = curr->left ? curr->left : curr->right; // Go left or right
+        }
+    }
+
+    void addLeafNodes(Node* root, vector<int>& ans) { // Fixed function name
+        if (!root) return;
+        if (isLeaf(root)) {
+            ans.push_back(root->data); // Add leaf node
+            return;
+        }
+        addLeafNodes(root->left, ans); // Traverse left
+        addLeafNodes(root->right, ans); // Traverse right
+    }
+
+    void addRightBoundary(Node* root, vector<int>& ans) { // Fixed function name
+        vector<int> temp; // Temporary vector to store right boundary
+        Node* curr = root;
+        while (curr) {
+            if (!isLeaf(curr)) temp.push_back(curr->data); // Only add non-leaf nodes
+            curr = curr->right ? curr->right : curr->left; // Go right or left
+        }
+        reverse(temp.begin(), temp.end()); // Reverse for right boundary
+        ans.insert(ans.end(), temp.begin(), temp.end()); // Append to result
+    }
+
+public:
+    vector<int> boundaryTraversal(Node* root) {
+        vector<int> ans;
+        if (!root) return ans;
+        if (!isLeaf(root)) ans.push_back(root->data); // Add root if not a leaf
+        addLeftBoundary(root->left, ans); // Add left boundary
+        addLeafNodes(root, ans); // Add leaf nodes
+        addRightBoundary(root->right, ans); // Add right boundary
+        return ans;
+    }
+};
+
+// Time: O(N)
+// Space: O(H) where H is the height of the tree (for recursion stack)
+
+
+class Solution {
+    bool isLeaf(Node* root) {
+        return root && !root->left && !root->right;
+    }
+
+    void addRightBoundary(Node* root, vector<int>& ans) {
+        Node* curr = root;
+        while (curr) {
+            if (!isLeaf(curr)) ans.push_back(curr->data);
+            curr = curr->right ? curr->right : curr->left;
+        }
+    }
+
+    void addLeafNodes(Node* root, vector<int>& ans) {
+        if (!root) return;
+        if (isLeaf(root)) {
+            ans.push_back(root->data);
+            return;
+        }
+        addLeafNodes(root->left, ans);
+        addLeafNodes(root->right, ans);
+    }
+
+    void addLeftBoundary(Node* root, vector<int>& ans) {
+        vector<int> temp;
+        Node* curr = root;
+        while (curr) {
+            if (!isLeaf(curr)) temp.push_back(curr->data);
+            curr = curr->left ? curr->left : curr->right;
+        }
+        reverse(temp.begin(), temp.end());
+        ans.insert(ans.end(), temp.begin(), temp.end());
+    }
+
+public:
+    vector<int> boundaryTraversal(Node* root) {
+        vector<int> ans;
+        if (!root) return ans;
+        if (!isLeaf(root)) ans.push_back(root->data);
+        addRightBoundary(root->right, ans);   // Add right boundary
+        addLeafNodes(root, ans);             // Add leaf nodes
+        addLeftBoundary(root->left, ans);    // Add left boundary
+        return ans;
+    }
+};
+
+// Time Complexity: O(N)
+// Space Complexity: O(H), where H is the height of the tree (recursion stack).

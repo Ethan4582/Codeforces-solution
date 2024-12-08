@@ -1,0 +1,122 @@
+
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int j = 0; // Pointer for T
+        for (char c : s) {
+            if (j < t.size() && c == t[j]) {
+                j++;
+            }
+        }
+        return j == t.size(); // Check if we have matched all characters in T
+    }
+
+    string minWindow(string S, string T) {
+        int minLen = INT_MAX;
+        string result = "";
+        
+        for (int i = 0; i < S.size(); i++) {
+            for (int j = i; j < S.size(); j++) {
+                string substring = S.substr(i, j - i + 1);
+                if (isSubsequence(substring, T)) {
+                    if (substring.size() < minLen) {
+                        minLen = substring.size();
+                        result = substring;
+                    }
+                }
+            }
+        }
+        
+        return result; // Return the minimum window or empty string
+    }
+};
+
+// Time Complexity: O(N^3) where N is the length of S
+// Space Complexity: O(1)
+
+
+
+
+class Solution {
+public:
+    string minWindow(string S, string T) {
+        int n = S.size(), m = T.size();
+        int minLen = INT_MAX, start = -1;
+
+        for (int left = 0; left < n; left++) {
+            int tIndex = 0; // Pointer for T
+            for (int right = left; right < n; right++) {
+                if (S[right] == T[tIndex]) {
+                    tIndex++; // Move to the next character in T
+                }
+                if (tIndex == m) { // If we have matched all characters in T
+                    // Update minimum length and starting index
+                    if (right - left + 1 < minLen) {
+                        minLen = right - left + 1;
+                        start = left;
+                    }
+                    break; // No need to expand further, move left pointer
+                }
+            }
+        }
+
+        return start == -1 ? "" : S.substr(start, minLen); // Return result
+    }
+};
+
+// Time Complexity: O(N^2) where N is the length of S
+// Space Complexity: O(1)
+
+
+
+class Solution {
+public:
+    string minWindow(string S, string T) {
+        int n = S.size(), m = T.size();
+        if (m == 0) return ""; // If T is empty, return empty string
+
+        // Preprocessing: Store the indices of each character in S
+        unordered_map<char, vector<int>> charIndices;
+        for (int i = 0; i < n; i++) {
+            charIndices[S[i]].push_back(i);
+        }
+
+        int minLen = INT_MAX, start = -1;
+
+        // Two pointers for T
+        for (int i = 0; i < m; i++) {
+            if (charIndices.find(T[i]) == charIndices.end()) {
+                return ""; // If any character in T is not in S
+            }
+            
+            // Find the first occurrence of T[i] in S that is greater than or equal to the last found index
+            int lastIndex = (i == 0) ? -1 : start;
+            auto& indices = charIndices[T[i]];
+            auto it = upper_bound(indices.begin(), indices.end(), lastIndex);
+            
+            if (it == indices.end()) {
+                return ""; // No valid window found
+            }
+            
+            // Update start index to the position of T[i] in S
+            start = *it;
+
+            // Now look for the last character in T to find the end of the window
+            if (i == m - 1) {
+                int end = start;
+                while (end < n && (T[m - 1] == S[end])) {
+                    end++;
+                }
+                if (end - start < minLen) {
+                    minLen = end - start;
+                    start = start; // Update the starting index
+                }
+            }
+        }
+
+        return minLen == INT_MAX ? "" : S.substr(start, minLen);
+    }
+};
+
+// Time Complexity: O(N + M log M) where N is the length of S and M is the length of T
+// Space Complexity: O(N)

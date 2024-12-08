@@ -1,0 +1,121 @@
+
+we can convert to the question of find the subaary wihtmax zero as k zero in subaary 
+
+
+
+class Solution {
+public:
+    int longestOnes(std::vector<int>& nums, int k) {
+        int n = nums.size();
+        int max_len = 0;
+
+      
+        for (int i = 0; i < n; i++) {
+            int zero_count = 0;
+            
+            // Expand the subarray from the starting point i
+            for (int j = i; j < n; j++) {
+                // Count zeros in the current subarray
+                if (nums[j] == 0) {
+                    zero_count++;
+                }
+
+                // If the count of zeros exceeds k, break the loop
+                if (zero_count > k) {
+                    break;
+                }
+
+                // Update the maximum length of valid subarray
+                max_len = std::max(max_len, j - i + 1);
+            }
+        }
+
+        return max_len;
+    }
+};
+
+
+Complexity:
+Time Complexity: O(n)+0(n)[ for intwer while loop check ] - each element is processed at most twice (once by right and once by left).
+Space Complexity: O(1) 
+
+
+sliding windows 
+
+class Solution {
+public:
+    int longestOnes(std::vector<int>& nums, int k) {
+        int n = nums.size();
+        int max_len = 0;
+        int left = 0 , right=0; // Left pointer of the sliding window
+        int zero_count = 0; // Count of zeros in the current window
+
+        while(right<n) {
+            // If we encounter a zero, increment the zero count
+            if (nums[right] == 0) {
+                zero_count++;
+            }
+
+            // If the zero count exceeds k, shrink the window from the left
+            while (zero_count > k) {
+                if (nums[left] == 0) {
+                    zero_count--;
+                }
+                left++;
+            }
+
+            // Update the maximum length of the window
+            max_len = std::max(max_len, right - left + 1);
+            right++;
+        }
+
+        return max_len;
+    }
+};
+
+
+
+// most optimal solution 
+
+-> her important logic is that we move the window for valid winodw if it is valid we update if not then we do not update  the max  [ it like stick to that 1 extrao zero 0 k+1]
+that mkaeit in invalid 
+
+-> if the left pass the the first zer in the sybaary that mamke it avlid we can just update the max just shrink the window to update the window 
+
+0> instead of while we check the updating the lenght part 
+
+
+
+
+Tc - o(N) [ avoid while loop] now allow to expand until i get the valid zero then window can expand 
+
+
+class Solution {
+public:
+    int longestOnes(std::vector<int>& nums, int k) {
+        int n = nums.size();
+        int max_len = 0;
+        int left = 0 , right=0; // Left pointer of the sliding window
+        int zero_count = 0; // Count of zeros in the current window
+
+        while(right<n) {
+            // If we encounter a zero, increment the zero count
+            if (nums[right] == 0) {
+                zero_count++;
+            }
+
+            // If the zero count exceeds k, shrink the window from the left
+            if (zero_count > k ) {
+                if (nums[left] == 0) zero_count--;
+                left++;
+            }
+              // we only update if the window is valid instead
+           if(zero_count<=k){
+             max_len = std::max(max_len, right - left + 1);
+           }
+             right++;
+        }
+
+        return max_len;
+    }
+};

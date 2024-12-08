@@ -1,0 +1,17 @@
+
+type - 1
+
+longest subaary 
+
+
+type - 2
+
+find the number of subarry with given cnt 
+
+atmostSubarray(nums,goal) - atmostSubarray(nums,goal-1);
+
+
+type  -3 
+
+
+76. Minimum Window Substring

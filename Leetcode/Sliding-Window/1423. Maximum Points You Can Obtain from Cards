@@ -1,0 +1,26 @@
+
+
+class Solution {
+public:
+    int maxScore(vector<int>& a, int k) {
+        int lsum = 0, mxsum = 0, rsum = 0, n = a.size(); 
+        
+        // Corrected the accumulate function to include the k-th element
+        lsum = accumulate(a.begin(), a.begin() + k, 0);
+        
+        // Initial max sum
+        mxsum = lsum;
+        
+        // Loop to calculate the max score
+        for (int i = 0; i < k; i++) {
+            lsum -= a[k - 1 - i]; // Remove from left sum
+            rsum += a[n - 1 - i]; // Add to right sum
+            mxsum = max(mxsum, lsum + rsum); // Update max sum
+        }
+
+        return mxsum; // Corrected variable name from mzsum to mxsum
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(1)

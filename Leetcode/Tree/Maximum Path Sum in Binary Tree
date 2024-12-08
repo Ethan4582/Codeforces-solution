@@ -1,0 +1,49 @@
+
+
+
+class Solution {
+    // formulas is to find the max curve root->val + maxleft+maxright;
+private: 
+    int maxsum(TreeNode* root, int& ans) {
+        if (root == nullptr) return 0;
+      
+        // negative path is of no use that is the edge case 
+        int lh = max( 0 , maxsum(root->left, ans)); 
+        int rh = max( 0 , maxsum(root->right, ans));
+        
+        // null give us 0 at the end of the tree 
+        ans = max(ans, lh + rh + root->val);
+  
+        return max(lh, rh) + root->val; // to chose which path to got 
+    }
+
+public:
+    int maxPathSum(TreeNode* root) {
+        int ans = INT_MIN; // Initialize to the smallest integer
+        maxsum(root, ans); 
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(n), where n is the number of nodes.
+Space Complexity: O(h), where h is the height of the tree.
+*/
+
+
+// Time: O(N)
+// Space: O(H)
+class Solution {
+    int ans = INT_MIN;
+    int dfs(TreeNode *root) {
+        if (!root) return 0;
+        int left = dfs(root->left), right = dfs(root->right);
+        ans = max(ans, root->val + left + right);
+        return max(0, root->val + max(left, right));
+    }
+public:
+    int maxPathSum(TreeNode* root) {
+        dfs(root);
+        return ans;
+    }
+};

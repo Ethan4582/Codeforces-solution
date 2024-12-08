@@ -23,28 +23,28 @@ public:
 // Space: O(C) where C is the range of character set
 
 
-
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        int n = s.size();          // Length of the input string
-        int left = 0;             // Left boundary of the sliding window
-        int max_len = 0;          // Maximum length of substring without repeating characters
-        unordered_map<char, int> mpp; // Map to store the most recent index of each character
-        
-        for (int right = 0; right < n; ++right) {
-            // If the character at `right` is already in the map and its index is >= `left`
-            if (mpp.find(s[right]) != mpp.end() && mpp[s[right]] >= left) {
-                // Move the `left` boundary to the right of the last occurrence of `s[right]`
-                left = mpp[s[right]] + 1;
+         int n = s.size();          // Length of the input string
+        int max_len = 0; 
+         vector<int> hash(128, -1);
+         int l=0 , r=0;
+
+         while(r<n){
+            if(hash[s[r]]!=-1 ){
+                // in case already apper once before
+                if( hash[s[r]]>=l){
+                    l=hash[s[r]]+1; // update the left idex 
+                } 
             }
-            // Update the map with the current index of `s[right]`
-            mpp[s[right]] = right;
-            // Calculate the length of the current substring and update `max_len` if it's larger
-            max_len = max(max_len, right - left + 1);
-        }
-        
-        return max_len;  // Return the length of the longest substring without repeating characters
+             max_len= max(max_len, r-l+1);
+            //  upadte the window expanding 
+            hash[s[r]]=r;
+            r++;
+         }
+
+        return max_len;
     }
 };
 

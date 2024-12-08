@@ -1,0 +1,50 @@
+
+
+Brute force 
+
+Time complexity : O(n^2). We need to consider every subarray possible.
+
+Space complexity : O(1). Constant space is used.
+
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+     int count = 0;
+        for (int start = 0; start < nums.size(); start++) {
+            int sum=0;
+            for (int end = start; end < nums.size(); end++) {
+                sum+=nums[end];
+                if (sum == k)
+                    count++;
+            }
+        }
+        return count;
+    }
+};
+
+
+
+// Optmial 
+
+we make hash map we use prefix sum to count does their is num in array that exist => sum -k   that mean the remaing part  of that subbary is  k thsu we inrease the count 
+
+
+
+class Solution {
+public:
+    int subarraySum(std::vector<int>& nums, int k) {
+        int n = nums.size();
+        int ans = 0, sum = 0;
+        std::unordered_map<int, int> mpp {{0, 1}}; // Initialize with prefix sum 0
+
+        for (int i = 0; i < n; i++) {
+            sum += nums[i];
+            if (mpp.find(sum - k) != mpp.end()) {
+                ans += mpp[sum - k]; // Get the count of occurrences of (sum - k)
+            }
+            mpp[sum]++; 
+        }
+
+        return ans;
+    }
+};
