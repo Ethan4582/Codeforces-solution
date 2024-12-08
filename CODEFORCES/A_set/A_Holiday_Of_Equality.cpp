@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+#define ll long long
+#define ull unsigned long long
+#define pb push_back
+#define vi vector<int>
+#define vll vector<ll>
+#define vs vector<string>
+#define vpii vector<pair<int, int>>
+#define all(v) v.begin(), v.end()
+#define rall(v) v.rbegin(), v.rend()
+#define rep(i, a, n) for (int i = a; i < n; i++)
+#define p(a) cout << a << "\n";
+#define p2(a, b) cout << a << " " << b << "\n";
+#define YES cout << "YES\n";
+#define NO cout << "NO\n";
+
+#define fastread() (ios_base::sync_with_stdio(false), cin.tie(NULL));
+
+using namespace std;
+
+int main() {
+    fastread();
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    rep(i, 0, n) {
+        cin >> arr[i];
+    }
+    sort(all(arr));
+    int max_elem = *max_element(all(arr));
+    int sum = 0;
+    rep(i, 0, n) {
+        if (arr[i] != max_elem) {
+            sum += max_elem - arr[i];
+        }
+    }
+    p(sum);
+    return 0;
+}
