@@ -1,0 +1,40 @@
+
+
+
+My approach
+
+class Solution {
+private: 
+    int maxsum(TreeNode* root, int& ans) {
+        if (root == nullptr) return 0;
+        
+        //  left and right maximum path sums
+        int lh = maxsum(root->left, ans); 
+        int rh = maxsum(root->right, ans);
+        
+        // Update the maximum path sum
+        ans = max(ans, lh + rh + root->val);
+        
+        // Return the maximum sum of the path including the current node
+        return max(0, max(lh, rh) + root->val); // Only add positive sums
+    }
+
+public:
+    int maxPathSum(TreeNode* root) {
+        int ans = INT_MIN; // Initialize to the smallest integer
+        maxsum(root, ans); 
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(n), where n is the number of nodes.
+Space Complexity: O(h), where h is the height of the tree.
+*/
+
+
+
+
+
+
+

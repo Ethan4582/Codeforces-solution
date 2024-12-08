@@ -1,0 +1,66 @@
+optmized apporach 
+Time Complexity: Remains  O(nlogn) due to sorting and binary search.
+Space Complexity: O(1) additional space.
+
+class Solution {
+public:
+    bool checkIfExist(std::vector<int>& arr) {
+        std::sort(arr.begin(), arr.end()); 
+
+        for (int i = 0; i < arr.size(); ++i) {
+            
+            if (binarySearch(arr, arr[i] * 2, i + 1)) {
+                return true;
+            }
+            // Check for half the current element (only if it's even)
+            if (arr[i] % 2 == 0 && binarySearch(arr, arr[i] / 2, i + 1)) {
+                return true;
+            }
+        }
+
+        return false; 
+    }
+
+private:
+    
+    bool binarySearch(const std::vector<int>& arr, int target, int start) {
+        int left = start, right = arr.size() - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2; 
+            if (arr[mid] == target) {
+                return true; 
+            } else if (arr[mid] < target) {
+                left = mid + 1; 
+            } else {
+                right = mid - 1; 
+            }
+        }
+
+        return false; 
+    }
+};
+
+
+
+opmtimal
+
+Tc- 0(N)
+Sc- 0(N)
+
+class Solution {
+public:
+    bool checkIfExist(std::vector<int>& arr) {
+        std::unordered_set<int> seen; 
+
+        for (int num : arr) {
+     
+            if (seen.count(num * 2) || (num % 2 == 0 && seen.count(num / 2))) {
+                return true; 
+            }
+            seen.insert(num); 
+        }
+
+        return false; 
+    }
+};

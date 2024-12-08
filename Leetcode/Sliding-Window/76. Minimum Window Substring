@@ -1,0 +1,79 @@
+
+Brute force 
+
+class Solution {
+private:
+    bool check(unordered_map<char, int> mpp) {
+        for (auto& it : mpp) {
+            if (it.second > 0) return false; // Return false if any count > 0
+        }
+        return true; // All counts are 0 or less
+    }
+public:
+    string minWindow(string s, string t) {
+        int n = s.length(), m = t.length(); 
+        unordered_map<char, int> tracA;
+        for (char it : t) {
+            tracA[it]++; // Count characters in t
+        }
+        int minlen = INT_MAX; // Initialize to max value
+        string minstr;
+       
+        for (int i = 0; i < n; i++) {
+            unordered_map<char, int> copy = tracA; 
+            for (int j = i; j < n; j++) {
+                copy[s[j]]--; 
+                if (check(copy)) {
+                    int len = j - i + 1; // Current substring length
+                    if (len < minlen) { // Update min length
+                        minlen = len;
+                        minstr = s.substr(i, len); // Update min substring
+                    }
+                }
+            }
+        }
+        return minstr.empty() ? "" : minstr; // Return empty if no valid substring found
+    }
+};
+
+// Time Complexity: O(n^2 * m) where n is length of s and m is length of t
+// Space Complexity: O(m)
+
+
+
+
+// Time: O(M + N)
+// Space: O(C) where C is the range of characters
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int n = s.size(); // 
+        int m = t.size(); 
+        int charCount[128] = {}; 
+        int matched = 0; // Count of matched characters
+        int minLen = INT_MAX; // Minimum length of the substring
+        int start = -1; // Start index of the minimum substring
+
+        for (char c : t) {
+            charCount[c]++;
+        }
+
+        for (int left = 0, right = 0; right < n; ++right) {
+            // Check if current character is part of t
+            matched += charCount[s[right]]-- > 0;
+
+            while (matched >= m) {
+                // Update minimum length and start index
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    start = left;
+                }
+                // Move left pointer to shrink the window
+                matched -= ++charCount[s[left++]] > 0;
+            }
+        }
+
+        // Return the minimum substring or an empty string if not found
+        return start == -1 ? "" : s.substr(start, minLen);
+    }
+};

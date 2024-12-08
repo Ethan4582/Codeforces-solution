@@ -1,0 +1,33 @@
+
+// Time: O(NW)
+// Space: O(N)
+class Solution {
+public:
+    int prefixCount(vector<string>& A, string pref) {
+        int ans = 0;
+        for (auto &s : A) {
+            if (s.substr(0, pref.size()) == pref) ++ans;
+        }
+        return ans;
+    }
+};
+
+
+// fever steps
+
+class Solution {
+public:
+    int prefixCount(vector<string>& words, string pref) {
+        int cnt = 0;
+        int prefLength = pref.size();
+
+        for (const string& word : words) {
+            // Check if the word is long enough and matches the prefix
+            if (word.size() >= prefLength && word.compare(0, prefLength, pref) == 0) {
+                cnt++;
+            }
+        }
+        
+        return cnt;
+    }
+};

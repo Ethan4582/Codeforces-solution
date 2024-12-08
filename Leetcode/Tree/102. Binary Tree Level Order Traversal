@@ -1,0 +1,29 @@
+// Time: O(N)
+// Space: O(N)
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ans; // stores the level order element 
+        if (!root) return ans ; // if not children then return 
+        queue <TreeNode*> q;// define the queue
+        q.push(root); //push the root
+        // traves and put all  the element int array 
+        while(!q.empty()){
+            int n =q.size(); 
+            vector<int> level ; //arr to stor the  elemen on the  level
+            //traver for each node to check for childrent then push it to the queue
+            for( int i =0 ; i < n ; i++){
+                // pop the element in theh queue for children to be push
+                TreeNode * node = q.front(); 
+                q.pop();
+                if(node->left!=NULL)q.push(node->left);
+                 if(node->right!=NULL)q.push(node->right);
+                 // put the curr level array  
+                 level.push_back(node->val);
+            }
+            // put the aary in vector
+            ans.push_back(level);
+        }
+        return ans;
+    }
+};

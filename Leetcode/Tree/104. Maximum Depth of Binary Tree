@@ -1,0 +1,54 @@
+
+
+
+Tc- 0(N)
+SC- 0(max_height)
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        // can either use reursion or level order 
+        // for level order  worst is complete binary tree 0(N)
+        //for recurssion worst is skew 0(height)
+
+        // for heigh the general  formula is -> 1 +max(height_left, height_right )
+
+        if(root==NULL) return 0; 
+        int left_height= maxDepth(root->left); // we explore the left portion
+        int right_height= maxDepth(root->right);
+        return 1 +max(left_height, right_height);
+    }
+};
+
+
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (root == nullptr) return 0; // Return 0 if the tree is empty
+
+        queue<TreeNode*> q; 
+        q.push(root);
+        int depth = 0;
+
+        while (!q.empty()) {
+            int size = q.size(); // Number of nodes at the current level
+            depth++; // Increment depth for each level
+
+            for (int i = 0; i < size; i++) {
+                TreeNode* current = q.front();
+                q.pop();
+
+                if (current->left != nullptr) {
+                    q.push(current->left); // Add left child to queue
+                }
+                if (current->right != nullptr) {
+                    q.push(current->right); // Add right child to queue
+                }
+            }
+        }
+        return depth; // Return the maximum depth
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(max_height)

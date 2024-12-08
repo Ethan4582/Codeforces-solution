@@ -1,0 +1,103 @@
+
+
+Brute force 
+
+Time Complexity: O(n^2) in the worst case, due to the nested loops.
+Space Complexity: O(k) 
+
+class Solution {
+public:
+    int longestKSubstr(std::string &s, int k) {
+        int n = s.size(); 
+        int mx = -1; // Initialize max length to -1
+
+      
+        for (int i = 0; i < n; i++) {
+            std::unordered_map<char, int> mpp; // Reset the map for each 
+            for (int j = i; j < n; j++) {
+                mpp[s[j]]++; 
+                if (mpp.size() == k) {
+                    mx = std::max(mx, j - i + 1); 
+                }
+
+                if (mpp.size() > k) {
+                    break;
+                }
+            }
+        }
+
+        return mx; 
+    }
+};
+
+
+
+Tc- 0(N)+0(N)[ inner while loop]
+class Solution {
+public:
+    int longestKSubstr(std::string &s, int k) {
+        int n = s.size(); 
+        int maxlen = -1; // Initialize max length to -1
+        int l = 0, r = 0; 
+        std::unordered_map<char, int> mpp; 
+        
+        while (r < n) {
+            mpp[s[r]]++; 
+            if (mpp.size() > k) {
+                mpp[s[l]]--; 
+                if (mpp[s[l]] == 0) { 
+                    mpp.erase(s[l]); 
+                }
+                l++; 
+            }
+            
+            
+            if (mpp.size() == k) {
+                maxlen = std::max(maxlen, r - l + 1);
+            }
+            r++; 
+        }
+        
+        return maxlen; 
+    }
+};
+
+
+// mOst optmial  
+
+to take we remove 1 from left to avoid the use of while and move r keepin the size same we do this agian
+
+
+Tc- 0(N)
+
+class Solution {
+public:
+    int longestKSubstr(std::string &s, int k) {
+        int n = s.size(); 
+        int maxlen = -1; // Initialize max length to -1
+        int l = 0, r = 0; 
+        std::unordered_map<char, int> mpp; 
+        
+        while (r < n) {
+            mpp[s[r]]++; 
+            if (mpp.size() > k) {
+                mpp[s[l]]--; 
+                if (mpp[s[l]] == 0) { 
+                    mpp.erase(s[l]); 
+                }
+                l++; 
+            }
+            
+            
+            if (mpp.size() == k) {
+                maxlen = std::max(maxlen, r - l + 1);
+            }
+            r++; 
+        }
+        
+        return maxlen; 
+    }
+};
+
+
+
