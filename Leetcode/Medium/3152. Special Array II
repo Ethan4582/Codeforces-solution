@@ -1,0 +1,103 @@
+
+class Solution {
+    bool check(vector<int>& a, int left, int right) {
+        if (right - left <= 1) return true; 
+        
+        for (int i = left; i < right - 1; i++) { 
+            if ((a[i] % 2 == 0 && a[i + 1] % 2 == 0) || (a[i] % 2 != 0 && a[i + 1] % 2 != 0)) {
+                return false; 
+            }
+        }
+        return true; 
+    }
+
+public:
+    vector<bool> isArraySpecial(vector<int>& nums, vector<vector<int>>& q) {
+        vector<bool> ans; 
+        
+        for (const auto& query : q) { 
+            int left = query[0]; 
+            int right = query[1]; 
+            
+            if (check(nums, left, right+1)) {
+                ans.push_back(true); 
+            } else {
+                ans.push_back(false);
+            }
+        }
+        return ans;
+    }
+};
+
+
+/*
+Time Complexity: O(N * M) - Where N is the size of nums and M is the number of 
+Space Complexity: O(1) - No extra space used aside from output.
+*/
+
+
+
+
+/*
+Time Complexity: O(N + Q log M) - Where N is the size of nums, Q is the number of queries, and M is the size of err.
+Space Complexity: O(M) - For storing the err vector.
+*/
+
+
+
+
+class Solution {
+public:
+    vector<bool> isArraySpecial(vector<int>& nums,
+                                vector<vector<int>>& queries) {
+        vector<bool> ans(queries.size());
+        vector<int> violatingIndices;
+
+        for (int i = 1; i < nums.size(); i++) {
+            // same parity, found violating index
+            if (nums[i] % 2 == nums[i - 1] % 2) {
+                violatingIndices.push_back(i);
+            }
+        }
+
+        for (int i = 0; i < queries.size(); i++) {
+            vector<int> query = queries[i];
+            int start = query[0];
+            int end = query[1];
+
+            bool foundViolatingIndex =
+                binarySearch(start + 1, end, violatingIndices);
+
+            if (foundViolatingIndex) {
+                ans[i] = false;
+            } else {
+                ans[i] = true;
+            }
+        }
+
+        return ans;
+    }
+
+private:
+    bool binarySearch(int start, int end, vector<int>& violatingIndices) {
+        int left = 0;
+        int right = violatingIndices.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int violatingIndex = violatingIndices[mid];
+
+            if (violatingIndex < start) {
+                // check right half
+                left = mid + 1;
+            } else if (violatingIndex > end) {
+                // check left half
+                right = mid - 1;
+            } else {
+                // violatingIndex falls in between start and end
+                return true;
+            }
+        }
+
+        return false;
+    }
+};

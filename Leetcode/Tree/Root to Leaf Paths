@@ -1,0 +1,74 @@
+Root to all Leaf Paths
+
+
+class Solution {
+public:
+    void findPaths(Node* root, vector<int>& currentPath, vector<vector<int>>& allPaths) {
+        if (!root) return; // Base case: if the node is null, return
+
+        // Add the current node's value to the path
+        currentPath.push_back(root->data);
+
+        // Check if it's a leaf node
+        if (!root->left && !root->right) {
+            allPaths.push_back(currentPath); // Store the current path
+        } else {
+            // Continue to explore the left and right subtrees
+            findPaths(root->left, currentPath, allPaths);
+            findPaths(root->right, currentPath, allPaths);
+        }
+
+        // Backtrack: remove the current node's value before returning
+        currentPath.pop_back();
+    }
+
+    vector<vector<int>> Paths(Node* root) {
+        vector<vector<int>> allPaths;
+        vector<int> currentPath;
+        findPaths(root, currentPath, allPaths); // Start the path finding
+        return allPaths; // Return all found paths
+    }
+};
+
+// Time Complexity: O(N), where N is the number of nodes
+// Space Complexity: O(H), where H is the height of the tree (for recursion stack)
+
+
+root to target leaf path 
+
+i traverse and look the target and make the array at left if it is no the target i return false if found return true and that array 
+
+
+
+class Solution {
+public:
+    bool findPathToTarget(Node* root, int target, vector<int>& currentPath) {
+        if (!root) return false; // Base case: if the node is null, return false
+
+        // Add the current node's value to the path
+        currentPath.push_back(root->data);
+
+        // Check if we have reached the target leaf node
+        if (root->data == target && !root->left && !root->right) {
+            return true; // Target found
+        }
+
+        // Continue to explore the left and right subtrees
+        if (findPathToTarget(root->left, target, currentPath) || 
+            findPathToTarget(root->right, target, currentPath)) {
+            return true; // Target found in either subtree
+        }
+
+        // Backtrack: remove the current node's value before returning
+        currentPath.pop_back();
+        return false; // Target not found
+    }
+
+    vector<int> solve(Node* root, int target) {
+        vector<int> path;
+        if (findPathToTarget(root, target, path)) {
+            return path; // Return the found path to the target
+        }
+        return {}; // Return empty if target is not found
+    }
+};

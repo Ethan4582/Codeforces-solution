@@ -1,0 +1,61 @@
+
+max width is pick 2 node at bootom level that has atleast 2 node then count the number of node that can exist between them
+
+ traverse and indx the node at the end of the level subtract the idxlast - firidx+1 on that level is width
+
+  0 - based index left= 2*i+1 , right = 2*i+2;   1 - based ind left = 2*i  right= 2*i+1
+
+
+  
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        // width = number of nodes in a level between any 2 nodes
+        // take the leftmost and rightmost node on the same level, count then max number of nodes that can exist on that level
+        // traverse and index the node at the end of the level, subtract the idxLast - firstIdx + 1 on that level is width
+        // 0-based index: left = 2*i + 1, right = 2*i + 2; 1-based index: left = 2*i, right = 2*i + 1
+        // for skewed trees, the index can overflow; to prevent overflow, I will change the index by subtracting the curr (root - 1)
+        // then I use the same idx formula to get the new index
+        // change the root for current index as i - min (of at current element), then use formula to get the new index
+
+        if (root == NULL) {
+            return 0; // If tree is empty, width is 0
+        }
+        
+        int ans = 0; 
+        queue<pair<TreeNode*, int>> q; 
+        q.push({root, 0}); 
+        
+        while (!q.empty()) {
+            int size = q.size();
+            int mmin = q.front().second; // to prevent index overflow
+            int first, last; // leftmost and rightmost elements on the level
+            
+            for (int i = 0; i < size; i++) {
+                long long curr_id = q.front().second - mmin; // update the level index
+                TreeNode* node = q.front().first;
+                q.pop();
+                
+                // Get the leftmost and rightmost elements
+                if (i == 0) first = curr_id; // first index
+                if (i == size - 1) last = curr_id; // last index
+                
+                if (node->left) {
+                    q.push({node->left, curr_id * 2 + 1});
+                }
+           
+                if (node->right) {
+                    q.push({node->right, curr_id * 2 + 2});
+                }
+            }
+            
+            // Update the max width
+            ans = max(ans, last - first + 1);
+        }
+        
+        return ans; 
+    }
+};
+
+// Time Complexity: O(N)
+// Space Complexity: O(N)

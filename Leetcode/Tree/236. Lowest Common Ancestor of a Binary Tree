@@ -1,0 +1,79 @@
+
+
+Brute force 
+
+class Solution {
+    bool findPath(TreeNode* root, TreeNode* x, vector<TreeNode*> &temp) { 
+        if (root == NULL) return false; // Base case
+        temp.push_back(root); // Add current node to path
+        // will run when it is found
+        if (root == x) return true; // Target found
+        // Check left and right subtrees
+        if (findPath(root->left, x, temp) || findPath(root->right, x, temp)) {
+            return true; // Found in either subtree
+        }
+        // at the end if target is not found (left | right)->null thus in prev step it will remove the element 
+        temp.pop_back(); // Backtrack
+        // when give callback return false
+        return false; // Target not found
+    }
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector<TreeNode*> p1, p2; 
+        // if did not find one of them invalid 
+        if (!findPath(root, p, p1) || !findPath(root, q, p2)) { 
+            return NULL; 
+        }
+        TreeNode* lca = NULL;
+        for (int i = 0; i < min(p1.size(), p2.size()); i++) { 
+            if (p1[i] == p2[i]) {
+                lca = p1[i]; // keep updating till last
+            } else {
+                break; 
+            }
+        }
+        return lca; // Return the LCA
+    }
+};
+
+// Time Complexity: O(2N)
+// Space Complexity: O(2N)
+
+
+Optmized 
+
+
+// Time Complexity: O(N)
+// Space Complexity: O(H) where H is the height of the tree
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        //brute 2 DS to store the traver node then check the last commmon number 
+        //3->5  the last common is 1 then it is the LCA
+        //3->1
+        //optmized 
+        //but we use DFS traver and check for target if found it we return the node else we return null  if one is null other is int we return the int their will be node where both are int that is LCA or atend of DFS call one tree half of tree will give the nuber other will give the null thus in edn the LCA
+        if(root==NULL || root==p || root==q){
+            return root; // found the target 
+        }
+
+        //traver to get the final root 
+
+        TreeNode* Left =lowestCommonAncestor( root->left,  p,  q);
+        
+        TreeNode* Right=lowestCommonAncestor(root->right,  p,  q);
+
+        //after all the traver the reccall end 
+
+        if(Left==NULL){
+            return Right;
+        }else if(Right==NULL){
+            return Left;
+        }
+        else{
+            return root;
+        }
+
+    }
+};

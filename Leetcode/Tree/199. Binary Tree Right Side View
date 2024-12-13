@@ -1,0 +1,172 @@
+
+WE can do both dfs and bfs 
+
+BFS -for worst caset SC- 0(N) full binary tree  it will store all the node in the level
+
+DFS  -for most it will be 0(H)  but for skew 0(N) 
+
+we can choose anyone we want 
+
+we go With because dfs is cleaner 
+
+Rever preorder  -> root , right , left  the first node of each  level order 
+
+DFS -
+ 
+class Solution {
+    void dfs(TreeNode* node, int level, vector<int>& ans) {
+        // If the node is NULL, return
+        if (node == NULL) {
+            return;
+        }
+
+        // if any val == size mean it is the first element at that level and is also not in the store so insert the element 
+        if (level == ans.size()) {
+            ans.push_back(node->val);
+        }
+
+        // Traverse right first to ensure rightmost nodes are added
+        dfs(node->right, level + 1, ans);
+        dfs(node->left, level + 1, ans);
+    }
+    
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        // last node of each level is by right side view 
+        // or the first node of every level if traverse from the right side is ans 
+        vector<int> ans; // To store the right side view
+        dfs(root, 0, ans); // Start DFS from root
+        return ans; // Return the result
+    }
+};
+
+/*
+Time Complexity: O(N) - Each node is processed once.
+Space Complexity: O(H) - Space for the recursion stack, where H is the height of the tree.
+*/ 
+
+
+
+BFS - 
+
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        // last node of each level is by right side view 
+        // or the first node of every level if traverse from the right side is ans 
+        vector<int> ans; 
+        if (root == NULL) {
+            return ans; // Return empty if root is null
+        }
+        
+        queue<TreeNode*> q; // Queue for BFS
+        q.push(root);
+        
+        while (!q.empty()) {
+            int size = q.size(); // Number of nodes at the current level
+            
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = q.front();
+                q.pop();
+                
+                // If it's the last node in the current level, add it to the answer
+                if (i == size - 1) {
+                    ans.push_back(node->val);
+                }
+                
+                // Add left and right children to the queue
+                if (node->left != NULL) {
+                    q.push(node->left);
+                }
+                if (node->right != NULL) {
+                    q.push(node->right);
+                }
+            }
+        }
+        
+        return ans; // Return the result
+    }
+};
+
+/*
+Time Complexity: O(N) - Each node is processed once.
+Space Complexity: O(W) - Space for the queue, where W is the maximum width of the tree.
+*/ 
+
+
+
+--------------------------
+
+
+left side  
+
+
+class Solution {
+    void dfs(Node* root, int level, vector<int>& ans) {
+        // Base condition: if the node is NULL, return
+        if (root == NULL) {
+            return;
+        }
+        
+        // If this is the first node at this level, add it to the answer
+        if (level == ans.size()) {
+            ans.push_back(root->data); // Use root->data instead of node->data
+        }
+        
+        // Traverse left first to ensure leftmost nodes are added
+        dfs(root->left, level + 1, ans);
+        dfs(root->right, level + 1, ans);
+    }
+    
+public:
+    vector<int> leftView(Node *root) {
+        vector<int> ans; 
+        dfs(root, 0, ans); // Start DFS from root
+        return ans; // Return the result
+    }
+};
+
+/*
+Time Complexity: O(N) - Each node is processed once.
+Space Complexity: O(H) - Space for the recursion stack, where H is the height of the tree.
+*/ 
+
+
+class Solution {
+  public:
+    vector<int> leftView(Node *root) {
+         // last node of each level is by right side view 
+        // or the first node of every level if traverse from the right side is ans 
+        vector<int> ans; 
+        if (root == NULL) {
+            return ans; // Return empty if root is null
+        }
+        
+        queue<Node*> q; // Queue for BFS
+        q.push(root);
+        
+        while (!q.empty()) {
+          
+            int n = q.size();
+            for (int i = 0; i < n; i++) {
+                Node* node = q.front();
+                q.pop();
+                
+                // takew the first node of  level
+                if (i ==  0) {
+                    ans.push_back(node->data);
+                }
+                
+                // Add left and right children to the queue
+                if (node->left != NULL) {
+                    q.push(node->left);
+                }
+                if (node->right != NULL) {
+                    q.push(node->right);
+                }
+            }
+        }
+        
+        return ans; // Return the result
+    }
+};

@@ -1,0 +1,39 @@
+class Solution {
+public:
+    long long pickGifts(vector<int>& arr, int k) {
+        while (k--) {
+         
+            int idx = max_element(arr.begin(), arr.end()) - arr.begin(); 
+            long long val = sqrt(arr[idx]);
+            arr[idx] = val; 
+        }
+        return accumulate(arr.begin(), arr.end(), 0LL); 
+    }
+};
+
+// Time Complexity: O(k * N) where N is the size of the array
+// Space Complexity: O(1) (in-place modification)
+
+	
+	Time complexity: O(n+k×logn)
+	Space complexity: O(n)
+	
+class Solution {
+public:
+    long long pickGifts(vector<int>& arr, int k) {
+        priority_queue<int> mxhep(arr.begin(), arr.end());
+        while(k--){
+            int val=mxhep.top();
+            mxhep.pop();
+            mxhep.push(floor(sqrt(val)));
+        }
+
+          long long ans = 0;
+        while (!mxhep.empty()) {
+            ans +=mxhep.top();
+            mxhep.pop();
+        }
+
+        return ans;
+    }
+};

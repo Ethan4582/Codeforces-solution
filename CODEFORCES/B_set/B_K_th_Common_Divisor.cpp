@@ -21,19 +21,25 @@ const int N = 1e5 + 5;
 
 using namespace std;
 
-int a[N]; 
-bool c[N]; 
-
 int main() {
-     ios_base::sync_with_stdio(false); cin.tie(NULL);
-    int n; cin >> n;
-    if (n == 1) cout << "1\n";
-    else if (n < 4) cout << "NO SOLUTION\n";
-    else
-    {
-        for (int i = 2; i <= n; i += 2) cout << i << " ";
-        for (int i = 1; i <= n; i += 2) cout << i << " ";
-        cout << '\n';
+    fastread();
+    int a, b, k; 
+    cin >> a >> b >> k;
+
+    int cnt = 0, ans = -1; 
+    int limit = min(a, b); 
+
+    for (int i = limit; i >= 1; i--) {
+        if (a % i == 0 && b % i == 0) {
+            cnt++;
+            if (cnt == k) { 
+                ans = i;
+                break;
+            }
+        }
     }
+
+    p(ans);
+
     return 0;
 }

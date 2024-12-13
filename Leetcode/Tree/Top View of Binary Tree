@@ -1,0 +1,118 @@
+class Solution {
+  public:
+    vector<int> topView(Node *root) {
+        vector<int> ans; 
+        if (root == NULL) {
+            return ans;
+        }
+        map<int, int> mpp; // horizontal level and the node
+        queue<pair<Node*, int>> q;  // node, horizontal distance
+        q.push({root, 0});
+        while (!q.empty()) {
+            auto it = q.front(); 
+            q.pop();
+            Node* node = it.first;
+            int horzlin = it.second;
+            // if not already exist we put the element
+            if (mpp.find(horzlin) == mpp.end()) {
+                mpp[horzlin] = node->data;
+            }
+            
+            // check for left/right 
+            if (node->left != NULL) {
+                q.push({node->left, horzlin - 1});
+            }
+            if (node->right != NULL) {
+                q.push({node->right, horzlin + 1});
+            }
+        }
+        
+        // iterate the map 
+        for (auto it : mpp) {
+            ans.push_back(it.second);
+        }
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(N) - Each node is processed once.
+Space Complexity: O(N) - Space for the queue and map in the worst case (skewed tree).
+*/
+
+class Solution {
+  public:
+    void dfs(Node* node, int hd, int level, map<int, pair<int, int>>& mpp) {
+        // If the node is NULL, return
+        if (node == NULL) return;
+
+        // If this horizontal distance is not recorded or we are at a higher level (lower depth)
+        if (mpp.find(hd) == mpp.end() || level < mpp[hd].second) {
+            mpp[hd] = {node->data, level}; // store node data and level
+        }
+
+        // Traverse left and right
+        dfs(node->left, hd - 1, level + 1, mpp);
+        dfs(node->right, hd + 1, level + 1, mpp);
+    }
+
+    vector<int> topView(Node *root) {
+        vector<int> ans; 
+        if (root == NULL) {
+            return ans;
+        }
+        map<int, pair<int, int>> mpp; // horizontal distance and pair of (node data, level)
+        dfs(root, 0, 0, mpp); // Start DFS from root
+
+        // Iterate the map to get the top view
+        for (auto it : mpp) {
+            ans.push_back(it.second.first); // only node data
+        }
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(N) - Each node is processed once.
+Space Complexity: O(N) - Space for the map in the worst case (skewed tree).
+*/ 
+
+// O(n * log n) Time and O(n) Space
+
+class Solution {
+  public:
+    void dfs(Node* node, int hd, int level, map<int, pair<int, int>>& mpp) {
+        // If the node is NULL, return
+        if (node == NULL) return;
+
+        // If this horizontal distance is not recorded or we are at a higher level (lower depth)
+        if (mpp.find(hd) == mpp.end() || level < mpp[hd].second) {
+            mpp[hd] = {node->data, level}; // store node data and level
+        }
+
+        // Traverse left and right
+        dfs(node->left, hd - 1, level + 1, mpp);
+        dfs(node->right, hd + 1, level + 1, mpp);
+    }
+
+    vector<int> topView(Node *root) {
+        vector<int> ans; 
+        if (root == NULL) {
+            return ans;
+        }
+        map<int, pair<int, int>> mpp; // horizontal distance and pair of (node data, level)
+        dfs(root, 0, 0, mpp); // Start DFS from root
+
+        // Iterate the map to get the top view
+        for (auto it : mpp) {
+            ans.push_back(it.second.first); // only node data
+        }
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(N) - Each node is processed once.
+Space Complexity: O(N) - Space for the map in the worst case (skewed tree).
+*/ 
+
