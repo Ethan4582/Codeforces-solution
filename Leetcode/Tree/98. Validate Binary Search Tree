@@ -1,0 +1,27 @@
+// Time: O(N)
+// Space: O(H)
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        // for each node from range if the node is valid then it is correct 
+        // for main root -> [ -INT_MIN, INT_MAX]
+        // left subtree -> [-INT_MIN, root] -> check if curr node is valid is in range 
+        // right  -> [ root , INT_MAX]
+        
+        // base case 
+        return isValidBST(root, LONG_MIN, LONG_MAX);
+    }
+
+    bool isValidBST(TreeNode* root, long long minval, long long maxval) {
+        if (root == NULL) return true; // leaf node
+        if (root->val >= maxval || root->val <= minval) {
+            return false;
+        }
+        // recursive call for left and right subtree 
+        return isValidBST(root->left, minval, root->val) && 
+               isValidBST(root->right, root->val, maxval);
+    }
+};
+
+

@@ -1,0 +1,68 @@
+https://www.geeksforgeeks.org/problems/inorder-successor-in-bst/1
+
+
+Brute force ----
+
+class Solution {
+public:
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+    int inOrderSuccessor(Node *root, Node *x) {
+        vector<int> ans;
+        ans = inorder(root, ans);
+        for (int i = 0; i < ans.size() - 1; i++) {
+            if (ans[i] == x->data) { // Compare with x->data
+                return ans[i + 1]; // Return the next element
+            }
+        }
+        return -1; // Return -1 if no successor found
+    }
+    
+    vector<int> inorder(Node* root, vector<int>& ans) { // Change Node to int
+        if (root == NULL) {
+            return ans; // Return the ans vector
+        }
+        
+        // Inorder traversal going to the left 
+        inorder(root->left, ans); // Corrected to root->left
+        
+        ans.push_back(root->data); // Push current node's data
+        
+        // Inorder traversal going to the right  
+        inorder(root->right, ans); // Corrected to root->right
+        
+        return ans; // Return the ans vector
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+
+
+
+
+
+class Solution {
+public:
+    // returns the value of the inorder successor of the Node x in BST (rooted at 'root')
+    int inOrderSuccessor(Node *root, Node *x) {
+        int successorValue = -1; // Initialize successor value as -1 (or any invalid value)
+        inorder(root, x, successorValue); // Call the inorder function
+        return successorValue; // Return the successor value or -1 if not found
+    }
+    
+    void inorder(Node* root, Node* x, int& successorValue) {
+        if (root == NULL) return; // Base case
+        
+        inorder(root->left, x, successorValue); // Traverse left subtree
+        
+        // If current node's data is greater than x's data
+        if (successorValue == -1 && root->data > x->data) {
+            successorValue = root->data; // Update successor value
+        }
+        
+        inorder(root->right, x, successorValue); // Traverse right subtree
+    }
+};
+
+// Time Complexity: O(h) where h is the height of the tree
+// Space Complexity: O(1)

@@ -1,0 +1,12 @@
+class Solution {
+public:
+    bool checkTree(TreeNode* root) {
+        int le= root->left->val; 
+        int ri =root->right->val;
+        if( le+ri == root->val){
+            return true ;
+        }else{
+            return false;
+        }
+    }
+};

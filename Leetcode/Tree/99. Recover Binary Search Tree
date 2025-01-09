@@ -1,0 +1,57 @@
+
+class Solution {
+private: 
+    TreeNode* first = NULL; 
+    TreeNode* prev = NULL; 
+    TreeNode* mid = NULL; 
+    TreeNode* last = NULL;
+
+    void inorder(TreeNode* root) {
+        if (root == NULL) return;
+
+        inorder(root->left);
+        
+        // When we traverse in imaginary array of sorted inorder,
+        // we check the previous element for BST property.
+        // This we use the mid to compare the next adjacent or some different swap with mid.
+        // So all the checks are done.
+        if (prev != NULL && (root->val < prev->val)) {
+            // If the adjacent violation
+            if (first == NULL) {
+                first = prev; // The first violated number 
+                mid = root;   // The next element 
+            } 
+            // Not adjacent violation
+            else {
+                last = root; // The current distinct node violation 
+            }
+        }
+        
+        // Mark the current node for next element to compare 
+        prev = root; 
+
+        inorder(root->right);
+    }
+
+public:
+    void recoverTree(TreeNode *root) {
+        // 2 cases: first case if the nodes are not adjacent and  
+        // if they are invalid adjacent 
+        // We keep the first, mid, last; if we could not find the last, we use the middle to swap.
+        first = mid = last = NULL; 
+        prev = new TreeNode(INT_MIN); // To check violation 
+        inorder(root); // Start the traversal 
+        
+        // Swap the found nodes to recover the BST
+        if (first && last) {
+            swap(first->val, last->val);
+        } else if (first && mid) {
+            swap(first->val, mid->val);
+        }
+        
+      
+    }
+};
+
+// Time Complexity: O(N)
+// Space Complexity: O(h) where h is the height of the tree

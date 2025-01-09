@@ -1,0 +1,64 @@
+
+if we have preoder and post oder  than we cannot construct unique binary tree 
+
+     3                 3
+   2                 2
+  1                     1
+
+  the above both tree can be constructed using preoder and post order and we create 1,2,3  and 3,2,1  in idferent way using the traversal no not inique 
+
+  inorder & preoder
+
+  root is 3   
+          --left--3root-----emteir right tree
+  inorder ->    9 , 3, 15, 20 , 7 
+       --- here each elment iself a root andthen travers to left nad right
+  preorder ->  3, 9, 20, 15, 7 
+
+
+  -> if we haev inorder than we can make unique tree  
+
+
+  -> post and inorder  
+  
+
+  post order ->  40 50 20 60 30 10   here the 10 will be the root if go by postordr 
+
+  Inorder -> 10 20 50 10 60 30  here 10 will be the root and elment on the left will be the eft tree and on righ the right tree 
+
+-> so break in to samller problme by breaking the inorder into smaller keep on doing 
+
+  so now we make shorter version of the post order and inorde rarray do the same  for left then for the right tree 
+
+
+  class Solution {
+
+TreeNode* build(vector<int>& in, int strin, int endin, vector<int>& post, int strtpost, int endpost, map<int,int>& mpp) {
+    if (strin > endin || strtpost > endpost) return NULL; // Base case
+    TreeNode* root = new TreeNode(post[endpost]); // Create root
+
+    int inroot = mpp[post[endpost]]; // Index of root in inorder
+    int numleft = inroot - strin; // Number of elements in left subtree
+
+    // Build left and right subtrees
+    root->left = build(in, strin, inroot - 1, post, strtpost, strtpost + numleft - 1, mpp);
+    root->right = build(in, inroot + 1, endin, post, strtpost + numleft, endpost - 1, mpp);
+    return root;
+}
+
+public:
+    TreeNode* buildTree(vector<int>& in, vector<int>& post) {
+        if (in.size() != post.size()) {
+            return NULL; // Size check
+        }
+        map<int, int> mpp; 
+        for (int i = 0; i < in.size(); i++) {
+            mpp[in[i]] = i; // Map value to index
+        }
+
+        return build(in, 0, in.size() - 1, post, 0, post.size() - 1, mpp); // Call build
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(n)

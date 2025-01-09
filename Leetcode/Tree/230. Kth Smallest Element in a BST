@@ -1,0 +1,95 @@
+
+// brute force 
+
+#include <queue>
+
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        std::queue<TreeNode*> q; // Queue for BFS
+        std::vector<int> elements; // Store elements in sorted order
+        
+        // Level order traversal using BFS
+        q.push(root);
+        while (!q.empty()) {
+            TreeNode* node = q.front();
+            q.pop();
+            if (node) {
+                elements.push_back(node->val); // Collect node value
+                q.push(node->left); // Push left child
+                q.push(node->right); // Push right child
+            }
+        }
+        
+        // Sort elements to find the kth smallest
+        std::sort(elements.begin(), elements.end());
+        return elements[k - 1]; // Return the kth smallest
+    }
+};
+
+// Time Complexity: O(N log N) due to sorting
+// Space Complexity: O(N) for storing elements
+
+-----------------  Recursive  
+
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        int cnt = 0; 
+        return soln(root, cnt, k);
+    }
+
+    int soln(TreeNode * root, int & cnt, int k) {
+        if (root == NULL) return -1; // Return -1 if not found
+        
+        // Inorder traversal
+        int left = soln(root->left, cnt, k);
+        if (cnt == k) return left; // If found in left subtree
+        
+        cnt++; // Increment count after visiting left node
+        if (cnt == k) return root->val; // If current node is the kth smallest
+        
+        return soln(root->right, cnt, k); // Visit right subtree
+    }
+};
+
+// Time Complexity: O(H + k) where H is the height of the tree
+// Space Complexity: O(H) for the recursion stack
+
+
+-------- Morris trversal -------------------- 
+
+
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        int cnt = 0, result = -1;
+        TreeNode* curr = root;
+
+        while (curr) {
+            if (!curr->left) {
+                cnt++;
+                if (cnt == k) result = curr->val;
+                curr = curr->right;
+            } else {
+                TreeNode* pred = curr->left;
+                while (pred->right && pred->right != curr) pred = pred->right;
+
+                if (!pred->right) {
+                    pred->right = curr;
+                    curr = curr->left;
+                } else {
+                    pred->right = nullptr;
+                    cnt++;
+                    if (cnt == k) result = curr->val;
+                    curr = curr->right;
+                }
+            }
+        }
+        return result;
+    }
+};
+
+
+// Time Complexity: O(N) for visiting each node once
+// Space Complexity: O(1) for using no extra space

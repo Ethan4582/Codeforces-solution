@@ -1,0 +1,35 @@
+Tc- 0(log(n))
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        // as it state the number does not exist that mean always tghier will be numbe that does not exit in the tree 
+        if(root==NULL){
+            return new  TreeNode (val);
+        }
+
+         TreeNode* curr= root;
+        while(true){// until some null value 
+          if(curr->val<= val){
+            if(curr->right!=NULL){ // look in the right 
+             curr= curr->right;
+            }else{ // we fund the place 
+                curr->right= new  TreeNode(val); 
+                break;
+            }
+          }
+          
+          else{  // if num is samller 
+          if(curr->left!=NULL){
+            curr=curr->left;
+          }else{
+            curr->left= new  TreeNode (val);
+            break;
+          }
+
+          }
+        }
+
+        return root;
+        
+    }
+};

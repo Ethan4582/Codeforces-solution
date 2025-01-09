@@ -1,0 +1,69 @@
+
+
+// Time Complexity: O(k * N) where N is the size of nums.
+// Space Complexity: O(1)
+
+class Solution {
+public:
+    vector<int> getFinalState(vector<int>& nums, int k, int mul) {
+        while (k--) {
+        
+        int min_index = min_element(nums.begin(), nums.end()) - nums.begin(); 
+        nums[min_index] *= mul; 
+    }
+    return nums; 
+    }
+};
+
+class Solution {
+public:
+    vector<int> getFinalState(vector<int>& nums, int k, int multiplier) {
+        int n = nums.size();
+
+        while (k--) {
+            // Find the index of the smallest element in the array
+            int minIndex = 0;
+            for (int i = 0; i < n; i++) {
+                if (nums[i] < nums[minIndex]) {
+                    minIndex = i;
+                }
+            }
+
+            // Multiply the smallest element by the multiplier
+            nums[minIndex] *= multiplier;
+        }
+
+        return nums;
+    }
+};
+
+
+
+
+
+Time Complexity: O(N+k⋅logN)
+Space Complexity: O(N)
+
+class Solution {
+public:
+    vector<int> getFinalState(vector<int>& nums, int k, int multiplier) {
+        vector<pair<int, int>> hepp;
+        for (int i = 0; i < nums.size(); i++) {
+            hepp.push_back({nums[i], i});
+        }
+
+        make_heap(hepp.begin(), hepp.end(), greater<>());
+
+        while (k--) {
+            pop_heap(hepp.begin(), hepp.end(), greater<>());
+            auto [value, i] = hepp.back();
+            hepp.pop_back();
+
+            nums[i] *= multiplier;
+            hepp.push_back({nums[i], i});
+            push_heap(hepp.begin(), hepp.end(), greater<>());
+        }
+
+        return nums;
+    }
+};

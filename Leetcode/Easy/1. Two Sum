@@ -48,7 +48,7 @@ public:
 };
 
 
-------------------------------- optimal -------------------------------
+------------------------------- optimal   -> one pas hash table apprach -------------------------------
 
 // Time Complexity: O(N)
 // Space Complexity: O(1)

@@ -1,0 +1,90 @@
+
+
+// Brute force logic 
+
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        TC- 0(N)// skew  tree 
+        return bstFromPreorderHelper(preorder, 0, preorder.size() - 1);
+    }
+
+private:
+    TreeNode* bstFromPreorderHelper(vector<int>& preorder, int start, int end) {
+        if (start > end) return NULL; // Base case
+
+        // The first element in the preorder slice is the root
+        TreeNode* root = new TreeNode(preorder[start]);
+
+        // Find the index where the right subtree starts
+        int rightStart = start + 1;
+        while (rightStart <= end && preorder[rightStart] < root->val) {
+            rightStart++;
+        }
+
+      
+        root->left = bstFromPreorderHelper(preorder, start + 1, rightStart - 1);
+        root->right = bstFromPreorderHelper(preorder, rightStart, end);
+
+        return root;
+    }
+};
+
+--- Optmised approach 
+
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+       
+        int index = 0;
+        return bstFromPreorderHelper(preorder, index, INT_MIN, INT_MAX);
+    }
+
+private:
+    TreeNode* bstFromPreorderHelper(vector<int>& preorder, int& index, int minVal, int maxVal) {
+   
+        if (index >= preorder.size() || preorder[index] < minVal || preorder[index] > maxVal) {
+            return NULL;
+        }
+
+        TreeNode* root = new TreeNode(preorder[index++]); the node
+
+        
+        root->left = bstFromPreorderHelper(preorder, index, minVal, root->val);
+        
+        root->right = bstFromPreorderHelper(preorder, index, root->val, maxVal);
+
+        return root;
+    }
+};
+
+
+
+
+------------------------------------- Most optmised  ------------------ 
+Time O(N)
+Space O(H)
+
+Give the function a bound the maximum number it will handle.
+The left recursion will take the elements smaller than node.val
+The right recursion will take the remaining elements smaller than bound
+
+
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int i =0 ; 
+        return build( preorder , i , INT_MAX);
+    }
+    TreeNode* build(vector<int>& preorder , int& i , int bound){
+        if(i == preorder.size() || preorder[i]> bound) return NULL;
+        TreeNode* root = new TreeNode(preorder[i++]);
+        // left subtree 
+        root->left=build(preorder, i  ,root->val );
+        // right subtree 
+        root->right= build( preorder , i , bound);
+        return root;
+
+    }
+
+};

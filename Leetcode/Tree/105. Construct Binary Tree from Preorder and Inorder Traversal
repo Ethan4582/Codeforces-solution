@@ -1,0 +1,36 @@
+
+from preoder the first elment is the root so in inorde array elment on lef tare children  of left and right array is right children
+
+we can recurrsively do for the left child array elment  use it predorder to get the next  root and left left and right elemnt do the same for next left array in curr inordr and use its predorder to get new inorder 
+
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        map<int, int> mpp; 
+        for (int i = 0; i < inorder.size(); i++) { 
+            mpp[inorder[i]] = i;
+        }
+        TreeNode* root = buildTree(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1, mpp);
+        return root;
+    }
+
+    TreeNode* buildTree(vector<int>& preorder, int prestart, int preEnd, vector<int>& inorder, int instart, int inend, map<int, int>& mpp) { 
+        if (prestart > preEnd || instart > inend) return NULL; 
+
+        // get the current root from where the tree grows; 
+        TreeNode* root = new TreeNode(preorder[prestart]); 
+        
+        // map the current root in inorder array
+        int intRoot = mpp[root->val];
+        int numLeft = intRoot - instart; // new end of inorder root
+
+        // recursive do the same thing for left child in inorder and preorder + 1;
+        root->left = buildTree(preorder, prestart + 1, prestart + numLeft, inorder, instart, intRoot - 1, mpp); 
+        // for right children in the inorder array then recursive making the right part for the tree
+        root->right = buildTree(preorder, prestart + numLeft + 1, preEnd, inorder, intRoot + 1, inend, mpp); // Fixed parameters
+        return root; // Return the root
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(n) for the map and recursion stack

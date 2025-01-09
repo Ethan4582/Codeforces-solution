@@ -1,0 +1,41 @@
+
+
+Brute force  
+
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int x) {
+        int s=-1, y=-1;
+        for( int i =0 ; i < nums.size(); i++){
+            for(int j =i+1 ; j < nums.size(); j++){
+                if(nums[i]+nums[j]==x){
+                     s= i+1 , y = j+1; 
+                    break;
+                }
+            }
+        }
+        return {s, y}; 
+    }
+};
+
+
+// optmized apprach  
+
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& A, int target) {
+        int i = 0, j = A.size() - 1;
+        while (i < j) {
+            if (A[i] + A[j] == target) return {i + 1, j + 1};
+            if (A[i] + A[j] < target) ++i;
+            else --j;
+        }
+        return {};
+    }
+};
+
+

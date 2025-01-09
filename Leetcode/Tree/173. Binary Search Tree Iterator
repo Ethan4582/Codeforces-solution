@@ -1,0 +1,46 @@
+
+// Tc -0(1) 
+// sc -0(H)
+// Tc of call - 0(N)
+class BSTIterator {
+    stack<TreeNode*> st;
+public:
+    BSTIterator(TreeNode* root) {
+        // we use stack to implment itratieb inorder while mainting the space -(height of tree)
+         // as the question deman the  pointer hsoudl be as the smallest num so we do the most left then keep add in the stack and the the top we have samllest number 
+         pushall(root);
+    }
+    
+    int next() {    // return left small pointer  and if the right exist the put it in the stack the do deep in left of the right and keep adding in the stack the pop samllest in ITERATOR
+    //basicalyy doing inorder trvaersal left -node - right 
+
+    TreeNode * temp = st.top(); 
+    st.pop();
+    // after poping if right exist i got to the right then push all the left 
+    // inorder traversal
+    pushall(temp->right);
+    return temp->val;// return the right pointer after poping 
+
+        
+    }
+    
+    bool hasNext() { // next true if their exist a number in front in inorder 
+    // so if the stack is empty that mean their not next element 
+    // this because as we are doing itrative inorder so theis is first left ->node ->right 
+    // it means if the stack is noempty
+    return !st.empty();
+    }
+    void pushall(TreeNode * root){
+        while(root!=NULL){
+            st.push(root);
+            root=root->left;
+        }
+    }
+};
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator* obj = new BSTIterator(root);
+ * int param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */

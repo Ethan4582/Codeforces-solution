@@ -1,0 +1,74 @@
+
+brute force 
+
+class Solution {
+    // Count nodes in the binary tree
+    void counthnode(TreeNode* root, int &cnt) {
+        if (root == NULL) {
+            return; // Base case
+        }
+        
+        cnt++; 
+        counthnode(root->left, cnt); 
+        counthnode(root->right, cnt); 
+    }
+
+public:
+    int countNodes(TreeNode* root) {
+        int cnt = 0;
+        counthnode(root, cnt); 
+        return cnt; 
+    }
+};
+
+// Time Complexity: O(N)
+// Space Complexity: O(H) // H is the height of the tree
+
+
+----------------------------- Optmized less than 0(N)---------------
+
+complet binary tree all leverl will be filled excep the last eiht both need to be filled or or need ti ahve atleast left or none 
+
+property of complet binary tree max node in full binary tree will have 2*h-1 node in it h is the height -> 1 +(lef_tree)+ (right_tree)
+
+height of tree any instance log(n) Tc- for atmax or we will travel log(n)
+so (log(N))^2 sc- 0(1) or0 (log(n))
+
+class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if (root == nullptr) {
+            return 0; 
+        }
+
+        int lh = findLeftHeight(root); // Corrected function name
+        int rh = findRightHeight(root); // Corrected function name
+
+        // If both heights are equal, it's a full tree
+        if (lh == rh) return (1 << lh) - 1;
+
+        // Recursively count nodes
+        return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+
+    int findLeftHeight(TreeNode* node) { // Corrected function name
+        int height = 0; 
+        while (node) {
+            height++;
+            node = node->left;
+        }
+        return height;
+    }
+
+    int findRightHeight(TreeNode* node) { // Corrected function name
+        int height = 0; 
+        while (node) {
+            height++;
+            node = node->right;
+        }
+        return height;
+    }
+};
+
+// Time Complexity: O(log n)
+// Space Complexity: O(1) (iterative height calculation)

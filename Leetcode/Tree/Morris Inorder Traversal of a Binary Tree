@@ -1,0 +1,56 @@
+
+
+// we can only impment this in iterative traverasl as the recursive take care of itself 
+
+// inotder mean we just  from the left to last root then to the right 
+
+//edgecase -1  :  if no left exist  skew right tree 
+
+//Case -2   "  right most  of left subtree of the curr  now point the right to curr which is the head  
+
+//Case 3: how to move to right side of the tree   if the rightmost has not thread connect to the root then wemkae threasd in case 2  if already exist then we move to the right side 
+
+
+
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans; 
+        TreeNode* curr = root; // for traversal 
+        
+        while (curr != NULL) {
+            // case - 1 if no left is there it is the root so we push it 
+            if (curr->left == NULL) {
+                ans.push_back(curr->val); 
+                // now I should move to right as no left exists 
+                curr = curr->right;
+            }
+            // Case 2: if there exists a left 
+            // we visited the left subtree and visited last node in that current tree as the root 
+            // assume that subtree as inorder to make last node in the inorder array taking the current as the root 
+            else { // find the rightmost node in current tree
+                TreeNode* nxtcurrroot = curr->left;
+                while (nxtcurrroot->right && nxtcurrroot->right != curr) { // that thread does not point to itself 
+                    // keep moving to the extreme right 
+                    nxtcurrroot = nxtcurrroot->right; // Fixed to move to the right
+                }
+                // case 2.b if the right becomes null 
+                if (nxtcurrroot->right == NULL) {
+                    nxtcurrroot->right = curr; // point the rightmost a thread to the main root
+                    // now as the first thread is made we move to next curr root;
+                     ans.push_back(curr->val); // ---------------- Preorder 
+                    curr = curr->left;
+                } else {
+                    // case 2.c if the last node is connected to the root 
+                    nxtcurrroot->right = NULL; // break the thread
+                    // ans.push_back(curr->val);  -------> inorder 
+                    curr = curr->right;
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// Morris Traversal | Preorder | Inorder

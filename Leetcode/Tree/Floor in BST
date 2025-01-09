@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int floor(Node* root, int x) {
+        if (root == NULL) return -1; // Return -1 if the tree is empty
+
+        int ans = -1; // Initialize ans to -1
+        while (root) {
+            if (root->data == x) {
+                return root->data; // If x is found, return it as the floor
+            }
+            if (x < root->data) {
+                root = root->left; // Move to the left subtree
+            } else {
+                ans = root->data; // Update ans with current node's data
+                root = root->right; // Move to the right subtree
+            }
+        }
+        return ans; // Return the floor value found
+    }
+};

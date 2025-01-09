@@ -1,0 +1,103 @@
+
+class Codec {
+public:
+// we can use any BFS/DFS 
+    string serialize(TreeNode* root) {
+        // level order 
+        if (!root) return "";
+
+        string ans = ""; 
+        queue<TreeNode*> q; 
+        q.push(root); 
+        while (!q.empty()) {
+            TreeNode* curr = q.front();
+            q.pop();
+            if (curr == NULL) ans += "#,"; // Use # for null
+            else ans += to_string(curr->val) + ',';
+            // if not null check for left and the right 
+            if (curr != NULL) {
+                q.push(curr->left);
+                q.push(curr->right);
+            }
+        } 
+        return ans;
+    }
+
+    TreeNode* deserialize(string data) {
+        if (data.size() == 0) return NULL;
+        // string stream allows us to read input as object
+        stringstream s(data);
+        string str;
+        getline(s, str, ','); // move the str point to the element next after the ',';
+        TreeNode* root = new TreeNode(stoi(str)); // convert the point element to number 
+        queue<TreeNode*> q; 
+        q.push(root);
+        while (!q.empty()) {
+            TreeNode* curr = q.front();
+            q.pop();
+            getline(s, str, ',');  // take the next left element 
+            if (str == "#") {
+                curr->left = NULL; // Fix variable name
+            } else { // if not null convert into node
+                TreeNode* leftnode = new TreeNode(stoi(str));
+                curr->left = leftnode; // Fix variable name
+                q.push(leftnode); // push it into queue
+            }
+
+            getline(s, str, ','); // take the next right element 
+            if (str == "#") {
+                curr->right = NULL; // Fix variable name
+            } else { // if not null convert into right node 
+                TreeNode* rightnode = new TreeNode(stoi(str));
+                curr->right = rightnode; // Fix variable name
+                q.push(rightnode); // push it into queue
+            }
+        }
+
+        return root;
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+
+
+class Codec {
+public:
+// we can use any BFS/DFS 
+    void serializeDFS(TreeNode* root, string &ans) {
+        if (!root) {
+            ans += "#,"; // Use # for null
+            return;
+        }
+        ans += to_string(root->val) + ','; // Add node value
+        serializeDFS(root->left, ans); // Traverse left
+        serializeDFS(root->right, ans); // Traverse right
+    }
+
+    string serialize(TreeNode* root) {
+        string ans = "";
+        serializeDFS(root, ans); // Start DFS
+        return ans;
+    }
+
+    TreeNode* deserializeDFS(stringstream &s) {
+        string str;
+        getline(s, str, ','); // Read next value
+        if (str == "#") return NULL; // Return NULL for #
+        TreeNode* node = new TreeNode(stoi(str)); // Create node
+        node->left = deserializeDFS(s); // Deserialize left
+        node->right = deserializeDFS(s); // Deserialize right
+        return node;
+    }
+
+    TreeNode* deserialize(string data) {
+        if (data.size() == 0) return NULL;
+        stringstream s(data);
+        return deserializeDFS(s); // Start DFS
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+

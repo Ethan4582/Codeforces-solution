@@ -1,0 +1,17 @@
+
+// Time: O(log2N) -> 0(H)-> Height of the tree
+// Space: O(H)
+
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if (root == NULL) return NULL; // Return NULL if the root is null
+        if (root->val == val) {
+            return root; // Return the node if the value matches
+        } else if (val < root->val) {
+            return searchBST(root->left, val); // Search in the left subtree
+        } else {
+            return searchBST(root->right, val); // Search in the right subtree
+        }
+    }
+};

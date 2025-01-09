@@ -1,0 +1,29 @@
+
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int x) {
+        int n = nums.size(); 
+        int closestSum = nums[0] + nums[1] + nums[2]; // smallest possible sum 
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < n; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue; // Skip duplicates
+            int l = i + 1, r = n - 1;
+            while(l <r){
+                int currsum = nums[i]+ nums[l] + nums[r]; 
+                if(abs(currsum-x)<abs(closestSum-x)){
+                    closestSum= currsum;
+                }
+                if(currsum<x){
+                    l++;
+                }else{
+                    r--;
+                }
+            }
+        }
+        return closestSum; 
+    }
+};
+
+// Time: O(N^2) due to nested loops
+// Space: O(1) for the two-pointer approach

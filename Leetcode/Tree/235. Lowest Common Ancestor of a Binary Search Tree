@@ -1,0 +1,56 @@
+
+
+ Tc- 0(H)  Sc- 0(1) // axullary stack space 
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        // LCA is the first  node where their path get split 
+        // ED 1 - the node itself is the LCA  E2- of both are at left 
+        // ED-3 both are on the right ED- 4 one is on the left and the other is on the right 
+        if (root==NULL) return NULL;
+        int curr= root->val;
+        // if both of  element lies on the right 
+        if(curr<p->val && curr<q->val){
+           return  lowestCommonAncestor(root->right, p,  q);
+        }
+        // if both of them lies on the left of the tree 
+        if(curr>p->val && curr>q->val){
+           return  lowestCommonAncestor(root->left, p,  q);
+        }
+
+        // the case of both of the elmet are on ht left and on the right then that is your LCA
+        // or the LCA is the root itself 
+        return root;
+
+    }
+};
+
+
+
+SC -(1)
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+       
+
+        while (root != NULL) {
+            int curr = root->val;
+
+            // if both elements lie on the right
+            if (curr < p->val && curr < q->val) {
+                root = root->right; // move to the right subtree
+            }
+            // if both of them lie on the left
+            else if (curr > p->val && curr > q->val) {
+                root = root->left; // move to the left subtree
+            }
+            // the case where one is on the left and the other is on the right
+            // or the root itself is the LCA
+            else {
+                return root;
+            }
+        }
+
+        return NULL; // in case there is no LCA found (should not happen in a valid BST)
+    }
+};

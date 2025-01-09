@@ -1,0 +1,71 @@
+we are give node and we need to find the time need to burn all the node from the give nodes 
+
+class Solution {
+    // Find max distance from the target node
+    int findMaxDistance(map<Node*, Node*> &mpp, Node* tar) {
+        queue<Node*> q; 
+        q.push(tar); // Start from target node
+        map<Node*, int> vis; 
+        vis[tar] = 1; 
+        int maxi = 0; 
+        while (!q.empty()) {
+            int sz = q.size(); 
+            int fl = 0; // Track if any node exists
+            for (int i = 0; i < sz; i++) {
+                Node* node = q.front(); // Fix syntax error
+                q.pop();
+                if (node->left && !vis[node->left]) {
+                    fl = 1;
+                    vis[node->left] = 1; 
+                    q.push(node->left); // Fix syntax error
+                }
+                if (node->right && !vis[node->right]) {
+                    fl = 1;
+                    vis[node->right] = 1; 
+                    q.push(node->right); // Fix syntax error
+                }
+                if (mpp[node] && !vis[mpp[node]]) {
+                    fl = 1;
+                    vis[mpp[node]] = 1; // Fix variable name
+                    q.push(mpp[node]); // Fix syntax error
+                }
+            }
+            if (fl) maxi++; // Increment max distance
+        }
+        return maxi;
+    }
+
+    // Map parents and find target node
+    Node* bfstoMapParent(Node* root, map<Node*, Node*> &mpp, int target) {
+        queue<Node*> q; 
+        q.push(root); 
+        Node* res = nullptr; // To store target node address
+        while (!q.empty()) {
+            Node* curr = q.front(); 
+            q.pop();
+            if (curr->data == target) {
+                res = curr; 
+            }
+            if (curr->left) {
+                mpp[curr->left] = curr; // Fix variable name
+                q.push(curr->left);
+            }
+            if (curr->right) {
+                mpp[curr->right] = curr; // Fix variable name
+                q.push(curr->right);
+            }
+        }
+        return res;
+    }
+
+public:
+    int minTime(Node* root, int target) {
+        map<Node*, Node*> mpp; 
+        Node* tar = bfstoMapParent(root, mpp, target); // Fix variable name
+        int ans = findMaxDistance(mpp, tar);
+        return ans; // Return correct variable
+    }
+};
+
+// Time Complexity: O(N)
+// Space Complexity: O(N)

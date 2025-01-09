@@ -1,0 +1,70 @@
+
+Tc = (space of the tree)
+
+class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if(root==NULL) return NULL; 
+
+        if(root->val== key){
+            return helper(root);
+        }
+          // when we deteact  curr of their can be situation of the subtree can det detach 
+          // atack that subtree to the other child left or right deoend on the subtree root
+          // so withe cut right subtree wntierly then need to attack to the left child child right the detach subtree 
+          // or we can do the vice versa for the leftsubtree detach  
+          //edge case - 2 if one of the   left right doesnot esixt then just attach it no exta need
+         
+          // attaching the node
+
+            TreeNode* curr=root;
+            while(root!=NULL){
+                // we go to the left
+                if(root->val > key){
+                    // rleft is not null  and the value is equal to key 
+                    // for the first 2 child of main root
+                    if(root->left!=NULL && root->left->val== key){
+                        root->left= helper(root->left); // then delete the left and then join it 
+                        break;
+                    }else{
+                        // form here it agin go to while of 2 chidl it go according to the cinditon 
+                        root= root->left;
+                    }
+                }else{ // we go to the right
+                if(root->right!=NULL && root->right->val== key){
+                        root->right= helper(root->right); // then delete the right and then join it 
+                        break;
+                    }else{
+                        // form here it agin go to while of 2 chidl it go according to the cinditon 
+                        root= root->right;
+                    }
+
+                }
+
+            }
+
+            return curr;
+
+    }
+      TreeNode* helper(TreeNode* root){
+        // if any one of its null then i just direct attach it 
+        if(root->left==NULL) return root->right;
+        if(root->right==NULL) return root->left;
+
+        // if both left and right exist then  we can chose any left right to do the attach
+        //we take the right substree
+        TreeNode* rightChild= root->right; // right subtree root
+
+        // then i will go and attach to the last right as the rightchild is bigger number than leftchild
+        // so i need to go deepest right of the ledtchild
+        TreeNode* lastRight= findlastRight(root->left); // on the left subtree
+        lastRight->right=  rightChild;
+        return root->left ;// then new attack subtree root
+      }
+
+      TreeNode* findlastRight(TreeNode* root){
+        if(root->right==NULL) return root; 
+        return findlastRight(root->right);
+      }
+
+};

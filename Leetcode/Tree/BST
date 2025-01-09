@@ -1,0 +1,6 @@
+
+- left node<Node< right node   → for each node and the entire tree
+- Generally we do not have duplicate but if we want either we add extra duplicate node or we use each node as (node, freq_node)
+- Generally All the BST has the height of log(n)
+- Search in BST is 0(log(n))
+

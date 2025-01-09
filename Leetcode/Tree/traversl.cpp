@@ -1,3 +1,4 @@
+
 //  All Traversal At once 
 
 https://www.geeksforgeeks.org/problems/postorder-traversal-iterative/1
@@ -113,16 +114,5 @@ public:
         return pre; // Return the pre-order traversal
     }
 };
-
-
-
-
-
-
-
-
-
-
-
 
 

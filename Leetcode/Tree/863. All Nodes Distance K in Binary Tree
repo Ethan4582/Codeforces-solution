@@ -1,0 +1,109 @@
+
+The big concern here is that we can travel upward for node bottom of left k = sum distance of bottom of root right tree  that is not fisable 
+
+// we make map while travesring for node is marked pared along wiht the children left and right in the map  so now we can traverse in both upward and downward direction 
+
+
+2 Type of question 
+
+1. make array of all the node of distance k =2 
+
+2. make array of all the node of distance k =2 frm target = 5 
+
+1. Parent Mapping Function (addParent):
+Har node ka parent map mein store karte hain using recursion.
+
+2. Collect K-Distance Nodes (collectKDistanceNodes):
+BFS lagake target se k-distance par jo nodes hain unhe collect karte hain.
+Queue mein target node dalte hain aur ek `visited` set banate hain to avoid
+revisits. Har level par left, right, aur parent nodes check karte hain. Jab k
+== 0 hota hai, result collect karte hain.
+
+3. Main Function (distanceK):
+Sabse pehle parent map banate hain (addParent call).
+Target node se BFS laga ke result collect karte hain (collectKDistanceNodes
+call).
+
+
+class Solution {
+    // Level order traversal to mark parent nodes
+    void markpar(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& parent_track) {
+        queue<TreeNode*> q; 
+        q.push(root); 
+        while (!q.empty()) {
+            TreeNode* curr = q.front();
+            q.pop(); 
+            if (curr->left) {
+                parent_track[curr->left] = curr;
+                // Push the left child for traversal
+                q.push(curr->left);
+            }
+            if (curr->right) {
+                parent_track[curr->right] = curr;
+                // Push the right child for traversal
+                q.push(curr->right);
+            }
+        }
+    }
+
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        // Map to store all the parent nodes
+        unordered_map<TreeNode*, TreeNode*> parent_track;
+        // Function to mark all the parents in the map
+        markpar(root, parent_track);
+
+        // Now readily traverse all nodes associated with the current node
+        // Map to keep track of visited nodes to avoid already visited elements in the queue
+        unordered_map<TreeNode*, bool> vist;
+        queue<TreeNode*> q; 
+        q.push(target);  // Start from the target node
+        vist[target] = true;
+        int curr_lev = 0; // To keep track of the distance 
+
+        while (!q.empty()) {
+            int sz = q.size();
+
+            // Check if we have reached the target distance
+            if (curr_lev++ == k) break; 
+
+            // To add the next elements 
+            for (int i = 0; i < sz; i++) {
+                TreeNode* curr = q.front(); 
+                q.pop();
+
+                // Mark the left node
+                if (curr->left && !vist[curr->left]) {
+                    q.push(curr->left); 
+                    vist[curr->left] = true;
+                }
+                // Mark the right node
+                if (curr->right && !vist[curr->right]) {
+                    q.push(curr->right); 
+                    vist[curr->right] = true;
+                }
+                // Mark the parent node; check if it's a parent and is not visited
+                if (parent_track[curr] && !vist[parent_track[curr]]) {
+                    q.push(parent_track[curr]); 
+                    vist[parent_track[curr]] = true;
+                }
+            }
+        }
+
+        // After breaking, what is left in the queue is the answer 
+        vector<int> ans;
+        while (!q.empty()) {
+            TreeNode* curr = q.front(); 
+            q.pop();
+            ans.push_back(curr->val);
+        }
+        return ans;
+    }
+};
+
+
+
+// Time Complexity: O(N)
+// Space Complexity: O(N)
+
+for c++ it canhave hasgmap - Log(n) for java it is 0(1)

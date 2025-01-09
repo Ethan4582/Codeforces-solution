@@ -1,0 +1,36 @@
+
+
+class Solution {
+  public:
+    void dfs(Node* node, int hd, int level, map<int, pair<int, int>>& mpp) {
+        // If the node is NULL, return
+        if (node == NULL) return;
+
+        // Update the map with the bottom-most element at this horizontal distance
+        mpp[hd] = {node->data, level}; // store node data and level
+
+        // Traverse left and right
+        dfs(node->left, hd - 1, level + 1, mpp);
+        dfs(node->right, hd + 1, level + 1, mpp);
+    }
+
+    vector<int> bottomView(Node *root) {
+        vector<int> ans; 
+        if (root == NULL) {
+            return ans;
+        }
+        map<int, pair<int, int>> mpp; // horizontal distance and pair of (node data, level)
+        dfs(root, 0, 0, mpp); // Start DFS from root
+
+        // Iterate the map to get the bottom view
+        for (auto it : mpp) {
+            ans.push_back(it.second.first); // only node data
+        }
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(N) - Each node is processed once.
+Space Complexity: O(N) - Space for the map in the worst case (skewed tree).
+*/ 

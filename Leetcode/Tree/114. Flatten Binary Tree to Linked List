@@ -1,0 +1,63 @@
+
+we have to rearrage it look like a linkedlist we canot make a new one 
+
+we are try ot create a right skew tree so 
+1. prev- null
+2. we go to right sybtree until we reach last node 
+3. last node right = prev and node left= null this make sure for next or we can parent node of the last node now as the right child as the last of the left child   last node left = NULL   prev = node 
+- this ensure we are flaterning it  
+
+
+class Solution {
+public:
+    TreeNode* prev = NULL; // we keep on updating to flatten the tree 
+
+    void flatten(TreeNode* root) {
+        if (root == NULL) return; 
+
+        flatten(root->right); // going to the rightmost element to flatten
+        flatten(root->left);
+        // we reach the last node 
+        root->right = prev; // to flatten to the right 
+        root->left = NULL; // to make it left portion
+
+        // assign the current right to be straight 
+        prev = root; 
+    }
+};
+
+
+
+------------------ Stack based implemention -----------------------------
+
+we first move to the left   with right element at the bottom and left at the top 
+
+now arrange as the righ= st.top which all the left elment of the left subtree and left of each node as null we so the same fro the right portion 
+
+class Solution {
+public:
+    stack<TreeNode*> st; 
+
+    void flatten(TreeNode* root) {
+        if (root) st.push(root); // Start by pushing the root onto the stack
+
+        // we move the left subtree, traverse all the left nodes  
+        while (!st.empty()) {
+            TreeNode* curr = st.top(); 
+            st.pop(); 
+            // right node at the bottom
+            if (curr->right) {
+                st.push(curr->right);
+            }
+            // left portion at the top
+            if (curr->left) {
+                st.push(curr->left);
+            }
+            // now we flatten it, take the top of the stack which is the left and left of flatten as NULL
+            if (!st.empty()) {
+                curr->right = st.top(); // Fix: changed 's' to 'st'
+                curr->left = NULL; // Fix: corrected 'cuur' to 'curr'
+            }
+        }
+    }
+};
