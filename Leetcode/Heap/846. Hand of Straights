@@ -1,0 +1,36 @@
+// Time: O(NlogN)
+// Space: O(N)
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& nums, int k) {
+        int n = nums.size();
+        //can we even divide the number in k group 
+        if(n%k){
+            return false;
+        }
+        map<int, int> mpp; 
+        for(auto it: nums){
+            mpp[it]++;  // ordered freqeucny 
+        }
+
+        while(!mpp.empty()){
+            int curr= mpp.begin()-> first;
+            // now make the group of k size
+            for(int i=0; i < k;i++){
+                //cjeck if the next consectaive is present in the map 
+                if(mpp[curr+i]==0){
+                    // we do not have that answer mean false
+                    return false; 
+                }
+                 // if we have  the number than reduce it 
+                 mpp[curr+i]--;
+                 if(mpp[curr+i]<1){
+                    mpp.erase(curr+i);
+                 }
+            }
+        }
+        return true;
+    }
+};
+
+

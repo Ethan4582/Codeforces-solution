@@ -1,0 +1,89 @@
+
+My Appraoch 
+
+Time Complexity: O(3N) -> N1+N2+N3  so it can become  k(N) not exactly 
+SC- 0(1)
+class Solution {
+private:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode dummy; // Dummy node to simplify merging
+        ListNode* tail = &dummy;
+        dummy.next = nullptr; // Initialize the next pointer of the dummy node
+
+        while (l1 && l2) {
+            if (l1->val < l2->val) {
+                tail->next = l1;
+                l1 = l1->next;
+            } else {
+                tail->next = l2;
+                l2 = l2->next;
+            }
+            tail = tail->next;
+        }
+        // Attach remaining elements from non-empty list
+        tail->next = l1 ? l1 : l2;
+        return dummy.next;
+    }
+
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty()) return nullptr;
+
+        ListNode* newhead = lists[0]; 
+        for (int i = 1; i < lists.size(); i++) { // Start from index 1
+            newhead = mergeTwoLists(newhead, lists[i]); // Merge the current head with the next list
+        }
+
+        return newhead;
+    }
+};
+
+
+
+------------------Min Heap 
+
+we use   priority_queue  to impement  min heap whcih store all the elmenent in sorted order of the first elment wise PQ<int , ListNode*> then we can just take out from  the Pq and move the temp to curr list then we do  for other elmement in PQ 
+
+// Time: O(NlogK)
+// Space: O(K)
+
+
+class compare {
+public:
+    bool operator()(ListNode* a, ListNode* b) {
+        return a->val > b->val; 
+    }
+};
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& ls) {
+        if (ls.empty()) return NULL;
+
+      
+        ListNode* dummy = new ListNode(0);
+        ListNode* tail = dummy; 
+
+    
+        priority_queue<ListNode*, vector<ListNode*>, compare> pq; 
+        for (ListNode* head : ls) {
+            if (head != NULL) {
+                pq.push(head);
+            }
+        }
+
+        while (!pq.empty()) {
+            ListNode* minNode = pq.top();
+            pq.pop(); 
+            tail->next = minNode; 
+            tail = tail->next; // Move the pointer
+
+            if (minNode->next) { // If not null, then add the next element 
+                pq.push(minNode->next);
+            }
+        }
+        
+       
+        return dummy->next;
+    }
+};

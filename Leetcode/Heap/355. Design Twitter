@@ -1,0 +1,58 @@
+class Twitter {
+    map<int, vector<pair<int, int>>> tweet; // post by user along with counter how recent it is 
+    map<int, set<int>> follower; // for each we can store all the followers they have 
+    int timecnt;
+public:
+    Twitter() : timecnt(0) {}
+    
+    void postTweet(int userId, int tweetId) {
+        // adding the post recent tweet by user in front of the list 
+        tweet[userId].push_back({timecnt++, tweetId}); // store all the list of tweets for all the users 
+    }
+    
+    vector<int> getNewsFeed(int userId) {
+        // I need to get a list of all the userIds the user follows and then get the list of all the tweets made by them, then just merge the 10 most recent tweets from all the users followed by user 
+
+        // Now it merges k sorted lists 
+        // naive pointer on all the lists then use the counter to most recent until we have 10 news feeds  
+        // optimized approach is from all the tweets made by users the user follows make max heap on counter of the most recent tweet then k tweets from it   
+        // max heap can be used to get the recent 10 tweets.
+        priority_queue<pair<int, int>> recent_tweets;
+        
+        // get all the posts made by me 
+        for (auto it : tweet[userId]) {
+            recent_tweets.push(it);
+        }
+        
+        // get the posts from all the users the user follows
+        for (auto it : follower[userId]) {
+            // get the posts from that userId 
+            for (auto k : tweet[it]) {
+                recent_tweets.push(k);
+            }
+        }
+        
+        // Now we need to find the recent 10 tweets.
+        vector<int> result;
+        int cnt = 0; 
+        while (!recent_tweets.empty() && cnt < 10) {
+            // heap we have the most recent tweet the second element is tweetId
+            result.push_back(recent_tweets.top().second);
+            recent_tweets.pop();
+            cnt++;
+        }
+        return result;
+    }
+    
+    void follow(int followerId, int followeeId) {
+        follower[followerId].insert(followeeId); // O(1)
+    }
+    // we could have chose map but we chose set because for deletion it will take O(N) but for set it is O(1)
+    
+    void unfollow(int followerId, int followeeId) {
+        follower[followerId].erase(followeeId); // O(1)
+    }
+};
+
+// Time Complexity: O(1) for posting a tweet, O(N log N) for getting news feed, O(1) for follow/unfollow
+// Space Complexity: O(N) for storing tweets and followers

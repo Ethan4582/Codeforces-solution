@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int deleteGreatestValue(vector<vector<int>>& grid) {
+        int ans = 0;   
+        int n = grid.size(); // rows
+        int m = grid[0].size(); // columns
+
+        for (auto& it : grid) {
+            sort(it.begin(), it.end()); 
+        }
+
+        for(int j = m - 1; j >= 0; j--) { // Iterate through columns
+            int currmax = 0; 
+            // iterate through all the rows 
+            for(int i = 0; i < n; i++) {
+                if (j < m) { // Check column index
+                    currmax = max(currmax, grid[i][j]);
+                }
+            }
+            ans += currmax;
+        }
+        return ans; 
+    }
+};
+
+// Time Complexity: O(n * m log(m)) for sorting, O(n) for finding max in each column.
+// Space Complexity: O(1) for additional space.
+
+
+
+
+class Solution {
+public:
+    int deleteGreatestValue(vector<vector<int>>& grid) {
+        int ans = 0;   
+        int n = grid.size(); // rows
+        int m = grid[0].size(); // columns
+        // put all the elements of the same row in the map with priority giving the max element from the row 
+        unordered_map<int, priority_queue<int>> mpp; 
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                mpp[i].push(grid[i][j]);
+            }
+        }
+
+        for(int i = 0; i < m; i++) { // Iterate through columns
+            int maxi = INT_MIN; 
+            for(int j = 0; j < n; j++) {
+                if (!mpp[j].empty()) { // Check if the priority queue is not empty
+                    maxi = max(maxi, mpp[j].top()); 
+                    mpp[j].pop();
+                }
+            }
+            ans += maxi;
+        }
+        return ans;
+    }
+};
+
+// Time Complexity: O(n * m log(m)) for inserting into the priority queue, O(n) for finding max in each column.
+// Space Complexity: O(n * m) 

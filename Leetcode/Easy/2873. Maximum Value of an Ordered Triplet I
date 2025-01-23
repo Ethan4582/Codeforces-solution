@@ -1,0 +1,31 @@
+
+
+
+
+Opmized 
+
+
+class Solution {
+public:
+    long long maximumTripletValue(vector<int>& nums) {
+        int n = nums.size(); 
+        long long ans = 0; 
+        long long l[100000], r[100000];
+        
+        l[0] = nums[0];
+        for (int i = 1; i < n; i++) {
+            l[i] = max(l[i - 1], (long long)nums[i]); 
+        } 
+
+        r[n - 1] = nums[n - 1];
+        for (int j = n - 2; j >= 0; j--) { 
+            r[j] = max(r[j + 1], (long long)nums[j]); 
+        } 
+
+        for (int i = 1; i < n - 1; i++) {
+            ans = max((l[i - 1] - nums[i]) * r[i + 1], ans); 
+        }
+        
+        return (ans < 0 ? 0 : ans);
+    }
+};

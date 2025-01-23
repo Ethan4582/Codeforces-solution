@@ -1,0 +1,62 @@
+
+
+class Solution {
+private:
+    void dfs(int node, vector<vector<int>>& ar, vector<int>& vis) {
+        vis[node] = 1;
+        for (int j = 0; j < ar.size(); j++) {
+            // we got the provencie if the the first graph then explore it 
+            if (ar[node][j] == 1 && !vis[j]) {
+                dfs(j, ar, vis);
+            }
+        }
+    }
+public:
+    int findCircleNum(vector<vector<int>>& ar) {
+        int n = ar.size();
+        vector<int> vis(n, 0);
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
+                cnt++;
+                dfs(i, ar, vis);
+            }
+        }
+        return cnt;
+    }
+};
+
+
+
+
+
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& ar) {
+        int n = ar.size();
+        vector<int> vis(n, 0);
+        int cnt = 0; 
+
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
+                cnt++;
+                queue<int> q;
+                q.push(i);
+                vis[i] = 1;
+
+                while (!q.empty()) {
+                    int node = q.front();
+                    q.pop();
+
+                    for (int neighbor = 0; neighbor < n; neighbor++) {
+                        if (ar[node][neighbor] == 1 && !vis[neighbor]) {
+                            q.push(neighbor);
+                            vis[neighbor] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        return cnt;
+    }
+};

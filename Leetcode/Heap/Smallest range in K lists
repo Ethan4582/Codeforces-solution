@@ -1,0 +1,65 @@
+Time complexity: O(N * K * log K)
+Auxiliary Space: O(K) since at worst case only k elements are in the priority Queue.
+class Solution {
+public:
+    class node {
+    public:
+        int data, row, col;
+        node(int data, int row, int col) {
+            this->data = data;
+            this->col = col;295. Find Median from Data Stream295. Find Median from Data Stream
+            this->row = row;
+        }
+    };
+
+    class compare {
+    public:
+        bool operator()(node* a, node* b) {
+            return a->data > b->data; // Min-heap based on node value
+        }
+    };
+
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        int mini = INT_MAX; // Initialize mini to maximum possible value
+        int maxi = INT_MIN; // Initialize maxi to minimum possible value
+        priority_queue<node*, vector<node*>, compare> minHeap; // Min-heap to store the elements
+
+        int n = nums.size(); // Number of lists
+
+        // Finding min and max for the first column
+        for (int i = 0; i < n; i++) {
+            int ele = nums[i][0];
+            mini = min(mini, ele); // Update mini with the minimum element
+            maxi = max(maxi, ele); // Update maxi with the maximum element
+            minHeap.push(new node(ele, i, 0)); // Push the first element of each list into the min-heap
+        }
+
+        // Initial range
+        int start = mini, end = maxi;
+
+        while (!minHeap.empty()) {
+            auto curr = minHeap.top(); // Get the minimum element from the heap
+            minHeap.pop();
+
+            // If there is a next element in the same list
+            if (curr->col + 1 < nums[curr->row].size()) {
+                int r = curr->row; // Current row
+                int c = curr->col + 1; // Next column
+                minHeap.push(new node(nums[r][c], r, c)); // Push the next element into the heap
+
+                mini = minHeap.top()->data; // Update mini to the new minimum
+                maxi = max(maxi, nums[r][c]); // Update maxi if the new element is larger
+
+                // If the current range is smaller than the previous range, update it
+                if (maxi - mini < end - start) {
+                    start = mini; // Update start of range
+                    end = maxi; // Update end of range
+                }
+            } else {
+                break; // No more elements to explore in this list
+            }
+        }
+
+        return {start, end}; // Return the smallest range found
+    }
+};

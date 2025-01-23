@@ -1,0 +1,27 @@
+
+class Solution {
+    void maxheapify(std::vector<int> &arr, int i, int n) {
+        int l = 2 * i + 1; // Left child index
+        int r = 2 * i + 2; // Right child index
+        int lar = i; // Assume current index is the largest
+
+        if (l < n && arr[l] > arr[lar]) {
+            lar = l;
+        }
+        if (r < n && arr[r] > arr[lar]) {
+            lar = r;
+        }
+        if (lar != i) {
+            std::swap(arr[lar], arr[i]);
+            maxheapify(arr, lar, n);
+        }
+    }
+
+public:
+    void convertMinToMaxHeap(std::vector<int> &arr, int n) {
+        for (int i = (n - 2) / 2; i >= 0; i--) {
+            maxheapify(arr, i, n);
+        }
+        
+    }
+};

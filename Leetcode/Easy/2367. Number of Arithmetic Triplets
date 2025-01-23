@@ -1,0 +1,54 @@
+
+class Solution {
+public:
+    int arithmeticTriplets(vector<int>& nums, int diff) {
+        int counter = 0;
+        for (int i = 0; i < nums.size(); i++){
+            if ((find(nums.begin(), nums.end(), nums[i] + diff) != nums.end()) &&
+                (find(nums.begin(), nums.end(), nums[i] + (2*diff))!= nums.end())){
+                    counter ++;
+                }
+         }
+        return counter;
+    }
+};
+
+// Time complexity: O(n^2)
+// Space complexity: O(1)
+
+																				
+class Solution {
+public:
+    int arithmeticTriplets(vector<int>& nums, int diff) {
+        unordered_map <int, int> seen;
+        int counter = 0;
+        for (int i = 0; i < nums.size(); i++){
+            seen[nums[i]] = i;
+        }
+        for (int i = 0; i < nums.size(); i++){
+            if(seen.count(nums[i] + diff) && seen.count(nums[i] + (2*diff))){
+                counter++;
+            }
+        }
+        return counter;
+    }
+};
+	
+	
+	class Solution {
+public:
+    int arithmeticTriplets(vector<int>& nums, int diff) {
+        unordered_map <int, int> seen;
+        int counter = 0;
+        for (int i = 0; i < nums.size(); i++){
+            seen[nums[i]] = i;
+        }
+        for (int i = 0; i < nums.size(); i++){
+            if(seen.count(nums[i] + diff) && seen.count(nums[i] + (2*diff))){
+                counter++;
+            }
+        }
+        return counter;
+    }
+};
+	

@@ -1,0 +1,121 @@
+
+
+----------------------------------------------------- BRUTE FORCE -----------------------------------------------------
+Time Complexity: O(NlogN)
+Space Complexity: O(1)
+
+class Solution {
+public:
+    int findKthLargest(std::vector<int>& nums, int k) {
+        std::sort(nums.begin(), nums.end(), std::greater<int>());
+        return nums[k-1];
+    }
+};
+
+
+
+
+
+-------------------------------------------------- HEAP SORT --------------------------------------------------
+// Time: O(N + klogN)
+// Space: O(1)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        make_heap(begin(A), end(A));
+        while (--k) {
+            pop_heap(begin(A), end(A));
+            A.pop_back();
+        }
+        return A[0];
+    }
+}
+
+
+
+-------------------------------------------------- MIN HEAP --------------------------------------------------
+// Time: O(NlogK)
+// Space: O(K)
+class Solution {
+public:
+    int findKthLargest(vector<int>& A, int k) {
+        priority_queue<int, vector<int>, greater<>> pq;
+        for (int n : A) {
+            pq.push(n);
+            if (pq.size() > k) pq.pop();
+        }
+        return pq.top();
+    }
+};
+-----------------------------------------------------MAX HEAP--------------------------------------------------
+
+// Time: O(N - k + klog(N - k))
+// Space: O(N - k)
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+         priority_queue<int>pq ;
+        int n = nums.size()  ;
+
+        for(auto it : nums){
+            pq.push(it);
+        }
+        int p =k-1;
+        while(p>0){
+            pq.pop();
+            p--;
+        }
+        return pq.top();
+    }
+};
+	
+-------------------------------------------------- QUICK SELECT --------------------------------------------------
+Approach 3/3: QuickSelect Algorithm
+The QuickSelect algorithm is an efficient method to find the k-th smallest (or largest) element in an unordered list without sorting the entire list. 
+
+Time Complexity:
+
+Best and Average Case: O(N)
+
+// Time: O(N) on averge, O(N^2) in the worst case
+// Space: O(1)
+
+class Solution {
+    int part(vector<int>& arr, int le, int rg) {
+       int pivot = arr[le] ;
+    int l = le + 1 ;
+    int r = rg;
+    while (l <= r) {
+        if (arr[l] < pivot && arr[r] > pivot) {
+            swap(arr[l], arr[r]);
+            l++ ;
+            r-- ;
+        }
+        if (arr[l] >= pivot) {
+            l++;
+        }
+        if (arr[r] <= pivot) {
+            r--;
+        }
+    }
+    swap(arr[le], arr[r]);
+    return r;
+    }
+
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int l = 0;
+        int r = nums.size() - 1;
+
+        // Use the partition algorithm of quick select
+        while (true) {
+            int m = part(nums, l, r); // Partitioning the array
+            if (m + 1 == k) return nums[m]; // If the index matches k, return the element
+            else if (m + 1 > k) { // If the index is greater than k
+                r = m - 1; // Search in the le part
+            } else {
+                l = m + 1; // Search in the rg part
+            }
+        }
+    }
+};

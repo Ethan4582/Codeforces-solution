@@ -1,0 +1,96 @@
+
+
+
+class Solution {
+public:
+    vector<int> mergeKArrays(vector<vector<int>> arr, int K) {
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+        
+        // Insert the first element of each array into the priority queue
+        for (int i = 0; i < K; i++) {
+            if (!arr[i].empty()) {
+                pq.push({arr[i][0], {i, 0}}); // {value, {array index, element index}}
+            }
+        }
+        
+        vector<int> ans;
+        
+        while (!pq.empty()) {
+            auto curr = pq.top();
+            pq.pop();
+            ans.push_back(curr.first); // Add the smallest element to the result
+            
+            int arrayIndex = curr.second.first;
+            int elementIndex = curr.second.second;
+            
+            // If there is a next element in the same array, push it into the priority queue
+            if (elementIndex + 1 < arr[arrayIndex].size()) {
+                pq.push({arr[arrayIndex][elementIndex + 1], {arrayIndex, elementIndex + 1}});
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
+
+tC- 0(N*k ( Log(k)))
+
+
+class Node {
+public: 
+    int data;
+    int i; // Array index
+    int j; // Element index in the array
+
+    // Constructor to initialize Node
+    Node(int d, int arrayIndex, int elementIndex) : data(d), i(arrayIndex), j(elementIndex) {}
+};
+
+class compare {
+public: 
+    bool operator()(Node* a, Node* b) {
+        return a->data > b->data; // Min-heap based on the data value
+    }
+};
+
+class Solution {
+public:
+    // Imagine an array of sorted lists, a matrix on top of each other 
+    std::vector<int> mergeKArrays(std::vector<std::vector<int>>& arr, int K) {
+        // Priority queue to hold pointers to Node objects
+        std::priority_queue<Node*, std::vector<Node*>, compare> pq;
+        
+        // Push the first element of each array into the priority queue
+        for (int i = 0; i < K; i++) {
+            if (!arr[i].empty()) {
+                Node* temp = new Node(arr[i][0], i, 0);
+                pq.push(temp);
+            }
+        }
+        
+        std::vector<int> ans; 
+        
+        while (!pq.empty()) {
+            Node* temp = pq.top();
+            ans.push_back(temp->data); 
+            pq.pop();
+            
+            int i = temp->i;  
+            int j = temp->j; 
+            
+            // Check if there is a next element in the same array
+            if (j + 1 < arr[i].size()) {
+                // Adding the next element in the sorted array 
+                Node* next = new Node(arr[i][j + 1], i, j + 1);
+                pq.push(next);
+            }
+            
+            // Free the memory allocated for the current Node
+            delete temp;
+        }
+        
+        return ans;
+    }
+};

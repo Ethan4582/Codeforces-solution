@@ -1,0 +1,101 @@
+
+
+//Brute force 
+
+Time Complexity: O(n2*log(n2))
+Auxiliary Space: O(n)
+
+int kthLargestSum(int arr[], int N, int K)
+{
+    vector<int> result;
+
+    // Generate all subarrays
+    for (int i = 0; i < N; i++) {
+        int sum = 0;
+        for (int j = i; j < N; j++) {
+            sum += arr[j];
+            result.push_back(sum);
+        }
+    }
+
+    // Sort in decreasing order
+    sort(result.begin(), result.end(), greater<int>());
+
+    // return the Kth largest sum
+    return result[K - 1];
+}
+
+
+Time Complexity: O(N2 log K) 
+Auxiliary Space: O(N), but this can be reduced to O(K) for min-heap and we can store the prefix sum array in the input array itself as it is of no use.
+
+
+
+class Solution {
+public:
+    int kthLargest(vector<int> &arr, int k) {
+        int n = arr.size(); 
+        
+        // Precompute the prefix sum
+        vector<int> sum(n + 1, 0); // Initialize with 0
+        for (int i = 1; i <= n; i++) {
+            sum[i] = arr[i - 1] + sum[i - 1]; // Correctly compute prefix sums
+        }
+        
+        // Min-heap to store the k largest sums
+        priority_queue<int, vector<int>, greater<int>> pq; 
+        
+        // Loop to calculate all contiguous subarray sums
+        for (int i = 1; i <= n; i++) {
+            for (int j = i; j <= n; j++) {
+                int x = sum[j] - sum[i - 1]; // Calculate the subarray sum
+                if (pq.size() < k) {
+                    pq.push(x); // Push the sum if we have less than k elements
+                } else {
+                    // Ensure we keep the k largest sums in the heap
+                    if (pq.top() < x) {
+                        pq.pop(); // Remove the smallest sum
+                        pq.push(x); // Add the new sum
+                    }
+                }
+            }
+        }
+        
+        // The top element of the min-heap is the K-th largest sum
+        return pq.top();
+    }
+};
+
+
+Time Complexity: O(n^2 log n) ,The time complexity of the above code for the Prefix Sum and Sorting approach is O(n^2logn), where n is the size of the input array. This is due to the nested loop used to calculate all possible subarray sums and the sort() function used to sort the vector of subarray sums.
+
+Auxiliary Space: O(n^2), The auxiliary space complexity of the above code is O(n).
+
+
+int kthLargestSum(vector<int>& arr, int k)
+{
+    int n = arr.size();
+
+    // Create a prefix sum array.
+    vector<int> prefixSum(n + 1);
+    prefixSum[0] = 0;
+    for (int i = 1; i <= n; i++) {
+        prefixSum[i] = prefixSum[i - 1] + arr[i - 1];
+    }
+
+    // Create a vector to store all possible subarray sums.
+    vector<int> subarraySums;
+    for (int i = 0; i <= n; i++) {
+        for (int j = i + 1; j <= n; j++) {
+            subarraySums.push_back(prefixSum[j]
+                                   - prefixSum[i]);
+        }
+    }
+
+    // Sort the subarray sums in decreasing order.
+    sort(subarraySums.begin(), subarraySums.end(),
+         greater<int>());
+
+    // Return the K-th largest sum of contiguous subarray.
+    return subarraySums[k - 1];
+}

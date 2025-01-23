@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& ta, int k) {
+        vector<int> mpp(26, 0); 
+        // Count the frequency of each task and store it in mpp array
+        for(char it : ta){
+            mpp[it - 'A']++; // Convert char to index by subtracting 'A'
+        }
+        
+        priority_queue<int> pq; 
+        // Adding elements to heap to take the one with the most frequency to put in k+1 distance
+        for(int i = 0; i < 26; i++){
+            if(mpp[i] > 0){
+                pq.push(mpp[i]); // Push only tasks with non-zero frequencies
+            }
+        }
+        
+        int ans = 0;
+        // While the priority queue is not empty, we will run the scheduling
+        while(!pq.empty()){
+            vector<int> temp;
+            // Determine how many elements we can add between two tasks that need to wait k+1 intervals
+            for(int i = 1; i <= k + 1; i++){
+                // Perform tasks one by one, maintaining k+1 space
+                if(!pq.empty()){ // Edge case: Ensure we have tasks left to schedule
+                    int freq = pq.top(); 
+                    pq.pop();
+                    freq--; // Decrement frequency as task is executed
+                    temp.push_back(freq); // Add remaining frequency to temp
+                }
+            }
+
+            // After processing, push back tasks that still have a remaining frequency > 0
+            for(int &it : temp){
+                if(it > 0){
+                    pq.push(it); // Only push tasks with non-zero frequency
+                }
+            }
+
+            // If no tasks are left, add only the cycles needed for the tasks processed
+            if(pq.empty()){
+                ans += temp.size(); // Add the time taken for the final scheduling
+            } else {
+                // Otherwise, add a full cycle of k+1 intervals
+                ans += k + 1;
+            }
+        }
+
+        return ans; 
+    }
+};
+
+/*
+Time Complexity: O(N + T * log(T)), where N is the total number of tasks and T is the number of unique tasks.
+Space Complexity: O(T), for the priority queue and temporary storage.
+*/
