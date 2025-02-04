@@ -28,7 +28,7 @@ public:
 
 
 // optmized 
-mkae 2 heap max conatin all the smaller than media and all the greate in the maxheap if maxheap.size()==min.heap.size that means arrai is even just (mx.top +mn.top)/2   if mx.heap>min.heap ans=mx.top vice versa for  min.heap > mx.heap ans =mn.top
+mkae 2 heap max conatin all the smaller than media and all the greate in the minheap if maxheap.size()==min.heap.size that means arrai is even just (mx.top +mn.top)/2   if mx.heap>min.heap ans=mx.top vice versa for  min.heap > mx.heap ans =mn.top
 
 
 

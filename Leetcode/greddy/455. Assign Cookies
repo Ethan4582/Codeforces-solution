@@ -1,0 +1,14 @@
+// Time: O(MlogM + NlogN)
+// Space: O(1)
+class Solution {
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(begin(g), end(g));
+        sort(begin(s), end(s));
+        int i = 0, j = 0, M = g.size(), N = s.size();
+        for (; i < M && j < N; ++j) {
+            if (g[i] <= s[j]) ++i;
+        }
+        return i;
+    }
+};

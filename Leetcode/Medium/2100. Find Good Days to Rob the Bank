@@ -1,0 +1,82 @@
+
+class Solution {
+public:
+    vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+        vector<int> result;
+        int n = security.size();
+        
+     
+        for (int i = time; i <= n - time - 1; i++) {
+            if (is_true(i, security, time)) {
+                result.push_back(i); 
+            }
+        }
+        
+        return result;
+    }
+    
+    bool is_true(int i, vector<int>& arr, int time) {
+     
+        for (int j = 1; j <= time; j++) {
+            if (arr[i - j] < arr[i - j + 1]) {
+                return false; 
+            }
+        }
+        
+    
+        for (int j = 1; j <= time; j++) {
+            if (arr[i + j] < arr[i + j - 1]) {
+                return false;
+            }
+        }
+        
+        return true; 
+    }
+};
+
+// Time Complexity: O(n * time)
+// Space Complexity: O(n)
+	
+	
+class Solution {
+public:
+    vector<int> goodDaysToRobBank(vector<int>& a, int t) {
+        int n = a.size();
+        vector<int> ans;
+
+        if (t == 0) {
+            for (int i = 0; i < n; i++) {
+                ans.push_back(i);
+            }
+            return ans;
+        }
+
+        vector<int> inc(n, 0), dec(n, 0); 
+
+       
+        for (int i = 1; i < n; i++) {
+            if (a[i] <= a[i - 1]) {
+                inc[i] = inc[i - 1] + 1;
+            }
+        }
+
+        
+        for (int i = n - 2; i >= 0; i--) {
+            if (a[i] <= a[i + 1]) {
+                dec[i] = dec[i + 1] + 1;
+            }
+        }
+
+    
+        for (int i = 0; i < n; i++) {
+            if (inc[i] >= t && dec[i] >= t) {
+                ans.push_back(i);
+            }
+        }
+
+        return ans;
+    }
+};
+
+// Time Complexity: O(n)
+// Space Complexity: O(n)
