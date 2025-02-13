@@ -1,0 +1,74 @@
+class Solution {
+public:
+    bool areAlmostEqual(string s1, string s2) {
+        // If the sizes of the strings are different, they cannot be equal
+        if (s1.size() != s2.size()) {
+            return false;
+        }
+
+        if(s1==s2){
+            return true;
+        }
+
+        unordered_map<char, int> mpp1, mpp2; 
+
+        // Count character occurrences in both strings
+        for (int i = 0; i < s1.size(); i++) {
+            mpp1[s1[i]]++;
+            mpp2[s2[i]]++;
+        }
+
+        // Check if the maps have the same size
+        if (mpp1.size() != mpp2.size()) {
+            return false;
+        }
+
+        // Check if characters in both maps are the same
+        for (const auto& pair : mpp1) {
+            if (mpp2[pair.first] != pair.second) {
+                return false;
+            }
+        }
+
+        // Now check the positions of mismatched characters
+        vector<int> diffIndices;
+        for (int i = 0; i < s1.size(); i++) {
+            if (s1[i] != s2[i]) {
+                diffIndices.push_back(i);
+            }
+        }
+
+        // There should be exactly 2 positions where the characters differ
+        return diffIndices.size() == 2 &&
+               s1[diffIndices[0]] == s2[diffIndices[1]] &&
+               s1[diffIndices[1]] == s2[diffIndices[0]];
+    }
+};
+
+
+
+class Solution {
+public:
+    bool areAlmostEqual(string s1, string s2) {
+        int fi=0, sec=0, cnt=0;
+        if(s1.size()!=s2.size()){
+            return false;
+        } 
+        for(int i =0; i<s1.size(); i++){
+            if(s1[i]!=s2[i]){
+                cnt++;
+
+                if(cnt>2){
+                    return false; 
+                } else if(cnt==1){
+                    fi=i;
+                }else{
+                    sec=i;
+                }
+            }
+
+        }
+
+        return s1[fi]==s2[sec] && s1[sec]==s2[fi];
+    }
+};

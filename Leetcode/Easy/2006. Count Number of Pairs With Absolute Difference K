@@ -1,0 +1,70 @@
+class Solution {
+public:
+    int countKDifference(vector<int>& nums, int k) {
+        int n = nums.size(); 
+        int cnt = 0; 
+        int i = 0, j = 0;  
+        sort(nums.begin(), nums.end()); 
+
+        while (j < n) {
+            if (nums[j] - nums[i] < k) {
+                j++;
+            } else if (nums[j] - nums[i] > k) {
+                i++;
+            } else {
+            
+                int a = nums[i], b = nums[j]; 
+                int cnt1 = 0, cnt2 = 0;
+
+          
+                while (i < n && nums[i] == a) {
+                    cnt1++; 
+                    i++;
+                }
+
+         
+                while (j < n && nums[j] == b) {
+                    cnt2++; 
+                    j++;
+                }
+
+             
+                if (a == b) {
+                    cnt += cnt1 * (cnt1 - 1) / 2;
+                } else {
+                    cnt += (cnt1 * cnt2); 
+                }
+            }
+        }
+        return cnt;
+    }
+};
+
+	
+	Sorting and Two Pointer Technique – O(n*logn) Time and O(1) Space
+	
+	
+	Using Hash Map or Dictionary – O(n) Time and O(n) Space
+
+	
+	class Solution {
+public:
+    int countKDifference(vector<int>& nums, int k) {
+         int n = nums.size();  
+    unordered_map<int, int> freq;
+    int cnt = 0;
+
+    for (int i = 0; i < n; i++) {
+    
+        if (freq.find(nums[i] + k) != freq.end()) 
+            cnt += freq[nums[i] + k]; 
+      
+        
+        if (freq.find(nums[i] - k) != freq.end()) 
+            cnt += freq[nums[i] - k]; 
+     
+        freq[nums[i]]++; 
+    }
+    return cnt;
+    }
+};

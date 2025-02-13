@@ -1,0 +1,123 @@
+
+---brute force tle 
+
+class NumberContainers {
+public:
+    map<int, int> mpp; 
+
+    NumberContainers() {
+   
+    }
+    
+    void change(int i, int num) {
+        mpp[i] = num; 
+    }
+    
+    int find(int num) {
+      
+        for (auto it : mpp) {
+            if (it.second == num) { 
+                return it.first; 
+            }
+        }
+        return -1; 
+    }
+};
+
+/*
+Time Complexity: O(n) 
+Space Complexity: O(n)
+*/
+
+-------------- use 2 map -------------
+
+class NumberContainers {
+public:
+    unordered_map<int, int> mpp; // Maps index -> number
+    unordered_map<int, set<int>> numToIndices; // Maps number -> sorted indices
+
+    NumberContainers() {}
+
+    void change(int i, int num) {
+        if (mpp.count(i)) { 
+            int prevNum = mpp[i];
+            numToIndices[prevNum].erase(i);
+            if (numToIndices[prevNum].empty()) {
+                numToIndices.erase(prevNum);
+            }
+        }
+        mpp[i] = num;
+        numToIndices[num].insert(i);
+    }
+
+    int find(int num) {
+        if (numToIndices.count(num) && !numToIndices[num].empty()) {
+            return *numToIndices[num].begin(); // Smallest index
+        }
+        return -1;
+    }
+};
+
+/*
+Time Complexity:
+- change(): O(log n) due to set operations.
+- find(): O(1) as it retrieves the smallest index in O(1).
+Space Complexity: O(n) - Stores index-to-number and number-to-indices mappings.
+*/
+
+
+------------------ use priorty queue---------------
+
+
+// for insert is simple update mpp and then mpp1 push the idx in prev for serach is might not be the first as we have replac the idx in the prignal array with new value then track to orignal map
+
+class NumberContainers {
+public:
+    NumberContainers() {}
+
+    void change(int index, int number) {
+        // Update index to number mapping
+        mpp[index] = number;
+
+        // Add index to the min heap for this number
+        mpp1[number].push(index);
+    }
+
+    int find(int number) {
+        // If number doesn't exist in our map
+        if (mpp1.find(number) == mpp1.end()) {
+            return -1;
+        }
+
+      
+        auto& minHeap = mpp1[number];
+
+        // Keep checking top element until we find valid index
+        while (!minHeap.empty()) {
+            int index = minHeap.top();
+
+            // If index still maps to our target number, return it
+            if (mpp[index] == number) {
+                return index;
+            }
+
+            // Otherwise remove this stale index
+            minHeap.pop();
+        }
+
+        return -1;
+    }
+
+private:
+    // Map to store number -> min heap of indices
+    unordered_map<int, priority_queue<int, vector<int>, greater<int>>>
+        mpp1;
+    // Map to store index -> number
+    unordered_map<int, int> mpp;
+};
+
+Time Complexity:
+- `change()`: O(log N) due to heap insertion.
+- `find()`: O(log N) due to heap maintenance.
+Space Complexity: O(N) - Storing mappings and heaps.
+*/

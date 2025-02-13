@@ -1,0 +1,55 @@
+class Solution {
+public:
+    string clearDigits(string s) {
+        stack<char> st; 
+        for (char it : s) {
+           
+            if (!isdigit(it)) {
+                st.push(it);
+            } else { 
+                if (!st.empty()) {
+                    st.pop(); 
+                }
+            }
+        }
+
+        string ans = ""; 
+      
+        while (!st.empty()) {
+            ans += st.top();
+            st.pop();
+        }
+        reverse(ans.begin(), ans.end()); 
+        return ans; 
+    }
+};
+
+
+
+/*
+Time Complexity: O(n), where n is the length of the input string.
+Space Complexity: O(n), for the stack used to store characters.
+*/
+	
+	
+	class Solution {
+public:
+    string clearDigits(string s) {
+        int ans = 0; 
+        for (int i = 0; i < s.length(); i++) {
+            if (isdigit(s[i])) {
+                ans = max(ans - 1, 0); // Decrease count of valid characters
+            } else {
+                // Place the character in the correct position
+                s[ans++] = s[i]; // Store non-digit character
+            }
+        }
+        s.resize(ans); // Resize the string to keep only valid characters
+        return s; // Return the final processed string
+    }
+};
+
+/*
+Time Complexity: O(n), where n is the length of the input string.
+Space Complexity: O(1), as we are modifying the string in place.
+*/

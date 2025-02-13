@@ -1,0 +1,16 @@
+#define ll long long
+class Solution {
+public:
+  long long countBadPairs(vector<int>& nums) {
+      unordered_map<int,ll> mpp;
+      ll n = nums.size(), ttl = n*(n-1)/2, gd=0;
+      for(ll i=0;i<n;++i){
+          gd += mpp[i-nums[i]];
+          mpp[i-nums[i]]++;
+      } 
+      return ttl - gd;
+  }
+};
+
+Tc- 0(N); 
+sc-0(N)

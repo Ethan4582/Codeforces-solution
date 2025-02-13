@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int countPairs(vector<int>& nums, int k) {
+        int n= nums.size(); 
+        int cnt=0;
+        for(int i =0 ; i < n; i++){
+            for(int j=i+1; j<n; j++){
+                if(nums[i]==nums[j] && (i*j)%k==0){
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+};
+	
+	
+	class Solution {
+public:
+    int countPairs(vector<int>& nums, int k) {
+        int n = nums.size(); 
+        int cnt = 0;
+        unordered_map<int, vector<int>> indexMap; // Map to store indices of each number
+
+        // Populate the map with indices of each number
+        for (int i = 0; i < n; i++) {
+            indexMap[nums[i]].push_back(i);
+        }
+
+        // Iterate through the map to count valid pairs
+        for (auto& entry : indexMap) {
+            vector<int>& indices = entry.second;
+            int size = indices.size();
+            // Check pairs of indices for the same number
+            for (int i = 0; i < size; i++) {
+                for (int j = i + 1; j < size; j++) {
+                    // Check if the product of indices is divisible by k
+                    if ((indices[i] * indices[j]) % k == 0) {
+                        cnt++;
+                    }
+                }
+            }
+        }
+
+        return cnt;
+    }
+};
+
+/*
+Time Complexity: O(n^2) in the worst case for counting pairs, but reduced due to grouping indices.
+Space Complexity: O(n) for storing indices in the map.

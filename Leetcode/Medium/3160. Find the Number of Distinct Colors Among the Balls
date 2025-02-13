@@ -1,0 +1,69 @@
+class Solution {
+public:
+    vector<int> queryResults(int l, vector<vector<int>>& q) {
+        vector<int> ans;
+        unordered_map<int, int> mpp;
+        vector<int> arr(l + 1, -1); 
+
+        for (int i = 0; i < q.size(); i++) {
+            int ball = q[i][0];
+            int color = q[i][1];
+
+            if (arr[ball] != -1) {
+                int prevcolor = arr[ball];
+                mpp[prevcolor]--;
+
+                if (mpp[prevcolor] == 0) { 
+                    mpp.erase(prevcolor);
+                }
+            }
+            arr[ball] = color;
+            mpp[color]++; 
+
+            ans.push_back(mpp.size()); 
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(N) - Each query processes in O(1).
+Space Complexity: O(L) - Uses a map and an array of size L.
+*/
+
+																		 
+																		 
+class Solution {
+public:
+    vector<int> queryResults(int l, vector<vector<int>>& q) {
+        vector<int> ans;
+        unordered_map<int, int> mpp, mpp1;
+       ; 
+
+        for (int i = 0; i < q.size(); i++) {
+            int ball = q[i][0];
+            int color = q[i][1];
+
+            if (mpp1.find(ball)!=mpp1.end()) {
+                int prevcolor = mpp1[ball];
+                mpp[prevcolor]--;
+
+                if (mpp[prevcolor] == 0) { 
+                    mpp.erase(prevcolor);
+                }
+            }
+            mpp1[ball] = color;
+            mpp[color]++; 
+
+            ans.push_back(mpp.size()); 
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(N) - Each query processes in O(1).
+Space Complexity: O(L) - Uses a map and an array of size L.
+*/
