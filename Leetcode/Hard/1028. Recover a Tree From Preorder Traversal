@@ -1,0 +1,93 @@
+class Solution {
+private:
+    TreeNode* solve(string& s, int& i, int dep) {
+        int n = s.length();
+        int j = i;
+
+   
+        while (j < n && s[j] == '-') {
+            j++;
+        }
+        int dsh = j - i;
+
+    
+        if (dsh != dep) {
+            return nullptr;
+        }
+
+        i = j;
+        int num = 0;
+
+        while (i < n && isdigit(s[i])) {
+            num = num * 10 + (s[i] - '0');
+            i++;
+        }
+
+      
+        TreeNode* root = new TreeNode(num);
+
+        root->left = solve(s, i, dep + 1);
+        root->right = solve(s, i, dep + 1);
+
+        return root;
+    }
+
+public:
+    TreeNode* recoverFromPreorder(string s) {
+        int i = 0;
+        return solve(s, i, 0);
+    }
+};
+
+
+tc-0(h)
+sc- 0(n)
+
+
+--------------------- optmised  
+class Solution {
+public:
+    TreeNode* recoverFromPreorder(string s) {
+        int n = s.length();
+        int i = 0;
+        stack<TreeNode*> st;
+        TreeNode* root = nullptr;
+
+        while (i < n) {
+            int dep = 0, num =0;
+            while (i < n && s[i] == '-') {
+                dep++;
+                i++;
+            }
+            while (i < n && isdigit(s[i])) {
+                num = num * 10 + (s[i] - '0');
+                i++;
+            }
+
+            TreeNode* node = new TreeNode(num);
+
+            // If it's the root node
+            if (st.empty()) {
+                root = node;
+            } else {
+
+                while (st.size() > dep) {
+                    st.pop();
+                }
+
+               
+                TreeNode* parent = st.top();
+                if (!parent->left) {
+                    parent->left = node;
+                } else {
+                    parent->right = node;
+                }
+            }
+
+            
+            st.push(node);
+        }
+
+        return root;
+    }
+};

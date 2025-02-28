@@ -1,10 +1,38 @@
-// Time: O(N)
-// Space: O(H)
 class Solution {
 public:
     bool isSameTree(TreeNode* p, TreeNode* q) {
-        if(p==NULL || q==NULL) return (p==q);  
-
-        return(p->val==q->val && isSameTree(p->left , q->left) && isSameTree(p->right , q->right));
+        if (!p || !q) return p == q;  
+        return (p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right));
     }
 };
+
+// Time Complexity: O(n) - Each node is visited once
+// Space Complexity: O(h) - Recursive depth is at most the height of the tree (O(log n) for balanced, O(n) for skewed)
+
+
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        queue<TreeNode*> que;
+        que.push(p);
+        que.push(q);
+        
+        while (!que.empty()) {
+            TreeNode* node1 = que.front(); que.pop();
+            TreeNode* node2 = que.front(); que.pop();
+            
+            if (!node1 && !node2) continue;
+            if (!node1 || !node2 || node1->val != node2->val) return false;
+            
+            que.push(node1->left);
+            que.push(node2->left);
+            que.push(node1->right);
+            que.push(node2->right);
+        }
+        
+        return true;
+    }
+};
+
+// Time Complexity: O(n) - Each node is visited once
+// Space Complexity: O(n) - In the worst case, the queue holds all nodes at one level

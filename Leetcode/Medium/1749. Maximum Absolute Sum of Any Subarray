@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int maxAbsoluteSum(vector<int>& nums) {
+        int ans=0; 
+        int n= nums.size(); 
+        int minsm=0, maxsm=0; 
+        int psum=0;
+        for(int i =0 ;i < n ; i++){
+            psum+=nums[i]; 
+
+            minsm=min(minsm, psum);
+             maxsm=max(maxsm, psum);
+
+             // if is pistive subtrac the lest sub arr sum from curr 
+
+            if(psum>0){
+                 ans= max(ans, max(psum , psum-minsm));
+            }else{
+                 ans= max(ans, max((abs(psum)) , abs(psum-maxsm)));
+            }
+        }
+        return ans;
+    }
+};
+
+	
+	------------------------ optmized approach 
+
+   class Solution {
+public:
+    int maxAbsoluteSum(vector<int>& nums) {
+        int ans=0; 
+        int n= nums.size(); 
+        int minsm=0, maxsm=0; 
+        int psum=0;
+        for(int i =0 ;i < n ; i++){
+            psum+=nums[i]; 
+
+            minsm=min(minsm, psum);
+             maxsm=max(maxsm, psum);
+
+        }
+        return maxsm-minsm;
+    }
+};

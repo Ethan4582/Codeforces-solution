@@ -1,0 +1,23 @@
+// Time: O(QP)
+// Space: O(1)
+class Solution {
+    bool match(string &s, string &p) {
+        int i = 0, N = p.size();
+        for (char c : s) {
+            if (i == N) {
+                if (isupper(c)) return false;
+            } else if (isupper(p[i])) {
+                if (islower(c)) continue;
+                if (c != p[i++]) return false;
+            } else if (c != p[i]) continue;
+            else ++i;
+        }
+        return i == N;
+    }
+public:
+    vector<bool> camelMatch(vector<string>& queries, string pattern) {
+        vector<bool> ans;
+        for (auto &s : queries) ans.push_back(match(s, pattern));
+        return ans;
+    }
+};

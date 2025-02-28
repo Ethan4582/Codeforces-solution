@@ -1,0 +1,65 @@
+tc -  0(n) ! [ total permuation]  + 0(n)  to check if the permuation isc ocrrect or not 
+sc - -0(n)
+
+
+----------------- s1 gnerate all the lexigraphicaly peruation then check is it possible --------------- 
+
+class Solution {
+private: 
+ void nextPermutation(string &s) {
+        int n = s.size();
+        int i = n - 2;
+
+        // Step 1: Find the first decreasing element from the end
+        while (i >= 0 && s[i] >= s[i + 1]) {
+            i--;
+        }
+
+        // Step 2: If such an element exists
+        if (i >= 0) {
+            int j = n - 1;
+            // Step 3: Find the element just larger than s[i]
+            while (s[j] <= s[i]) {
+                j--;
+            }
+            swap(s[i], s[j]); // Step 4: Swap them
+        }
+
+        // Step 5: Reverse the sequence from i + 1 to end
+        reverse(s.begin() + i + 1, s.end());
+    }
+    bool check(string &a, string &s) {
+        for (int i = 0; i < a.size(); i++) {
+           
+            if ((a[i] == 'I' && s[i] > s[i + 1]) || (a[i] == 'D' && s[i] < s[i + 1])) {
+                return false; 
+            }
+        }
+        return true; 
+    }
+
+public:
+    string smallestNumber(string a) {
+        string s = ""; 
+        for (int i = 1; i <= a.length() + 1; i++) {
+            s.push_back(i + '0'); 
+        }
+      
+        while (!check(a, s)) {
+            next_permutation(s.begin(), s.end());
+        }
+        return s; 
+    }
+};
+
+/*
+Time Complexity: O(n! * n) for generating permutations and checking conditions
+Space Complexity: O(n) for storing the string 's'
+*/ 
+
+
+
+----------------------------stack ------------------------------ 
+
+tc- 0(n) + 2* (n+1) [ stack operation ]
+sc-  0(n)

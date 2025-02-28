@@ -1,0 +1,33 @@
+ Time Complexity: O(n^2) 
+// Space Complexity: O(n) 
+
+
+class Solution {
+private:
+    TreeNode* solve(int prest, int preend, int postst, vector<int>& pre, vector<int>& post) {
+    
+        if (prest > preend) return nullptr;
+        TreeNode* root = new TreeNode(pre[prest]);
+
+        // If there is only one node, return it as leaf
+        if (prest == preend) return root;
+
+    
+        int nextnode = pre[prest + 1]; 
+        int j = postst;
+        while (post[j] != nextnode) j++;
+
+        int num = j - postst + 1;
+
+      
+        root->left = solve(prest + 1, prest + num, postst, pre, post);
+        root->right = solve(prest + num + 1, preend, j + 1, pre, post);
+
+        return root;
+    }
+
+public:
+    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
+        return solve(0, preorder.size() - 1, 0, preorder, postorder);
+    }
+};

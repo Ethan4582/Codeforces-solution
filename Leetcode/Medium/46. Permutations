@@ -1,0 +1,61 @@
+class Solution {
+private: 
+    void generate_per(vector<int>& nums, vector<bool>& used, vector<vector<int>>& res, vector<int>& curr) {
+        if (curr.size() == nums.size()) {
+            res.push_back(curr); 
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++) {
+            if (!used[i]) { 
+                used[i] = true; 
+                curr.push_back(nums[i]); 
+                generate_per(nums, used, res, curr); 
+                curr.pop_back(); 
+                used[i] = false; 
+            }
+        }
+    }
+
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res; 
+        vector<bool> used(nums.size(), false); 
+        vector<int> curr; 
+        generate_per(nums, used, res, curr); 
+        return res; 
+    }
+};
+
+/*
+Time Complexity: O(n!)
+Space Complexity: O(n)
+*/ 
+
+
+class Solution {
+private: 
+    void solve(int idx , vector<int>& nums, vector<vector<int>>& res) {
+        if (idx == nums.size()) {
+            res.push_back(nums); 
+            return;
+        }
+        for (int i = idx; i < nums.size(); i++) {
+           swap(nums[i], nums[idx]); 
+           solve(idx+1, nums, res);
+            swap(nums[i], nums[idx]); //backtrack 
+        }
+
+    }
+
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res; 
+         solve( 0 , nums, res);
+        return res; 
+    }
+};
+
+/*
+Time Complexity: O(n!)
+Space Complexity: O(n)
+*/ 

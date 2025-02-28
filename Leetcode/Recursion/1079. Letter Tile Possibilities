@@ -1,0 +1,81 @@
+class Solution {
+private: 
+void solve (string& s , vector<bool> & us,unordered_set<string> & st, string &  curr){
+       st.insert(curr); // insert curr string in recursion 
+
+       for(int i =0; i < s.length(); i++){ // alwsy start from 0 to explor all the possibilty 
+         if(us[i]){
+            continue; // move to next char
+         }
+
+         //do 
+         us[i]= true; 
+         curr.push_back(s[i]); 
+
+         // explore ; 
+         solve(s , us, st, curr);  
+         // undo  as we mkae 2 choices 
+           us[i]= false; 
+         curr.pop_back(); 
+
+       }
+}
+public:
+    int numTilePossibilities(string s) {
+        int n=s.length(); 
+        vector<bool> used( n , false);  // to mark the used idx while for loop for resusiion
+        unordered_set<string> st; 
+        string curr=""; // start recusion with empty string
+
+        solve(s, used , st, curr); 
+        return st.size()-1; // remov the "" from the set 
+    }
+};
+
+//tc - o(n!) = possibilty n , n-1, n-2 ...1 
+
+//sc= 0(n)[ reusion ] + 0(n* n!) n1 seq in set and each n seq 
+
+
+
+
+-- just used 26 char and increase insted of bool false and true and decres for undo 
+
+class Solution {
+private: 
+    void solve(string& s, vector<int>& used, unordered_set<string>& st, string& curr) {
+        st.insert(curr); 
+
+        for (int i = 0; i < s.length(); i++) { 
+            if (used[s[i] - 'A'] == 0) continue; 
+
+            // Choose
+            used[s[i] - 'A']--;  
+            curr.push_back(s[i]); 
+
+            // Explore
+            solve(s, used, st, curr);  
+
+            // Undo (Backtrack)
+            used[s[i] - 'A']++;  
+            curr.pop_back(); 
+        }
+    }
+
+public:
+    int numTilePossibilities(string s) {
+        vector<int> used(26, 0); 
+
+     
+        for (char ch : s) {
+            used[ch - 'A']++;
+        }
+
+        unordered_set<string> st; 
+        string curr = ""; 
+
+        solve(s, used, st, curr); 
+        return st.size()-1;
+    }
+};
+

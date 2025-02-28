@@ -1,0 +1,77 @@
+
+class Solution {
+private: 
+void generate(vector<string > &res,string & curr, vector<char>  &s , int n){
+    if(curr.size()==n){
+        res.push_back(curr); 
+        return ;
+    }
+
+    // other wise generate
+     for (char ch : s){
+        if(curr.empty() || curr.back()!=ch){
+            curr.push_back(ch); // add the char
+            generate(res, curr, s , n) ;// explore 
+            curr.pop_back(); // backtrack
+        }
+    }
+   
+} 
+public:
+    string getHappyString(int n, int k) {
+        vector<char> s= {'a', 'b', 'c'}; 
+        string curr= ""; 
+        vector<string > res;
+
+        generate(res, curr, s , n); 
+        
+        return (k <= res.size()) ? res[k-1] :"";
+    }
+};
+
+
+/// no  need to sort as the backtring itself gnerate the lexigraphicaly samlles tsubstring itself and weh make sure we do not mkae the happ  string 
+
+/*
+Time Complexity: O(2^n)
+Space Complexity: O(n)
+*/
+
+
+class Solution {
+private: 
+    void generate(int& cnt, string& curr, vector<char>& s, int n, int k, string& result) {
+        if (curr.size() == n) {
+            cnt++;
+            if (cnt == k) {
+                result = curr;
+            }
+            return;
+        }
+
+      
+        for (char ch : s) {
+            if (curr.empty() || curr.back() != ch) {
+                curr.push_back(ch); // Add the character
+                generate(cnt, curr, s, n, k, result); // Recur
+                curr.pop_back(); // Backtrack
+            }
+        }
+    } 
+
+public:
+    string getHappyString(int n, int k) {
+        vector<char> s = {'a', 'b', 'c'}; 
+        string curr = ""; 
+        int cnt = 0;
+        string result = "";
+
+        generate(cnt, curr, s, n, k, result); 
+
+        return result;
+    }
+};
+
+
+sc- 0(n)
+tc- (k * 2^n-1)

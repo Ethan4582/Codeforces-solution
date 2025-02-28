@@ -1,0 +1,31 @@
+class Solution {
+private: 
+    void solve(int idx, int sum, vector<int>& res, vector<int>& arr) {
+        
+        if (idx == arr.size()) {
+            res.push_back(sum); 
+            return;
+        }
+        
+      
+        solve(idx + 1, sum + arr[idx], res, arr);
+        
+       
+        solve(idx + 1, sum, res, arr);
+    }
+
+public:
+    vector<int> subsetSums(vector<int>& arr) {
+        vector<int> res; 
+        solve(0, 0, res, arr);
+        return res;
+    }
+};
+
+/*
+Time Complexity: O(2^N)
+Space Complexity: O(N)
+*/ 
+
+
+the reson at then leaf sum it ensure the the possible subset sum in the leaf 

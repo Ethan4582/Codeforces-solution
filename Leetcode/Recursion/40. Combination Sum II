@@ -1,0 +1,72 @@
+class Solution {
+private: 
+    void solve(int idx, int cnt, int x, vector<int>& curr, vector<int>& nm, set<vector<int>>& st) {
+        if (cnt > x) { 
+            return;
+        }
+        if (cnt == x) {
+            st.insert(curr);
+            return; 
+        }
+
+        for (int i = idx; i < nm.size(); i++) { 
+            curr.push_back(nm[i]); 
+            solve(i + 1, cnt + nm[i], x, curr, nm, st);
+            curr.pop_back(); 
+        }
+    }
+
+public:
+    vector<vector<int>> combinationSum2(vector<int>& nm, int x) {
+        set<vector<int>> st; 
+        sort(nm.begin(), nm.end());
+        vector<int> curr; 
+        solve(0, 0, x, curr, nm, st);
+        return vector<vector<int>>(st.begin(), st.end());
+    }
+};
+
+/*
+Time Complexity: O(2^n * log( set.size()));
+Space Complexity: O(n)
+*/ 
+
+
+------------------------ optmized 
+
+
+
+class Solution {
+private:
+    void dfs(int i, int x, vector<int>& A, vector<int>& tmp, vector<vector<int>>& ans) {
+        if (x == 0) {
+            ans.push_back(tmp);
+            return;
+        }
+        if (i == A.size()) return;
+
+        if (x >= A[i]) { 
+            tmp.push_back(A[i]);
+            dfs(i + 1, x - A[i], A, tmp, ans);
+            tmp.pop_back();
+        }
+
+        while (i + 1 < A.size() && A[i + 1] == A[i]) ++i;
+
+        dfs(i + 1, x, A, tmp, ans);
+    }
+
+public:
+    vector<vector<int>> combinationSum2(vector<int>& A, int x) {
+        sort(begin(A), end(A));
+        vector<vector<int>> ans;
+        vector<int> tmp;
+        dfs(0, x, A, tmp, ans);
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(2^N)
+Space Complexity: O(N)
+*/ 

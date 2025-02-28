@@ -1,0 +1,67 @@
+ class Solution {
+private:
+    // Function to check if two trees are identical
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (!p || !q) return p == q;  
+        return (p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right));
+    }
+
+public:
+    bool isSubtree(TreeNode* p, TreeNode* q) {
+        if (!p) return false;  
+
+        queue<TreeNode*> qNodes;
+        qNodes.push(p);
+
+        while (!qNodes.empty()) {
+            TreeNode* curr = qNodes.front();
+            qNodes.pop();
+
+            if (isSameTree(curr, q)) return true;
+
+            if (curr->left) qNodes.push(curr->left);
+            if (curr->right) qNodes.push(curr->right);
+        }
+
+        return false;
+    }
+};
+
+/*
+Time Complexity: O(m * n) 
+- We traverse every node in `p` (O(m)), and for each node, we may call `isSameTree` (O(n) in worst case).
+
+Space Complexity: O(m) 
+- BFS uses a queue, which can store up to O(m) nodes in the worst case.
+*/
+
+
+class Solution {
+private:
+    // Function to check if two trees are identical
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (!p || !q) return p == q;  
+        return (p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right));
+    }
+
+    // Function to check if q is a subtree of p
+    bool helper(TreeNode* p, TreeNode* q) {
+        if (!p) return false;  // If p is null, q cannot be a subtree
+        if (isSameTree(p, q)) return true;  
+        return helper(p->left, q) || helper(p->right, q);  
+    }
+
+public:
+    bool isSubtree(TreeNode* p, TreeNode* q) {
+        return helper(p, q);
+    }
+};
+
+/*
+Time Complexity: O(m * n) 
+- For each node in 'p', we may call `isSameTree`, which takes O(n) in the worst case.
+
+Space Complexity: O(m) (recursion stack for tree traversal)
+*/
+
+

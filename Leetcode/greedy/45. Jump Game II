@@ -1,0 +1,55 @@
+class Solution {
+    // [2,3,1,1,4]
+    //   (0 , 0 )
+      
+    //   (1, 1)  ( 2, 1) -> 2 jum from the curr idx 
+    //    |
+    //    | -> 
+    //     (1,2)  (1, 2 )  (4, 2)
+
+private: 
+    int solve(int idx, int cnt, vector<int>& nums, int n) {
+        if (idx >= n - 1) return cnt; // If we reach or exceed last index, return jumps
+        
+        int mini = INT_MAX; // Store minimum jumps
+
+        for (int i = 1; i <= nums[idx]; i++) {
+            if (idx + i < n) { // Check if within bounds
+                mini = min(mini, solve(idx + i, cnt + 1, nums, n));
+            }
+        }
+        return mini;
+    }
+
+
+public:
+    int jump(vector<int>& nums) {
+        // plane resussion of all the possibilty a[idx ] are th pissibilty  and the height of the tree is  tree take to reach at the end of the array 
+        int n= nums.size();
+        return solve( 0, 0, nums, n);
+    }
+};
+
+
+Time Complexity: O(2 ^N) (Exponential) due to brute force recursion.
+Space Complexity: 
+O(N) (Recursion depth in the worst case).
+
+
+
+class Solution {
+public:
+    int jump(vector<int>& a) {
+         int l =0  ,  r=0 , cnt=0  , n= a.size();
+         for(int i =0 ; i <n-1; i++){
+            r = max(r , i +a[i]); 
+            
+            if(l==i){ // we go 1 range 
+                cnt++; 
+                l = r; 
+            }
+         } 
+         return cnt;
+
+    }
+};

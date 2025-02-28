@@ -1,0 +1,58 @@
+class Solution {
+public:
+    string removeOccurrences(string s, string t) {
+        vector<int> kmpLPS = computeLPS(t);
+        stack<char> st;
+        vector<int> idx(s.length() + 1, 0);
+        
+        for (int i = 0, len = 0; i < s.length(); i++) {
+            char curr = s[i];
+            st.push(curr);
+            
+            if (curr == t[len]) {
+                idx[st.size()] = ++len;
+                
+                if (len == t.length()) {
+                    int m = t.length();
+                    while (m != 0) {
+                        st.pop();
+                        m--;
+                    }
+                    len = st.empty() ? 0 : idx[st.size()];
+                }
+            } else {
+                if (len != 0) {
+                    i--; 
+                    len = kmpLPS[len - 1];
+                    st.pop();
+                } else {
+                    idx[st.size()] = 0;
+                }
+            }
+        }
+        
+        string result = "";
+        while (!st.empty()) {
+            result = st.top() + result;
+            st.pop();
+        }
+        
+        return result;
+    }
+
+private:
+    vector<int> computeLPS(string &pattern) {
+        int m = pattern.size();
+        vector<int> lps(m, 0);
+        for (int i = 1, j = 0; i < m;) {
+            if (pattern[i] == pattern[j]) {
+                lps[i++] = ++j;
+            } else if (j) {
+                j = lps[j - 1];
+            } else {
+                lps[i++] = 0;
+            }
+        }
+        return lps;
+    }
+};

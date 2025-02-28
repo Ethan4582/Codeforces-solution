@@ -1,0 +1,25 @@
+
+
+
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& it) {
+        vector<vector<int>> merg; 
+        sort(it.begin(), it.end()); // Sort intervals based on the start time
+        for (int i = 0; i < it.size(); i++) {
+            if (merg.empty() || merg.back()[1] < it[i][0]) {
+                merg.push_back(it[i]); // No overlap, add the interval
+            } else {
+                merg.back()[1] = max(merg.back()[1], it[i][1]); // Overlap, merge intervals
+            }
+        }
+        return merg;
+    }
+};
+
+/*
+Time Complexity: O(n log n)
+Space Complexity: O(n)
+*/ 
+

@@ -82,3 +82,53 @@ public:
         return concatenated.find(s) != string::npos;
     }
 };
+
+
+class Solution {
+private: 
+vector<int> computeLPS(string &pat) {
+    int n = pat.length();
+    vector<int> lps(n, 0);
+    int len = 0, i = 1; 
+
+    while (i < n) {
+        if (pat[i] == pat[len]) {
+            len++; 
+            lps[i++] = len;
+        } else if (len > 0) {
+            len = lps[len - 1];  
+        } else {
+            lps[i++] = 0;
+        }
+    }
+    return lps;
+}
+
+bool kmpSearch(string &text, string &pat) {
+    vector<int> lps = computeLPS(pat); 
+    int i = 0, j = 0; 
+    int n = text.length(), m = pat.length();
+
+    while (i < n) {
+        if (text[i] == pat[j]) {
+            i++, j++;
+            if (j == m) return true;  // Found match
+        } else if (j > 0) {
+            j = lps[j - 1];  // Move back using LPS
+        } else {
+            i++;
+        }
+    }
+    return false;
+} 
+
+public:
+    bool rotateString(string s, string goal) {
+        if (s.length() != goal.length()) return false;
+        string curr = goal + goal;
+        return kmpSearch(curr, s); 
+    }
+};
+
+// Time Complexity: O(N) for computing LPS + O(N) for KMP search = O(N)
+// Space Complexity: O(N) for LPS array

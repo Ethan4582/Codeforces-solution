@@ -1,0 +1,34 @@
+class Solution {
+private: 
+vector<int> computeLPS(string &pat) {
+    int n = pat.length();
+    vector<int> lps(n, 0);
+    int len = 0, i = 1; 
+
+    while (i < n) {
+        if (pat[i] == pat[len]) {
+            len++; 
+            lps[i++] = len;
+        } else if (len > 0) {
+            len = lps[len - 1];  
+        } else {
+            lps[i++] = 0;
+        }
+    }
+    return lps;
+}
+
+public:
+    string longestPrefix(string s) {
+        vector<int> lps = computeLPS(s); 
+        int len = lps.back();  
+        if(len==0){
+            return "";
+        }
+
+        return s.substr(0, len); 
+    }
+};
+
+// Time Complexity: O(N) for computing LPS
+// Space Complexity: O(N) for storing the LPS array

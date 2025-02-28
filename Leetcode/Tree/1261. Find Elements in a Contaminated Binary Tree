@@ -1,0 +1,96 @@
+
+class FindElements {
+private:
+    TreeNode* rt;
+
+ 
+    void dfs(TreeNode* node, int x) {
+        if (!node) return;
+        node->val = x
+
+        dfs(node->left, 2 * x + 1);
+        dfs(node->right, 2 * x + 2);
+    }
+
+  
+    bool findfs(TreeNode* node, int x) {
+        if (!node) return false;
+        if (node->val == x) return true;
+
+        return findfs(node->left, x) || findfs(node->right, x);
+    }
+
+public:
+    FindElements(TreeNode* rt) {
+        this->rt = rt;
+        dfs(rt, 0);
+    }
+
+    bool find(int tar) {
+        return findfs(rt, tar);
+    }
+};
+
+
+
+
+class FindElements {
+    unordered_set<int> st;
+private:
+    TreeNode* rt;
+
+ 
+    void dfs(TreeNode* node, int x) {
+        if (!node) return;
+        node->val = x;
+        st.insert(x);
+
+        dfs(node->left, 2 * x + 1);
+        dfs(node->right, 2 * x + 2);
+    }
+
+  
+    bool findfs(TreeNode* node, int x) {
+        // if (!node) return false;
+        // if (node->val == x) return true;
+
+        // return findfs(node->left, x) || findfs(node->right, x);
+        return st.count(x)>0;
+    }
+
+public:
+    FindElements(TreeNode* rt) {
+        this->rt = rt;
+        dfs(rt, 0);
+    }
+
+    bool find(int target) {
+        return findfs(rt, target);
+    }
+};
+
+
+class FindElements {
+private:
+    TreeNode* root;
+    unordered_set<int> values;
+
+public:
+    FindElements(TreeNode* root) {
+        this->root = root;
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 0});
+        while (!q.empty()) {
+            auto [node, val] = q.front();
+            q.pop();
+            node->val = val;
+            values.insert(val);
+            if (node->left) q.push({node->left, 2 * val + 1});
+            if (node->right) q.push({node->right, 2 * val + 2});
+        }
+    }
+
+    bool find(int target) {
+        return values.count(target) > 0;
+    }
+};

@@ -1,0 +1,54 @@
+class Solution {
+private: 
+    void solve(int idx, vector<int>& nums, vector<int>& curr, set<vector<int>>& st) {
+        if (idx == nums.size()) {
+            st.insert(curr);
+            return;
+        }
+        curr.push_back(nums[idx]);
+        solve(idx + 1, nums, curr, st);
+        curr.pop_back();
+        while (idx + 1 < nums.size() && nums[idx + 1] == nums[idx]) ++idx;
+        solve(idx + 1, nums, curr, st);
+    }
+
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        set<vector<int>> st; 
+        vector<int> curr;
+        solve(0, nums, curr, st);
+        return vector<vector<int>>(st.begin(), st.end());
+    }
+};
+
+// Time: O(N^2 * 2^N)
+// Space: O(N)
+
+
+class Solution {
+private:
+    void solve(int idx, vector<int>& nums, vector<int>& curr, vector<vector<int>>& res) {
+        res.push_back(curr);
+        for (int i = idx; i < nums.size(); i++) {
+            if (i > idx && nums[i] == nums[i - 1]) continue;
+            curr.push_back(nums[i]);
+            solve(i + 1, nums, curr, res);
+            curr.pop_back();
+        }
+    }
+
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+        vector<int> curr;
+        solve(0, nums, curr, res);
+        return res;
+    }
+};
+
+/*
+Time Complexity: O(2^n) - Generates all subsets while handling duplicates.
+Space Complexity: O(n) - Recursion depth.
+*/

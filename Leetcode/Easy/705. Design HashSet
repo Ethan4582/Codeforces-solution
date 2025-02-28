@@ -148,3 +148,40 @@ public:
         return st.find(key) != st.end();
     }
 };
+	
+	class MyHashSet {
+private: 
+    vector<list<int>> map; // Use list for easier removal
+    int n = 1e5; // Size of the hash set
+
+public:
+    MyHashSet() {
+        map.resize(n);
+    }
+    
+    void add(int key) {
+        int idx = key % n;
+        if (!contains(key)) { // Check if key already exists
+            map[idx].push_back(key); // Add to the end of the list
+        }
+    }
+    
+    void remove(int key) {
+        int idx = key % n;
+        map[idx].remove(key); // Remove key directly from the list
+    }
+    
+    bool contains(int key) {
+        int idx = key % n;
+        for (auto it : map[idx]) {
+            if (it == key) return true; // Check if key exists
+        }
+        return false; 
+    }
+};
+
+// Time Complexity for add and contains: O(n) in the worst case, O(1) on average
+// Time Complexity for remove: O(n) in the worst case, O(1) on average
+// Space Complexity: O(n) for the hash set
+
+	

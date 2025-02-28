@@ -1,0 +1,104 @@
+class Solution {
+private:  
+    bool isvalid(string curr) {
+        int cnt = 0; 
+        for (char it : curr) {
+            if (it == '(') {
+                cnt++;
+            } else {
+                cnt--;
+                if (cnt < 0) return false; 
+            }
+        }
+        return cnt == 0; 
+    }
+
+    void solve(string& curr, int n, vector<string>& res) {
+        if (curr.size() == 2 * n) {
+            if (isvalid(curr)) res.push_back(curr); 
+            return; 
+        }
+
+      
+        curr.push_back('('); 
+        solve(curr, n, res); 
+        curr.pop_back(); // Undo
+
+        
+        curr.push_back(')'); 
+        solve(curr, n, res); 
+        curr.pop_back(); 
+    }
+
+public:
+    vector<string> generateParenthesis(int n) {
+        string curr = ""; 
+        vector<string> res; 
+        solve(curr, n, res);
+        return res;
+    }
+};
+
+/*
+Time Complexity: O(4^n / sqrt(n)) (Catalan number)
+Space Complexity: O(n) (Recursion depth)
+*/
+
+
+----------------------- optmized   
+
+
+class Solution {
+private:  
+    void solve(string& curr, int open, int close, int n, vector<string>& res) {
+        if (curr.size() == 2 * n) {
+            res.push_back(curr); 
+            return; 
+        }
+
+     
+        if (open < n) {
+            curr.push_back('(');
+            solve(curr, open + 1, close, n, res);
+            curr.pop_back(); // Undo
+        }
+
+
+        if (close < open) {
+            curr.push_back(')');
+            solve(curr, open, close + 1, n, res);
+            curr.pop_back(); 
+        }
+    }
+
+public:
+    vector<string> generateParenthesis(int n) {
+        string curr = ""; 
+        vector<string> res; 
+        solve(curr, 0, 0, n, res);
+        return res;
+    }
+};
+
+/*
+Time Complexity: O(4^n / sqrt(n)) (Catalan number)
+Space Complexity: O(n) (Recursion depth)
+*/
+
+
+// Time: O(N^2 * C(N)) where C(N) is the Nth Catalan number
+// Space: O(C(N))
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        if (n <= 0) return { "" };
+        auto prev = generateParenthesis(n - 1);
+        unordered_set<string> s;
+        for (int i = 0; i < prev.size(); ++i) {
+            for (int j = 0; j < 2 * n - 1; ++j) {
+                s.insert(prev[i].substr(0, j) + "()" + prev[i].substr(j));
+            }
+        }
+        return vector<string>(s.begin(), s.end());
+    }
+}

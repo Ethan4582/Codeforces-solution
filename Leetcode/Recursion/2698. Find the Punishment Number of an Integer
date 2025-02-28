@@ -1,0 +1,146 @@
+class Solution {
+public:
+    bool CanPartition(int num, int target) {
+    
+        if (target < 0 || num < target) {
+            return false;
+        }
+
+       
+        if (num == target) {
+            return true;
+        }
+
+        
+        return CanPartition(num / 10, target - num % 10) ||
+               CanPartition(num / 100, target - num % 100) ||
+               CanPartition(num / 1000, target - num % 1000);
+    }
+
+    int punishmentNumber(int n) {
+        int ans = 0;
+
+       
+        for (int i = 1; i <= n; i++) {
+            int curr = i * i;
+
+          
+            if (CanPartition(curr, i)) {
+                ans += curr;
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+-------------------------- resrssion  
+
+
+class Solution {
+public:
+    bool help(int i, int currsum, string &s, int t) {
+     
+        if (i == s.length()) {
+            return currsum == t; 
+        }
+
+      
+        if (currsum > t) return false;
+
+        bool check = false;
+
+        // Try different partitioning of numbers
+        for (int j = i; j < s.size(); j++) {
+            string sub = s.substr(i, j - i + 1); 
+            int val = stoi(sub); 
+            
+            // Recursive call to explore further partitions
+            check = check || help(j + 1, currsum + val, s, t);
+
+          
+            if (check) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int punishmentNumber(int n) {
+        int ans = 0;
+
+        for (int i = 1; i <= n; i++) {
+            int curr = i * i;
+            string s = to_string(curr);
+            
+           
+            if (help(0, 0, s, i)) {
+                ans += curr;
+            }
+        }
+        return ans;
+    }
+};
+
+
+----------------- recursion and memoization [ as ther are some number that apper so no need to compute themm --------------------- 
+// TC: O(n * log(n)^2)
+// - O(n) for iterating numbers 1 to n
+// - O(log(n)^2) for memoized recursive calls (since substrings are limited)
+
+// SC: O(n log(n))
+// - Recursion depth is O(log(n))
+// - Memoization table stores O(log(n)^2) entries
+
+
+class Solution {
+public:
+    bool help(int i, int currsum, string &s, int t, vector<vector<int>>& nums) {
+        if (i == s.length()) {
+            return currsum == t;
+        }
+
+        if (currsum > t) return false;
+
+        if (nums[i][currsum] != -1) {
+            return nums[i][currsum];
+        }
+
+        bool check = false;
+
+        for (int j = i; j < s.size(); j++) {
+            string sub = s.substr(i, j - i + 1);
+            int val = stoi(sub);
+
+            check = check || help(j + 1, currsum + val, s, t, nums);
+
+            if (check) {
+                return nums[i][currsum] = true;  // Store result in memo table
+            }
+        }
+
+        return nums[i][currsum] = false;
+    }
+
+    int punishmentNumber(int n) {
+        int ans = 0;
+
+        for (int i = 1; i <= n; i++) {
+            int curr = i * i;
+            string s = to_string(curr);
+
+            // Memoization table initialized to -1
+            vector<vector<int>> nums(s.length(), vector<int>(i + 1, -1));
+
+            if (help(0, 0, s, i, nums)) {
+                ans += curr;
+            }
+        }
+        return ans;
+    }
+};

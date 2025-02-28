@@ -1,0 +1,105 @@
+class Solution {
+public:
+    bool checkValidString(string s) {
+        stack<int> st1, st2; 
+        int i = 0;
+
+        while (i < s.length()) {
+            if (s[i] == '(') {
+                st1.push(i);
+            } else if (s[i] == '*') {
+                st2.push(i); 
+            } else {
+                if (!st1.empty()) {
+                    st1.pop();
+                } else if (!st2.empty()) {
+                    st2.pop();
+                } else {
+                    return false;
+                }
+            }
+            i++;
+        }
+
+    
+        while (!st1.empty() && !st2.empty()) {
+            if (st1.top() > st2.top()) {
+                return false; 
+            }
+            st1.pop();
+            st2.pop();
+        }
+
+        return st1.empty(); 
+    }
+};
+
+
+class Solution {
+public:
+    bool checkValidString(string s) {
+        stack<int> st1, st2; 
+        int i = 0;
+
+        while (i < s.length()) {
+            if (s[i] == '(') {
+                st1.push(i);
+            } else if (s[i] == '*') {
+                st2.push(i); 
+            } else {
+                if (!st1.empty()) {
+                    st1.pop();
+                } else if (!st2.empty()) {
+                    st2.pop();
+                } else {
+                    return false;
+                }
+            }
+            i++;
+        }
+
+    
+        while (!st1.empty() && !st2.empty()) {
+            if (st1.top() > st2.top()) {
+                return false; 
+            }
+            st1.pop();
+            st2.pop();
+        }
+
+        return st1.empty(); 
+    }
+};
+	
+	class Solution {
+public:
+    bool checkValidString(string s) {
+     
+        int i = 0;
+        int mn=0, mx=0;
+
+        while (i < s.length()) {
+           if(s[i]=='('){
+            mn+=1;
+            mx+=1;
+           }else if(s[i]==')'){
+            mn-=1;
+            mx-=1;
+           }else{
+             mn-=1;
+            mx+=1;
+           }
+
+           if(mn<0) { // to avoid the astrke count 
+            mn=0;
+           }
+           if(mx<0){
+            return false;
+           }
+            i++;
+        }
+   return (mn==0); // if we can remov all the possibil clsoig 
+    
+    }
+};
+

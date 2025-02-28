@@ -1,0 +1,46 @@
+class Solution {
+public:
+    struct Data {
+        int st; 
+        int end; 
+        int idx;
+    };
+
+  
+    static bool comp(Data a, Data b) {
+        if (a.end == b.end) 
+            return a.idx < b.idx;  
+        return a.end < b.end;
+    }
+
+    int maxMeetings(vector<int>& s, vector<int>& end) {
+        int n = s.size();
+        vector<Data> arr(n);
+
+        
+        for (int i = 0; i < n; i++) {
+            arr[i] = {s[i], end[i], i + 1};
+        }
+
+        sort(arr.begin(), arr.end(), comp);
+
+        vector<int> pos;
+        int cnt = 1;  
+        int endTime = arr[0].end;
+        pos.push_back(arr[0].idx);
+
+  
+        for (int i = 1; i < n; i++) {
+            if (arr[i].st > endTime) {
+                cnt++;
+                pos.push_back(arr[i].idx);
+                endTime = arr[i].end;
+            }
+        }
+
+        return cnt;
+    }
+};
+
+// Time Complexity: O(N log N) due to sorting
+// Space Complexity: O(N) for storing meetings
