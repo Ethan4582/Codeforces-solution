@@ -1,0 +1,88 @@
+class Solution {
+private: 
+    bool valid(int row, int col, vector<string> &board) {
+        
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 'Q') return false;
+        }
+
+        for (int i = row; i >= 0; i--) {
+            if (board[i][col] == 'Q') return false;
+        }
+
+        for (int i = row, j = col; i >= 0 && j < board.size(); i--, j++) {
+            if (board[i][j] == 'Q') return false;
+        }
+
+        return true; 
+    }
+
+    void solve(int row, vector<vector<string>> &ans, vector<string> &curr, int n) {
+        if (row == n) {
+            ans.push_back(curr); 
+            return;
+        }
+
+        for (int col = 0; col < n; col++) { 
+            if (valid(row, col, curr)) {
+                curr[row][col] = 'Q'; 
+                solve(row + 1, ans, curr, n); 
+                curr[row][col] = '.'; 
+            }
+        }
+    }
+
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans; 
+        vector<string> curr(n, string(n, '.')); // chess board
+
+        solve(0, ans, curr, n);
+        return ans;
+    }
+};
+
+
+
+optmized the search for vliad post using the hash map 
+
+// Time: O(N!)
+// Space: O(N^2)
+
+
+class Solution {
+private: 
+
+    void solve(int col, vector<vector<string>> &ans, vector<string> &curr, int n ,  vector<int> & left, vector<int> & upperd , vector<int> & lowerd) {
+        if (col == n) {
+            ans.push_back(curr); 
+            return;
+        }
+
+        for (int row = 0; row < n; row++) { 
+            if (left[row]==0 && upperd[n-1 + col-row]==0 && lowerd[col +row]==0) {
+                curr[col][row] = 'Q'; 
+                //mrk the not valid place 
+                left[row]=1; 
+                upperd[n-1 + col-row]=1;
+                 lowerd[col +row]=1;
+               solve(col+1, ans, curr, n , left ,upperd,lowerd);
+                // umarked 
+                curr[col][row] = '.'; 
+                 left[row]=0; 
+                upperd[n-1 + col-row]=0;
+                 lowerd[col +row]=0;
+            }
+        }
+    }
+
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans; 
+        vector<string> curr(n, string(n, '.')); // chess board 0(n)
+           
+           vector<int> left(n, 0), upperd (2*n-1, 0) ,lowerd(2*n-1, 0);
+        solve(0, ans, curr, n , left ,upperd,lowerd);
+        return ans;
+    }
+};

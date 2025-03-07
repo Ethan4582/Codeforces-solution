@@ -1,0 +1,47 @@
+class Solution {
+private: 
+    int dirs[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}}; 
+    char moves[4] = {'R', 'L', 'D', 'U'};
+
+    void solve(int row, int col, vector<vector<int>> &b, string &curr, vector<string> &res, int m, int n) {
+        if (row == m - 1 && col == n - 1) { 
+            res.push_back(curr);
+            return;
+        }
+        
+        // Mark the cell as visited
+        char temp = b[row][col];  
+        b[row][col] = '$';  
+        
+        for (int i = 0; i < 4; i++) {
+            int newRow = row + dirs[i][0];
+            int newCol = col + dirs[i][1];
+
+            if (newRow >= 0 && newCol >= 0 && newRow < m && newCol < n && b[newRow][newCol] == 1) {
+                curr.push_back(moves[i]); 
+                solve(newRow, newCol, b, curr, res, m, n);
+                curr.pop_back(); // Backtrack
+            }
+        }
+
+        
+        b[row][col] = temp;
+    }
+
+public:
+    vector<string> findPath(vector<vector<int>> &b) {
+        int m = b.size(), n = b[0].size();
+        vector<string> res;
+        string curr = ""; 
+
+        if (b[0][0] == 1) {
+            solve(0, 0, b, curr, res, m, n);
+        }
+        return res;
+    }
+};
+
+/*
+Time Complexity: O(4^(m*n)) - Backtracking explores all possible paths.
+Space Complexity: O(1) - No extra space used (in-place modifications).
+*/

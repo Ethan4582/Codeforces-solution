@@ -1,0 +1,38 @@
+class Solution {
+private: 
+bool check(vector<vector<char>>& b, int row, int col, char k) {
+    for (int i = 0; i < 9; i++) {
+        if (b[row][i] == k) return false; 
+        if (b[i][col] == k) return false;
+        
+      
+        int subRow = 3 * (row / 3) + i / 3;
+        int subCol = 3 * (col / 3) + i % 3;
+        if (b[subRow][subCol] == k) return false;
+    }
+    return true;
+}
+
+bool solve(vector<vector<char>>& b) {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (b[i][j] == '.') { 
+                for (char k = '1'; k <= '9'; k++) {
+                    if (check(b, i, j, k)) {
+                        b[i][j] = k;
+                        if (solve(b)) return true; 
+                        b[i][j] = '.';
+                    }
+                }
+                return false; 
+            }
+        }
+    }
+    return true; 
+}
+
+public:
+    void solveSudoku(vector<vector<char>>& b) {
+        solve(b);
+    }
+};

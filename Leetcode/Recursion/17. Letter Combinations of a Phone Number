@@ -1,0 +1,32 @@
+class Solution {
+private: 
+    void solve(string d, string curr, int i, vector<string> &ans, vector<string> &chk) {
+        if (i >= d.size()) {
+            ans.push_back(curr); 
+            return;
+        }
+        int nm = d[i] - '0';
+        string val = chk[nm]; 
+        for (int j = 0; j < val.length(); j++) {
+            curr.push_back(val[j]);
+            solve(d, curr, i + 1, ans, chk); // ansure curr size =d 
+            curr.pop_back();
+        }
+        // 2  abc
+        //  a x 
+        //  ab ax ax 
+
+    }
+public:
+    vector<string> letterCombinations(string d) {
+        vector<string> chk = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"}; 
+        vector<string> ans;
+        if (d.length() == 0) {
+            return ans;
+        }
+        int i = 0;
+        string curr;
+        solve(d, curr, i, ans, chk);
+        return ans;
+    }
+};

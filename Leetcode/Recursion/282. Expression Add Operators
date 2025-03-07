@@ -1,0 +1,38 @@
+class Solution {
+private:
+    void solve(int idx, string curr, long currsum, long preval, string &s, int x, vector<string> &ans) {
+        if (idx == s.length()) {
+            if (currsum == x) {
+                ans.push_back(curr);
+            }
+            return; 
+        }
+
+        for (int j = idx; j < s.length(); j++) {
+            string part = s.substr(idx, j - idx + 1);
+            long long val = stoll(part);
+
+         
+            if (part.size() > 1 && part[0] == '0') break;
+
+            if (idx == 0) { 
+                solve(j + 1, curr + part, val, val, s, x, ans);
+            } else {
+                solve(j + 1, curr + "+" + part, currsum + val, val, s, x, ans);
+                solve(j + 1, curr + "-" + part, currsum - val, -val, s, x, ans);
+                solve(j + 1, curr + "*" + part, currsum - preval + preval * val, preval * val, s, x, ans);
+            }
+        }
+    }
+
+public:
+    vector<string> addOperators(string num, int x) {
+        vector<string> ans;
+        solve(0, "", 0, 0, num, x, ans);
+        return ans;
+    }
+};
+
+
+Time Complexity -:  O(4 N) (Each digit can have 4 choices: +, -, *, or continue).
+No explicit eval() needed, reducing unnecessary computation.

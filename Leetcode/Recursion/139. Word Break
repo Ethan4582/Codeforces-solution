@@ -1,0 +1,26 @@
+class Solution {
+private: 
+bool solve(int idx, string &curr, string &s, unordered_map<string, int> &mpp) {
+    if (idx == s.size()) return true; 
+  
+    for (int i = idx; i < s.size(); i++) {
+        curr = s.substr(idx, i - idx + 1); 
+        
+        if (mpp.find(curr) != mpp.end()) { 
+            if (solve(i + 1, curr, s, mpp)) return true;
+        }
+    }
+    return false;
+}
+
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_map<string, int> mpp; 
+        for (string &word : wordDict) {
+            mpp[word]++;
+        }
+        string curr = "";
+        return solve(0, curr, s, mpp);
+
+    }
+};

@@ -1,0 +1,79 @@
+class Solution {
+private: 
+    bool solve(int idx, string& str, string& curr, string& s) {
+        if (idx > str.length()) return false;  
+        if (curr == s) return true;  
+
+        for (int i = 0; i < str.length(); i++) {
+            curr += str[i];  
+            if (solve(idx + 1, str, curr, s)) return true;  
+            curr.pop_back();  
+        }
+        return false;  
+    }
+
+public:
+    bool exist(vector<vector<char>>& b, string s) {
+        string str = "";  
+        for (int i = 0; i < b.size(); i++) {  
+            for (int j = 0; j < b[0].size(); j++) {  
+                str += b[i][j];  
+            }
+        }
+        string curr = "";  
+        return solve(0, str, curr, s);  
+    }
+};
+
+/*
+Time Complexity: O(2^n) - Generates all possible combinations.
+Space Complexity: O(n) - Recursion depth.
+*/
+
+
+
+class Solution {
+private: 
+    int dirs[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+    bool solve(int idx, int i, int j, vector<vector<char>>& b, string &s, int m, int n) {
+        if (idx == s.size()) return true;  
+
+        if (i < 0 || j < 0 || i >= m || j >= n || b[i][j] == '$' || b[i][j] != s[idx]) 
+            return false;  
+
+        char temp = b[i][j];  
+        b[i][j] = '$';  
+
+        for (int k = 0; k < 4; k++) {
+            int i1 = i + dirs[k][0];
+            int j1 = j + dirs[k][1];
+
+            if (solve(idx + 1, i1, j1, b, s, m, n)) 
+                return true;  
+        }
+
+        b[i][j] = temp;
+        return false;
+    }
+
+public:
+    bool exist(vector<vector<char>>& b, string s) {
+        int m = b.size(), n = b[0].size();
+
+        for (int i = 0; i < m; i++) {  
+            for (int j = 0; j < n; j++) {  
+                if (b[i][j] == s[0]) {
+                    if (solve(0, i, j, b, s, m, n)) 
+                        return true;  
+                }
+            }
+        }
+        return false;
+    }
+};
+
+/*
+Time Complexity: O(m * n * 4^k)
+Space Complexity: O(k)
+*/
