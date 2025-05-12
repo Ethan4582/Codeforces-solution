@@ -1,0 +1,55 @@
+
+f(n){
+   if(n<=1){
+      return n;
+   }
+
+   return f(n-2)= f(n-1);
+}
+
+// DP  -> to convert recurssion into DP 
+
+s-1 -> intialize the dp array  of size whocj is eqaul to max subproblem that can be solved 
+ s-2 -> check if the subproble is previous solved 
+
+
+ 
+  vector< int> dp(n+1 , -1);
+f(n, vector<int> & dp){
+   if(n<=1){
+      return n;
+   }
+   if(dp[n]!=-1){
+      return dp[n];
+   }
+
+   return f(n-2, dp) + f(n-1, dp);
+}
+
+Tc- 0(n); 
+sc- 0(n);
+
+
+------------------------ recurssion into tabluation format ------------------------ 
+
+- this elminate the recurssion stack space 
+
+vector< int> dp(n+1 , -1);
+
+dp[0]=0 , dp[1]=1; 
+  for(int i =2 ; i <=n ;i++){
+    dp[i]= dp[i-1] + dp[i-2];  // it like presum 
+  }
+
+  --------In order to optmize the space of 0(n)
+
+  int prev2 =0 , prev1 =1; 
+  for(int i =2; i <=n ; i++){
+   int curr_i = prev2 + prew1 ;  
+     prev2= prev1;
+  curr_i=prev;
+  }
+
+  return prev;
+
+  Sc- 0(1) as we do not use any stack or array space 

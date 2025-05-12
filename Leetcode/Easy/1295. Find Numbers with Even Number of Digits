@@ -1,0 +1,82 @@
+
+class Solution {
+private: 
+bool check(int n){
+    int dig=0;
+    while(n!=0){
+        dig++; 
+        n=n/10;
+    }
+    if(dig&1){
+        return false;
+    }
+    return true;
+}
+public:
+    int findNumbers(vector<int>& nums) {
+        int ans =0;
+        for(int i =0 ; i < nums.size(); i++){
+            if(check(nums[i])){
+                ans++;
+            }
+        }
+        return ans ;
+    }
+};
+
+
+
+class Solution {
+public:
+    int findNumbers(vector<int>& nums) {
+        // Counter to count the number of even digit integers
+        int ans = 0;
+
+        for (int it : nums) {
+            // Convert it to string and find its length
+            int length = to_string(it).length();
+            if (length % 2 == 0)
+                ans++;
+        }
+
+        return ans;
+    }
+};
+
+
+Tc- 0(N(log(M)))
+sc- 0(1)
+
+class Solution {
+public:
+    int findNumbers(vector<int>& nums) {
+        int ans=0;
+
+        for(int it : nums){
+            int cnt=(int)floor(log10(it))+1;
+            if(cnt%2==0){
+                ans++;
+            }
+        }
+        return ans;
+    }
+};
+
+
+Tc- 0(N)
+sc- 0(1)
+
+class Solution {
+public:
+    int findNumbers(vector<int>& nums) {
+      
+        int ans = 0;
+
+        for (int it : nums) {
+            if ((it >= 10 && it <= 99) || (it >= 1000 && it <= 9999) || it == 100000)
+                ans++;
+        }
+
+        return ans;
+    }
+};

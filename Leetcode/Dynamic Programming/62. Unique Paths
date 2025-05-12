@@ -1,0 +1,91 @@
+
+----------- recurisve function ------------------------
+
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+       
+        if (m == 1 || n == 1) {
+            return 1; 
+        }
+
+        return uniquePaths(m - 1, n) + uniquePaths(m, n - 1);
+    }
+};
+
+
+Time Complexity: O(2^{m+n}) (exponential due to overlapping subproblems)
+Space Complexity: O(m+n) (due to the recursion stack)
+
+----------------------------- top down approach -----------------------
+
+class Solution {
+private:
+    int solve(int m, int n, vector<vector<int>>& dp) {
+        // Base case: If we reach the first row or first column
+        if (m == 0 || n == 0) {
+            return 1; // Only one way to reach the destination
+        }
+        // Check if already computed
+        if (dp[m][n] != -1) {
+            return dp[m][n];
+        }
+        // Recursive calls
+        dp[m][n] = solve(m - 1, n, dp) + solve(m, n - 1, dp);
+        return dp[m][n];
+    }
+
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, -1)); // Memoization table
+        return solve(m - 1, n - 1, dp); // Start from the bottom-right corner
+    }
+};
+
+/*
+Time Complexity: O(m * n)
+Space Complexity: O(m * n)
+*/
+
+
+   --------------------- Tabulation  bootm upproch ------------------- 
+
+   decleare base case 
+   express all the state in for loop 
+   copy the function recursion  the for loop 
+
+
+// Time: O(MN)
+// Space: O(MN)
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, 1));
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                dp[i][j] = dp[i][j - 1] + dp[i - 1][j];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+};
+
+
+
+
+   ---------------------- DP + Space Optimization----------------
+
+   // Time: O(MN)
+// Space: O(MN)
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+  vector<int> dp(n, 1);
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                dp[j]+= dp[j - 1];
+            }
+        }
+        return dp[n-1];
+    }
+};

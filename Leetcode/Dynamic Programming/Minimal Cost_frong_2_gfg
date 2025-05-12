@@ -1,0 +1,46 @@
+class Solution {
+   private: 
+   int solve(int idx, vector<int>& arr, int k) { 
+       if (idx == 0) {
+           return 0;
+       }
+       int ans = INT_MAX;
+       for (int i = 1; i <= k; i++) {
+           if (idx - i >= 0) {
+               int diff = solve(idx - i, arr, k) + abs(arr[idx] - arr[idx - i]);
+               ans = min(ans, diff);
+           }
+       }
+       return ans; 
+   }
+   
+   public:
+       int minimizeCost(int k, vector<int>& arr) {
+           int n = arr.size();
+           return solve(n - 1, arr, k);
+       }
+   };
+   
+
+   Tc- 0(n ) * k [ because for each idx i take k jump]
+
+
+
+   class Solution {
+      public:
+        int minimizeCost(int k, vector<int>& arr) {
+           int n = arr.size();
+            vector<int> dp(n, INT_MAX);
+            dp[0] = 0; 
+            for (int i = 1; i < n; i++) {
+                for (int j = 1; j <= k; j++) { 
+                    if (i - j >= 0) { 
+                        dp[i] = min(dp[i], dp[i - j] + abs(arr[i] - arr[i - j]));
+                    }
+                }
+            }
+    
+            return dp[n - 1]; 
+        }
+    };
+    

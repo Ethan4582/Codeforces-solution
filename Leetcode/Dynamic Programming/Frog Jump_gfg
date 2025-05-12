@@ -1,0 +1,102 @@
+class Solution {
+private: 
+int solve(int idx, vector<int>& h) {
+    if (idx == 0) return 0; 
+    
+    int left = solve(idx - 1, h) + abs(h[idx] - h[idx - 1]);
+    
+    int right = INT_MAX;
+    if (idx > 1) {
+        right = solve(idx - 2, h) + abs(h[idx] - h[idx - 2]);
+    }
+    
+    return min(left, right);
+}
+
+public:
+    int minCost(vector<int>& height) {
+        int n = height.size();
+        return solve(n - 1, height);  // Start from the last stone
+    }
+};
+
+
+
+//! memoization 
+
+class Solution {
+   private: 
+   int solve(int idx, vector<int> & vis ,vector<int>& h) {
+       if (idx == 0) return 0; 
+       
+       if(vis[idx]!=-1){  // meoiztion
+        return vis[idx];
+       }
+               
+       int left = solve(idx - 1, vis ,h) + abs(h[idx] - h[idx - 1]);
+       
+   
+       
+       int right = INT_MAX;
+       if (idx > 1) {
+           right = solve(idx - 2,vis , h) + abs(h[idx] - h[idx - 2]);
+       }
+       
+       return min(left, right);
+   }
+   
+   public:
+       int minCost(vector<int>& height) {
+           int n = height.size();
+           vector<int> vis( n+ 1 , -1);
+           return solve(n - 1, vis, height);  
+       }
+   };
+
+
+
+   class Solution {
+    public:
+        int minCost(vector<int>& height) {
+            int n = height.size();
+            if (n == 1) return 0; // Base case
+    
+            vector<int> dp(n, 0); // 1D DP array
+            dp[0] = 0;
+            dp[1] = abs(height[1] - height[0]);
+    
+            for (int i = 2; i < n; i++) {
+                dp[i] = min(dp[i - 1] + abs(height[i] - height[i - 1]), 
+                            dp[i - 2] + abs(height[i] - height[i - 2]));
+            }
+    
+            return dp[n - 1]; // Minimum cost to reach last step
+        }
+    };
+
+    
+   class Solution {
+    public:
+        int minCost(vector<int>& height) {
+            int n = height.size();
+             int prv1=0 , prv2=0; 
+             
+    
+            for (int i = 1; i < n; i++) {
+                
+                int  lf=prv1 + abs(height[i] - height[i - 1]);
+                int  rw=INT_MAX;
+                if(i>1){
+                  rw=  prv2 + abs(height[i] - height[i - 2]);
+                }
+    
+                int curr = min( lf , rw);
+                
+                 prv2= prv1;
+                 prv1=curr;
+            }
+    
+            return prv1; 
+        }
+    };
+    

@@ -53,32 +53,32 @@
 
 
 
-// class Solution {
-//   public:
-//     vector<int> bfsOfGraph(vector<vector<int>> &adj) {
-//         int n = adj.size(); // number of nodes
-//         int vis[n] = {0}; // visited array
-//         vis[0] = 1; // mark the first or root node 
-//         queue<int> q; 
-//         q.push(0); // added the first adjacent list of 0 node 
-//         vector<int> bfs; // answer store for BFS traversal 
+class Solution {
+  public:
+    vector<int> bfsOfGraph(vector<vector<int>> &adj) {
+        int n = adj.size(); // number of nodes
+        int vis[n] = {0}; // visited array
+        vis[0] = 1; // mark the first or root node 
+        queue<int> q; 
+        q.push(0); // added the first adjacent list of 0 node 
+        vector<int> bfs; // answer store for BFS traversal 
         
-//         while (!q.empty()) {
-//             int node = q.front();
-//             q.pop(); // get the current node for traversal, mark it visited, and add all the neighbours in the queue 
-//             bfs.push_back(node); // use push_back to add the node to bfs
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop(); // get the current node for traversal, mark it visited, and add all the neighbours in the queue 
+            bfs.push_back(node); // use push_back to add the node to bfs
             
-//             // now we check the neighbour nodes 
-//             for (auto it : adj[node]) { // visit all the node neighbours stored in the adj list 
-//                 if (!vis[it]) { // if not visited, mark it 
-//                     vis[it] = 1;
-//                     q.push(it);
-//                 }
-//             }
-//         }
-//         return bfs;  
-//     }
-// };
+            // now we check the neighbour nodes 
+            for (auto it : adj[node]) { // visit all the node neighbours stored in the adj list 
+                if (!vis[it]) { // if not visited, mark it 
+                    vis[it] = 1;
+                    q.push(it);
+                }
+            }
+        }
+        return bfs;  
+    }
+};
 
 
 // #include <bits/stdc++.h>
@@ -157,31 +157,7 @@
 // - Continue until all reachable nodes are visited.
 
 
-// class Solution {
-//  void dfs(int node , vector<vector<int>>& adj, vector<int> vis  , vector<int>&dfsans){
-     
-//      vis[node]=1;// mark that current node as visted 
-//       dfsans.push_back(node);
-//      // trvers for all the neighboue 
-//      for(auto it : adj[node]){
-//          if(!vis[it]){
-//              dfs(it , adj, vis, dfsans); // if not visted we explore it 
-//          }
-//      }
-//  }
- 
-//   public:
-//     // Function to return a list containing the DFS traversal of the graph.
-//     vector<int> dfsOfGraph(vector<vector<int>>& adj) {
-//         int n = adj.size();// n  is number if node in the graph 
-//         vector<int> vis(n, 0); 
-//         int start=0; 
-//         vector<int> dfsans;
-//         // first dfs call to strt 
-//         dfs(start, adj, vis, dfsans); 
-//         return dfsans;
-//     }
-// };
+
 
 // Sc- 0(3N) -> store, visted, revsstact for work skew it can be 0(n)
 

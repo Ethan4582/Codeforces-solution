@@ -1,0 +1,23 @@
+https://www.geeksforgeeks.org/problems/tower-of-hanoi-1587115621/1
+
+
+- Move n−1 disks from the source peg to the helper peg.
+- Move the nth disk from the source peg to the destination peg.
+- Move the n−1 disks from the helper peg to the destination peg  [ again use the not used pole for n-1 transfer
+- we use the rod c to make the A→B for n-1 move to ensure it is not voilted
+
+class Solution {
+  public:
+
+    int towerOfHanoi(int n, int from, int to, int aux) {
+        int move=0; 
+        if(n>=1){
+            
+            move+=towerOfHanoi(n-1 , from , aux , to );
+            move++;// move from -> to 
+            move+=towerOfHanoi(n-1 , aux , to , from);
+            
+        }
+        return move;
+    }
+};
