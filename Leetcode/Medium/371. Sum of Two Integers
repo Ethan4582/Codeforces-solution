@@ -1,0 +1,36 @@
+
+class Solution {
+public:
+    int getSum(int a, int b) {
+        int ans=0, carry =0 ;
+        for(int i =0 ;i <32 ; i++){
+            int x = (a >> i & 1), y = (b >> i & 1);
+            if(carry){
+                if(x==y){
+                ans|=1<<i;// mask 
+                if(!x && !y){
+                    carry=0;
+                }
+            }
+            }else{
+                if(x!=y) ans|=1<<i;
+                if (x & y) carry = 1;
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+class Solution {
+public:
+    int getSum(int a, int b) {
+        while(b){
+            int carry= (a&b)<<1; 
+            a^=b;
+            b= carry;
+        }
+        return a;
+    }
+};

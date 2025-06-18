@@ -1,0 +1,102 @@
+
+
+class Solution {
+public:
+    bool canBeValid(string s, string locked) {
+        int l = s.size();
+        
+        if (l % 2 == 1) {
+            return false;
+        }
+
+        stack<int> s1, s2;
+
+    
+        for (int i = 0; i < l; i++) {
+            if (locked[i] == '0') {
+                s2.push(i);
+            } else if (s[i] == '(') {
+                s1.push(i);
+            } else if (s[i] == ')') {
+                if (!s1.empty()) {
+                    s1.pop();
+                } else if (!s2.empty()) {
+                    s2.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+
+    
+        while (!s1.empty() && !s2.empty() &&
+               s1.top() < s2.top()) {
+            s1.pop();
+            s2.pop();
+        }
+
+        if (!s1.empty()) {
+            return false;
+        }
+
+        return true;
+    }
+};
+
+
+
+
+
+
+
+
+
+class Solution {
+public:
+    bool canBeValid(string s, string locked) {
+        int l = s.size();
+       
+        if (l % 2 == 1) {
+            return false;
+        }
+        int s1 = 0, s2 = 0;
+      
+        for (int i = 0; i < l; i++) {
+            if (locked[i] == '0') {
+                s2++;
+            } else if (s[i] == '(') {
+                s1++;
+            } else if (s[i] == ')') {
+                if (s1 > 0) {
+                    s1--;
+                } else if (s2 > 0) {
+                    s2--;
+                } else {
+                    return false;
+                }
+            }
+        }
+     
+        int k = 0;
+        for (int i = l - 1; i >= 0; i--) {
+            if (locked[i] == '0') {
+                k--;
+                s2--;
+            } else if (s[i] == '(') {
+                k++;
+                s1--;
+            } else if (s[i] == ')') {
+                k--;
+            }
+            if (k > 0) {
+                return false;
+            }
+        }
+
+        if (s1 > 0) {
+            return false;
+        }
+
+        return true;
+    }
+};

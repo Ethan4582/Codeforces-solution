@@ -1,0 +1,50 @@
+
+
+
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+           if (!root) return 0;
+
+        queue<TreeNode*> q;
+        q.push(root);
+        int sum = 0;
+        while(q.size()){
+            int n=q.size();
+            while(n--){
+                auto node=q.front();
+                q.pop(); 
+                
+                if(node->left) {
+                    if (!node->left->left && !node->left->right) {
+                    sum += node->left->val;
+                }
+                 q.push(node->left);
+                }
+               
+                
+                   if (node->right) q.push(node->right);
+            }
+        }
+        return sum;
+    }
+};
+
+
+
+class Solution {
+private:
+int dfs(TreeNode* root , bool isleft){
+    if(!root) return 0; 
+
+    if(!root->left && !root->right){
+        return isleft ? root->val : 0;
+    }
+
+    return dfs(root->left , true) + dfs(root->right , false);
+}
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        return dfs(root, false); 
+    }
+};

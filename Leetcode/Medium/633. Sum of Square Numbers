@@ -1,0 +1,61 @@
+
+class Solution {
+private:
+    bool check(long n) {
+        long r = sqrt(n);
+        return r * r == n;
+    }
+
+public:
+    bool judgeSquareSum(int c) {
+        for (long a = 0; a * a <= c; a++) {
+            long b = c - a * a;
+            if (check(b)) return true;
+        }
+        return false;
+    }
+};
+
+
+Tc- 0(log(c))
+sc-0(log(c))
+
+class Solution {
+private:
+    bool binary_src(long s , long e, long n) {
+       if (s > e) return false;
+        long mid = s + (e - s) / 2;
+        if(mid*mid==n) return true; 
+        if(mid*mid>n)  return binary_src(s, mid-1, n);
+        return binary_src(mid + 1, e, n);
+    }
+
+public:
+    bool judgeSquareSum(int c) {
+        for (long a = 0; a * a <= c; a++) {
+            long b = c - a * a;
+            if (binary_src(0 , b, b)) return true;
+        }
+        return false;
+    }
+};
+
+
+
+ Fermat Theorem
+
+
+ class Solution {
+public:
+    bool judgeSquareSum(int c) {
+        for (int i = 2; i * i <= c; i++) {
+            int count = 0;
+            while (c % i == 0) {
+                count++;
+                c /= i;
+            }
+            if (i % 4 == 3 && count % 2 != 0) return false;
+        }
+        return c % 4 != 3;
+    }
+};

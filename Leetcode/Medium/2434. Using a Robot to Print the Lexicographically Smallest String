@@ -1,0 +1,67 @@
+class Solution {
+public:
+    string robotWithString(string s) {
+         string t = "", result = "";
+        vector<int> freq(26, 0);
+
+        for(char it :s){
+            freq[it-'a']++;
+        }
+        char  minchar='a'; 
+        for(char it : s){
+            t.push_back(it); // keep put the elm unit we get min char 
+            freq[it - 'a']--;
+            // all this will not run until we got min char at the back
+            while(minchar<='z' && freq[minchar-'a']==0){ // find the smallest char present in the string 
+            minchar++;
+            }
+
+            while(!t.empty() && t.back()<=minchar ){ // add the lemtn unitlwe have the smallest char written 
+                result+=t.back(); 
+                t.pop_back();
+            }
+            
+        }
+         // supose all th elment are tranfer from s->t and not the remain elme on the paper 
+         while(!t.empty()){
+                  result+=t.back(); 
+                t.pop_back();
+            }
+
+        //
+        return result;
+    }
+};
+
+
+
+
+
+class Solution {
+public:
+    string robotWithString(string s) {
+        int n = s.size();
+        vector<char> minSuffix(n);
+        minSuffix[n-1] = s[n-1];
+        // Precompute the minimum character from i to end
+        for (int i = n-2; i >= 0; --i) {
+            minSuffix[i] = min(s[i], minSuffix[i+1]);
+        }
+
+        string result;
+        stack<char> t;
+        int i = 0;
+        while (i < n || !t.empty()) {
+            // Push from s to t if s is not empty
+            if (i < n && (t.empty() || t.top() > minSuffix[i])) {
+                t.push(s[i]);
+                ++i;
+            } else {
+                // Pop from t to result
+                result += t.top();
+                t.pop();
+            }
+        }
+        return result;
+    }
+};

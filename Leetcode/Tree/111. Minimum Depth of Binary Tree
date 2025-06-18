@@ -1,0 +1,39 @@
+so he depth is the first not where it does not have leaf node so bfs is the most optmial  we check the level not the depth which can be more consuimig 
+
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+         if (!root) return 0;
+        queue<TreeNode*> q;
+        q.push(root);
+        int ans=1;
+        while(q.size()){
+            int n=q.size(); 
+            while(n--){
+                auto node = q.front();
+                q.pop();
+                if(!node->left&& !node->right) return ans ; 
+                 if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
+            ans++; // increas the level
+        }
+        return -1;
+    }
+};
+
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        
+        if(!root) return 0;
+        if(!root->left && !root->right) return 1; 
+
+        int d= INT_MAX; 
+        if(root->left) d= minDepth(root->left); 
+         if(root->right) d=min(d,  minDepth(root->right)); 
+         return 1+d;
+    }
+};

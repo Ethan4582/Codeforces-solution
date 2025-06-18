@@ -1,0 +1,28 @@
+class Solution {
+private:
+void dfs(int curr , int n , vector<int> &ans ){
+    if(curr> n){
+        return ;
+    }
+    if(curr<=n){
+        ans.push_back(curr);
+    }
+    for(int i=0; i <=9; i++){
+        int nextnum = curr*10+i;
+        if(nextnum<=n){
+            dfs(nextnum, n , ans);
+        }else{ // alreday big number 
+           break;// no need to generate the num
+        }
+    }
+}
+public:
+    vector<int> lexicalOrder(int n) {
+        vector<int> ans ; 
+
+        for(int i =1;i <=9 ; i++){
+            dfs(i , n , ans );
+        }
+        return ans;
+    }
+};

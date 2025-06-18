@@ -1,0 +1,48 @@
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& A) {
+         int M = A.size(), N = A[0].size();
+        vector<bool> row(M), col(N);
+         for (int i = 0; i < M; ++i) {
+            for (int j = 0; j < N; ++j) {
+                row[i] = row[i] || A[i][j] == 0;
+                col[j] = col[j] || A[i][j] == 0;
+            }
+        }
+        for (int i = 0; i < M; ++i) {
+            for (int j = 0; j < N; ++j) {
+                if (row[i] || col[j]) A[i][j] = 0;
+            }
+        }
+    }
+};
+
+
+
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& A) {
+        bool firstRow = false, firstColumn = false;
+        int M = A.size(), N = A[0].size();
+        for (int  i = 0; i < N && !firstRow; ++i) firstRow = A[0][i] == 0;
+        for (int i = 0; i < M && !firstColumn; ++i) firstColumn = A[i][0] == 0;
+        for (int i = 1; i < M; ++i) {
+            for (int j = 1; j < N; ++j) {
+                if (A[i][j] == 0) A[i][0] = A[0][j] = 0;
+            }
+        }
+        for (int i = 1; i < M; ++i) {
+            for (int j = 1; j < N; ++j) {
+                 if (A[i][0] == 0 || A[0][j] == 0) A[i][j] = 0;
+            }
+        }
+        if (firstRow) {
+            for (int i = 0; i < N; ++i) A[0][i] = 0;
+        }
+        if (firstColumn) {
+            for (int i = 0; i < M; ++i) A[i][0] = 0;
+        }
+    }
+};

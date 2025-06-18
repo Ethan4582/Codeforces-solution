@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int l = 0, r = s.length() - 1;
+        while (l <= r) {
+            if (s[l] != s[r]) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+
+    bool validPalindrome(string s) {
+
+        int l = 0, r = s.length() - 1;
+    
+        while (l <= r) {
+            if (s[l] == s[r]) {
+                l++;
+                r--;
+            } else {
+                
+                string s1 = s;
+                s1.erase(l, 1);
+                string s2 = s;
+                s2.erase(r, 1);
+                if (isPalindrome(s1) || isPalindrome(s2)) {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+                
+            }
+        }
+        return true;
+    }
+};

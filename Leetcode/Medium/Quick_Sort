@@ -1,0 +1,34 @@
+
+int partition(vector<int> &arr, int low, int high) {
+    int pivot = arr[low];
+    int i = low;
+    int j = high;
+
+    //Make sure it does not cross the oivot 
+    while (i < j) {
+          //! check the first numbe greater then pivot
+          //? <=  make sure if equll elment are their ther arr on left side of an array 
+        while (arr[i] <= pivot && i <= high - 1) {
+            i++;
+        }
+        //! check the first numbe smaller then pivot
+        while (arr[j] > pivot && j >= low + 1) {
+            j--;
+        }
+        //if j cross i do not swap 
+        if (i < j) swap(arr[i], arr[j]);
+    }
+    //?The real swap after search for pivot place 
+    swap(arr[low], arr[j]);
+    return j; //? telling the pivoit index 
+}
+
+void qs(vector<int> &arr, int low, int high) {
+    if (low < high) {
+        //! break the arr to and find pivot 
+        int pIndex = partition(arr, low, high);
+        //!Recresive to smaller arra
+        qs(arr, low, pIndex - 1);
+        qs(arr, pIndex + 1, high);
+    }
+}
