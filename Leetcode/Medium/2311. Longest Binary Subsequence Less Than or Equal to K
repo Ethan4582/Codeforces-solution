@@ -1,0 +1,59 @@
+
+class Solution {
+private:
+    int check(const string &s, int k, int idx) {
+      
+        if (idx < 0) {
+            return 0;
+        }
+
+        
+        long long bitValue = (s[idx] - '0') * (1 << (s.size() - idx - 1));
+        long long take = 0;
+        if (bitValue <= k) {
+            take = 1 + check(s, k - bitValue, idx - 1);
+        } else {
+
+            if (s[idx] == '0') {
+                take = 1 + check(s, k, idx - 1);
+            }
+        }
+
+        long long notTake = check(s, k, idx - 1);
+
+        return max(take, notTake);
+    }
+
+public:
+    int longestSubsequence(string s, int k) {
+        return check(s, k, s.size() - 1);
+    }
+		
+};
+
+
+
+
+
+
+class Solution {
+public:
+    int longestSubsequence(string s, int k) {
+        int len= 0;
+        long long power=1; 
+        for(int i = s.size()-1; i >=0 ; i--){
+            if(s[i]=='0'){
+                len++; 
+            }else if( power<=k){
+                len++; 
+                k-=power;
+            }
+
+            if(power<=k){
+                // power*=2;
+                power<<=1;
+            }
+        }
+        return len;
+    }
+};

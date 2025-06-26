@@ -1,0 +1,82 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& A) {
+        queue<pair<int, int>> q;
+        int M = A.size(), N = A[0].size(), step = 0, dirs[4][2] = {{0,1},{0,-1},{1,0},{-1,0}};
+        for (int i = 0; i < M; ++i) {
+            for (int j = 0; j < N; ++j) {
+                if (A[i][j] == 2) q.emplace(i, j);
+            }
+        }
+        while (q.size()) {
+            for (int cnt = q.size(); cnt--;) {
+                auto [x, y] = q.front();
+                q.pop();
+                for (auto &[dx, dy] : dirs) {
+                    int a = x + dx, b = y + dy;
+                    if (a < 0 || a >= M || b < 0 || b >= N || A[a][b] != 1) continue;
+                    A[a][b] = 2;
+                    q.emplace(a, b);
+                }
+            }
+            step++;
+        }
+        for (auto &row : A) {
+            for (int x : row) {
+                if (x == 1) return -1;
+            }
+        }
+        return max(0, step - 1);
+    }
+};
+	
+	
+	
+	
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size();
+        if (n == 0) return -1;
+        int m = grid[0].size();
+        int ans = 0;
+        queue<pair<int, pair<int, int>>> q;
+        int dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 2) {
+                    q.push({0, {i, j}});
+                    vis[i][j] = 1;
+                }
+            }
+        }
+
+        while (!q.empty()) {
+            int t = q.front().first;
+            int row = q.front().second.first, col = q.front().second.second;
+            q.pop();
+            for (auto& [dx, dy] : dirs) {
+                int a = row + dx, b = col + dy;
+                if (a >= 0 && a < n && b >= 0 && b < m && vis[a][b] != 1 && grid[a][b] == 1) {
+                    q.push({t + 1, {a, b}});
+                    ans = max(ans, t + 1);
+                    vis[a][b] = 1;
+                }
+            }
+        }
+
+       for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(!vis[i][j] && grid[i][j]==1){
+                    return -1;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+
