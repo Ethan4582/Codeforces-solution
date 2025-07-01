@@ -1,0 +1,73 @@
+class Solution {
+private: 
+int M, N, color, dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+void dfs(vector<vector<int>>& img, int x, int y, int newcol){
+
+    if(x<0 || y<0 ||  x>=M || y>=N || img[x][y]!=color){
+        return;
+    }
+     
+     img[x][y]= newcol;
+    for(auto it:dirs){
+        dfs(img, x+it[0] , y+it[1], newcol);
+    }
+}
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& img, int sr, int sc, int newcol) {
+       M = img.size(); 
+        if (M == 0) return img;
+        N = img[0].size(); 
+        color = img[sr][sc];
+
+       
+        if (color != newcol) {
+            dfs(img, sr, sc, newcol);
+        }
+
+        return img;
+    }
+};
+	
+	
+	
+	
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& img, int x, int y, int newColor) {
+        int n = img.size();
+        if (n == 0) return img;
+        int m = img[0].size();
+
+        int dir[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        int srcol = img[x][y];
+
+        if (srcol == newColor) {
+            return img; // No need to fill if the color is the same
+        }
+
+        queue<pair<int, int>> q;
+        q.push({x, y});
+        vis[x][y] = 1;
+        img[x][y] = newColor; // Update the starting pixel color
+
+        while (!q.empty()) {
+            int cx = q.front().first;
+            int cy = q.front().second;
+            q.pop();
+
+            for (auto& [dx, dy] : dir) {
+                int a = cx + dx;
+                int b = cy + dy;
+
+                if (a >= 0 && a < n && b >= 0 && b < m && !vis[a][b] && img[a][b] == srcol) {
+                    q.push({a, b});
+                    img[a][b] = newColor;
+                    vis[a][b] = 1;
+                }
+            }
+        }
+
+        return img;
+    }
+};

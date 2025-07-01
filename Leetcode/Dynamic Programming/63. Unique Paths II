@@ -40,43 +40,96 @@ public:
 
 ---------------------------Botton up approch ----------------------------------------
 
+
+
 class Solution {
 public:
-    int uniquePathsWithObstacles(vector<vector<int>>& grid) {
-        if(grid[0][0]==1) return 0;
-        int m = grid.size(), n = grid[0].size();   
-        vector<vector<int>> dp(m, vector<int>(n));
-        dp[0][0] = 1;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(i==0 && j==0) continue;
-                dp[i][j] = 0;
-                if(grid[i][j]==1) continue;
-                if(i>0) dp[i][j] += dp[i-1][j];
-                if(j>0) dp[i][j] += dp[i][j-1];
+    int uniquePathsWithObstacles(vector<vector<int>>& obs) {
+      
+         int m = obs.size(); 
+        int n = obs[0].size();
+         if (obs[0][0] == 1) return 0; // if already blocked 
+        vector<vector<int>> memo(m, vector<int>(n));
+         memo[0][0] = 1;
+        for(int i =0 ; i<m ; i++){
+            for(int j =0 ; j<n ; j++){
+             if (obs[i][j] == 1) {
+                    memo[i][j] = 0;  
+                    continue;
+                }
+                 if (i == 0 && j == 0) {
+                memo[i][j] = 1;
+                continue;
             }
+             int up = 0;
+            int left = 0;
+
+        
+            if (i > 0)
+                up = memo[i - 1][j];
+
+          
+            if (j > 0)
+                left = memo[i][j - 1];
+
+          
+            memo[i][j] = up + left;
         }
-        return dp[m-1][n-1];
     }
+
+    return memo[m - 1][n - 1];
+                
+            }
 };
 
+
+
 -------------------- space optmization----------------------------
+
+
+
 class Solution {
 public:
-    int uniquePathsWithObstacles(vector<vector<int>>& grid) {
-        if(grid[0][0]==1) return 0;
-        int m = grid.size(), n = grid[0].size();   
-        vector<vector<int>> dp(m, vector<int>(n));
-        dp[0][0] = 1;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(i==0 && j==0) continue;
-                dp[i][j] = 0;
-                if(grid[i][j]==1) continue;
-                if(i>0) dp[i][j] += dp[i-1][j];
-                if(j>0) dp[i][j] += dp[i][j-1];
+    int uniquePathsWithObstacles(vector<vector<int>>& obs) {
+      
+         int m = obs.size(); 
+        int n = obs[0].size();
+       
+       
+        if (obs[0][0] == 1 || obs[m - 1][n - 1] == 1) return 0;
+        
+         vector<int> prev(n, 0);
+          prev[0] = 1;
+        
+        for(int i =0 ; i<m ; i++){
+            vector<int> temp(n , 0);
+            for(int j =0 ; j<n ; j++){
+             if (obs[i][j] == 1) {
+                    temp[j] = 0;  
+                    continue;
+                }
+                 if (i == 0 && j == 0) {
+                temp[j] = 1;
+                continue;
             }
+             int up = 0;
+            int left = 0;
+
+        
+            if (i > 0)
+                up = prev[j];
+
+          
+            if (j > 0)
+                left = temp[j - 1];
+
+          
+            temp[j] = up + left;
         }
-        return dp[m-1][n-1];
+        prev=temp;
+
     }
+    return prev[n-1];
+
+  }
 };

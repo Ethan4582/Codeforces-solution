@@ -39,44 +39,46 @@ public:
 
 
 ------------------ Top down apprach -----------------------------
+
+
+
 class Solution {
-   private: 
-       int solve(int days, int last, vector<vector<int>>& dp, vector<vector<int>>& arr) {
-           if (days == 0) {
-               int maxi = INT_MIN;
-               for (int i = 0; i <3; i++) {
-                   if (arr[days][i] != last) {
-                       maxi = max(maxi, arr[days][i]);
-                   }
-               }
-               return (maxi == INT_MIN) ? 0 : maxi; 
-           }
-   
-           
-           if (dp[days][last + 1] != -1) {
-               return dp[days][last + 1];
-           }
-   
-           int maxi = INT_MIN;
-           for (int i = 0; i <3; i++) {
-               if (i != last) {
-                   int currpoint = arr[days][i] + solve(days - 1, i, dp, arr);
-                   maxi = max(maxi, currpoint);
-               }
-           }
-   
-           dp[days][last + 1] = maxi; 
-           return maxi;
-       }
-     
-   public:
-       int maximumPoints(vector<vector<int>>& arr) {
-           int n = arr.size();
-           vector<vector<int>> dp(n, vector<int>(4, -1));
-           return solve(n - 1, -1, dp, arr); 
-       }
-   };
-   
+private:
+    int solve(int days, int last, vector<vector<int>>& dp, vector<vector<int>>& arr) {
+        if (days == 0) {
+            int maxi = INT_MIN;
+            for (int i = 0; i < 3; i++) {
+                if (i != last) {
+                    maxi = max(maxi, arr[days][i]);
+                }
+            }
+            return (maxi == INT_MIN) ? 0 : maxi;
+        }
+
+        if (dp[days][last + 1] != -1) {
+            return dp[days][last + 1];
+        }
+
+        int maxi = INT_MIN;
+        for (int i = 0; i < 3; i++) {
+            if (i != last) {
+                int currPoint = arr[days][i] + solve(days - 1, i, dp, arr);
+                maxi = max(maxi, currPoint);
+            }
+        }
+
+        dp[days][last + 1] = maxi;
+        return maxi;
+    }
+
+public:
+    int maximumPoints(vector<vector<int>>& arr) {
+        int n = arr.size();
+        vector<vector<int>> dp(n, vector<int>(4, -1));
+        return solve(n - 1, -1, dp, arr);
+    }
+};
+
 
 
    --------------------- Tabulation  bootm upproch ------------------- 
@@ -115,3 +117,38 @@ class Solution {
    Time Complexity: O(n * 4 * 3) = O(n)
    Space Complexity: O(n * 4) = O(n)
    */
+
+
+   // Function to find the maximum points for ninja training
+int ninjaTraining(int n, vector<vector<int>>& points) {
+  // Initialize a vector to store the maximum points for the previous day's activities
+  vector<int> prev(4, 0);
+
+  // Initialize the DP table for the first day (day 0)
+  prev[0] = max(points[0][1], points[0][2]);
+  prev[1] = max(points[0][0], points[0][2]);
+  prev[2] = max(points[0][0], points[0][1]);
+  prev[3] = max(points[0][0], max(points[0][1], points[0][2]));
+
+  // Iterate through the days starting from day 1
+  for (int day = 1; day < n; day++) {
+    // Create a temporary vector to store the maximum points for the current day's activities
+    vector<int> temp(4, 0);
+    for (int last = 0; last < 4; last++) {
+      temp[last] = 0;
+      // Iterate through the tasks for the current day
+      for (int task = 0; task <= 2; task++) {
+        if (task != last) {
+          // Calculate the points for the current activity and add it to the
+          // maximum points obtained on the previous day (stored in prev)
+          temp[last] = max(temp[last], points[day][task] + prev[task]);
+        }
+      }
+    }
+    // Update prev with the maximum points for the current day
+    prev = temp;
+  }
+
+  // The maximum points for the last day with any activity can be found in prev[3]
+  return prev[3];
+}

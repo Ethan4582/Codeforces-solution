@@ -1,0 +1,96 @@
+https://www.geeksforgeeks.org/dsa/subset-sum-problem-dp-25/
+
+
+#include <vector>
+using namespace std;
+
+class Solution {
+private:
+    bool solve(int idx, int sum, vector<int>& arr, vector<vector<int>>& dp) {
+        if (sum == 0) {
+            return true;
+        }
+        if (idx == 0) {
+            return arr[0] == sum;
+        }
+        if (dp[idx][sum] != -1) {
+            return dp[idx][sum];
+        }
+        bool notTaken = solve(idx - 1, sum, arr, dp);
+        bool taken = false;
+        if (sum >= arr[idx]) {
+            taken = solve(idx - 1, sum - arr[idx], arr, dp);
+        }
+        return dp[idx][sum] = notTaken || taken;
+    }
+
+public:
+    bool isSubsetSum(vector<int>& arr, int sum) {
+        int n = arr.size();
+        vector<vector<int>> dp(n, vector<int>(sum + 1, -1));
+        return solve(n - 1, sum, arr, dp);
+    }
+};
+
+
+
+class Solution {
+  public:
+    bool isSubsetSum(vector<int>& arr, int sum) {
+        int n= arr.size();
+          vector<vector<int>> dp(n, vector<int>(sum + 1, false));
+        //base case 
+        for(int i =0 ;i < n ; i++){
+            dp[i][0]= true;
+        }
+        //base case
+       if(arr[0]<=sum){
+            dp[0][arr[0]]=true;
+       }
+        
+        for(int i=1 ;i< n;i++){
+            for(int j =1; j<=sum ; j++){
+                bool notaken =dp[i-1][j]; 
+                 bool taken = false;
+            if (arr[i] <= j) {
+                taken = dp[i - 1][j - arr[i]];
+            }
+            
+            dp[i][j]= taken|| notaken;
+                
+            }
+        }
+        return dp[n-1][sum];
+    }
+};
+
+
+class Solution {
+public:
+    bool isSubsetSum(vector<int>& arr, int sum) {
+        int n = arr.size();
+        vector<bool> temp(sum + 1, false);
+        temp[0] = true; 
+
+        if (arr[0] <= sum) {
+            temp[arr[0]] = true;
+        }
+
+        for (int i = 1; i < n; i++) {
+            vector<bool> curr(sum + 1, false);
+            curr[0] = true; 
+
+            for (int j = 1; j <= sum; j++) {
+                bool notTaken = temp[j];
+                bool taken = false;
+                if (arr[i] <= j) {
+                    taken = temp[j - arr[i]];
+                }
+                curr[j] = taken || notTaken;
+            }
+            temp = curr;
+        }
+
+        return temp[sum];
+    }
+};
