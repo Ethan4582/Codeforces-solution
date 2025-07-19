@@ -1,0 +1,24 @@
+class Solution {
+public:
+    char kthCharacter(int k) {
+        string ans=""; 
+        ans+="a";
+        while(ans.size()<=k){
+            string curr="";
+            for(char it: ans){
+                curr+=it + 1; // next char
+            }
+            ans+=curr;
+        }
+        return ans[k-1];
+    }
+};
+
+
+class Solution {
+public:
+    char kthCharacter(int k) {
+        int ans =__builtin_popcount(k-1); 
+        return 'a'+ans; 
+    }
+};
