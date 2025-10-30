@@ -1,0 +1,78 @@
+
+
+class Solution {
+int dirs[4][2] = {{1,0}, {0,1}, {-1,0}, {0,-1}};
+void dfs(vector<vector<int>>& grid , int i , int j ){
+    if(i<0 || j<0 || i>=grid.size() || j >=grid[0].size() || grid[i][j]!=1) return; 
+    grid[i][j]=0;
+    for(auto it: dirs){
+        int x= it[0]+i; int y=it[1]+j; 
+        dfs(grid, x, y);
+    }
+}
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+          int n = grid.size(), m = grid[0].size();
+        
+        for(int i = 0; i < n; i++) {
+            if(grid[i][0] == 1) dfs(grid, i, 0);      
+            if(grid[i][m-1] == 1) dfs(grid, i, m-1);  
+        }
+        for(int j = 0; j < m; j++) {
+            if(grid[0][j] == 1) dfs(grid, 0, j);      
+            if(grid[n-1][j] == 1) dfs(grid, n-1, j);  
+        }
+        int cnt=0; 
+        for(int i =1; i< n; i++){
+            for(int j=1 ; j<m; j++){
+            if(grid[i][j]==1)cnt++;
+            }
+        }
+        return cnt;
+    }
+};
+
+
+
+
+less optmized 
+
+class Solution {
+    int dirs[4][2] = {{1,0}, {0,1}, {-1,0}, {0,-1}};
+    bool canReachBoundary;
+    
+    int dfs(vector<vector<int>>& grid, int i, int j) {
+        if(i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size()) {
+            canReachBoundary = true;
+            return 0;
+        }
+        if(grid[i][j] != 1) return 0;
+        
+        grid[i][j] = 0; // Mark visited
+        int count = 1;
+        
+        for(auto [dx, dy] : dirs) {
+            count += dfs(grid, i + dx, j + dy);
+        }
+        return count;
+    }
+    
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        int result = 0;
+        
+        for(int i = 1; i < n-1; i++) {
+            for(int j = 1; j < m-1; j++) {
+                if(grid[i][j] == 1) {
+                    canReachBoundary = false;
+                    int count = dfs(grid, i, j);
+                    if(!canReachBoundary) {
+                        result += count;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};

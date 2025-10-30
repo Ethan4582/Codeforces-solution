@@ -1,18 +1,22 @@
 // #include <bits/stdc++.h> 
 // using namespace std; 
 
-// // //This is how to store the graph using matirx 
-// // int main(){
-// //    int n , m; 
-// //    cin>>n>>m; 
-// //    int adj[n+1][m+1] ; 
-// //    while(m--){
-// //       int u , v; cin>>u>>v; 
-// //       adj[u][v]=1;
-// //             adj[v][u]=1;
+// //This is how to store the graph using matirx 
+// int main(){
+//    int n , m; 
+//    cin>>n>>m; 
+//    int adj[n+1][m+1] ; 
+//    while(m--){
+//       int u , v; cin>>u>>v; 
+//       adj[u][v]=1;
+//             adj[v][u]=1;
 
-// //    }
-// // }
+//    }
+// }
+
+
+
+
 
 // //!Adjecented list Reprsentation of the graph 
 
@@ -170,31 +174,33 @@ class Solution {
 // #include <bits/stdc++.h>
 // using namespace std;
 
-// class Solution {
-//   private: 
-//     void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls) {
-//         vis[node] = 1; 
-//         ls.push_back(node); 
-//         // traverse all its neighbours
-//         for(auto it : adj[node]) {
-//             // if the neighbour is not visited
-//             if(!vis[it]) {
-//                 dfs(it, adj, vis, ls); 
-//             }
-//         }
-//     }
-//   public:
-//     // Function to return a list containing the DFS traversal of the graph.
-//     vector<int> dfsOfGraph(int V, vector<int> adj[]) {
-//         int vis[V] = {0}; 
-//         int start = 0;
-//         // create a list to store dfs
-//         vector<int> ls; 
-//         // call dfs for starting node
-//         dfs(start, adj, vis, ls); 
-//         return ls; 
-//     }
-// };
+
+
+class Solution {
+  private: 
+    void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls) {
+        vis[node] = 1; 
+        ls.push_back(node); 
+        // traverse all its neighbours
+        for(auto it : adj[node]) {
+            // if the neighbour is not visited
+            if(!vis[it]) {
+                dfs(it, adj, vis, ls); 
+            }
+        }
+    }
+  public:
+    // Function to return a list containing the DFS traversal of the graph.
+    vector<int> dfsOfGraph(int V, vector<int> adj[]) {
+        int vis[V] = {0}; 
+        int start = 0;
+        // create a list to store dfs
+        vector<int> ls; 
+        // call dfs for starting node
+        dfs(start, adj, vis, ls); 
+        return ls; 
+    }
+};
 
 // void addEdge(vector <int> adj[], int u, int v) {
 //     adj[u].push_back(v);
@@ -224,3 +230,76 @@ class Solution {
 // }
 
 
+
+
+
+When to Use Each:
+Use Pattern 1 (Level-by-Level) when:
+You need to know the current level/depth
+
+Process all nodes at same distance simultaneously
+
+Need level-specific operations
+
+Use Pattern 2 (Simple Queue) when:
+You just need shortest path distances
+
+No need to know which nodes are at same level
+
+Simpler code is preferred
+
+
+Scenario 1: Number of Islands (Pattern 2)
+
+// Just need to mark visited, no level info needed
+while (!q.empty()) {
+    auto [x, y] = q.front(); q.pop();
+    for (neighbors) {
+        if (valid) {
+            vis[nx][ny] = 1;
+            q.push({nx, ny});
+        }
+    }
+}
+
+
+Scenario 2: Binary Tree Level Order (Pattern 1)
+
+
+// Need to know which nodes are at same level
+while (q.size()) {
+    int cnt = q.size();
+    vector<int> level;
+    while (cnt--) {
+        auto node = q.front(); q.pop();
+        level.push_back(node->val);
+        if (node->left) q.push(node->left);
+        if (node->right) q.push(node->right);
+    }
+    result.push_back(level);  // Store level
+}
+
+
+Scenario 3: Shortest Path in Grid (Both work)
+
+// Pattern 1
+while (q.size()) {
+    int cnt = q.size();
+    while (cnt--) {
+        auto [x, y] = q.front(); q.pop();
+        if (x == targetX && y == targetY) return currentLevel;
+        for (neighbors) {
+            if (valid) q.push({nx, ny});
+        }
+    }
+    currentLevel++;  // Explicit level tracking
+}
+
+// Pattern 2  
+while (!q.empty()) {
+    auto [x, y, steps] = q.front(); q.pop();
+    if (x == targetX && y == targetY) return steps;
+    for (neighbors) {
+        if (valid) q.push({nx, ny, steps + 1});
+    }
+}

@@ -14,6 +14,17 @@ vector<vector<int>> build(int V, vector<vector<int>>& edges) {
     return adj;
 }
 
+ void dfs(int node, vector<vector<int>>& adj, vector<bool>& vis, vector<int>& comp) {
+        vis[node] = true;
+        comp.push_back(node);
+        
+        for(int neighbor : adj[node]) {
+            if(!vis[neighbor]) {
+                dfs(neighbor, adj, vis, comp);
+            }
+        }
+    }
+
 void bfs(int i, vector<vector<int>>& adj,
          vector<bool>& vis, vector<int>& comp){
              int n=adj.size();;
@@ -57,3 +68,48 @@ void bfs(int i, vector<vector<int>>& adj,
     return ans;
     }
 };
+
+
+
+
+1. Space Efficiency:
+
+// Adjacency Matrix: O(V²) space
+vector<vector<int>> matrix(V, vector<int>(V, 0));
+// For V=1000: 1000×1000 = 1,000,000 elements
+
+// Adjacency List: O(V + E) space  
+vector<vector<int>> adj(V);
+// For V=1000, E=2000: ~3000 elements total
+
+
+
+Time Efficiency for Traversal:
+
+
+// Matrix: O(V) to check neighbors of one node
+for(int j=0; j<V; j++) {
+    if(matrix[i][j] == 1) {
+        // process neighbor j
+    }
+}
+
+// Adj List: O(degree(i)) to check neighbors  
+for(int neighbor : adj[i]) {
+    // process neighbor directly
+}
+
+
+When to Use Matrix:
+Dense graphs where E ≈ V²
+
+Frequent edge existence checks
+
+Weighted graphs with specific algorithms
+
+When to Use List (Most Cases):
+Sparse graphs (most real-world graphs)
+
+Graph traversal (BFS/DFS)
+
+Memory constraints

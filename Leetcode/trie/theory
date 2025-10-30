@@ -1,0 +1,168 @@
+
+for each inseration we use the index 0-25 shown all the 26 alphabets when we insert a chat we create another point from the current node
+
+https://leetcode.com/problems/implement-trie-prefix-tree/description/
+- we traverse based on the class defined we make trie refernce to each word then when we reahced the end of the word we mark it  true [ word is completed]
+
+apple is complete new word 
+
+apps -> app + s + node_end_REF
+
+apxl  -> ap +  [ inside of p referenc node ]  ={ p , x}  +  new_node -> x + ref_node
+
+
+- we have vector of 26 char so when we mark all the char of all thw word we make it like tree of possibilty like tree 
+
+/// Now the search funtionailty 
+- so we travser the word look for the curr char does it have refernce trie then move forward and if the word has ended and the refernce is true then we have find the word in the trie 
+
+// find the word that start with 
+- we start search end if we find not a null poissition mean their we possible word from their possition we we found  have word that may exist  that start with certain letter  
+
+- if we enoucter null the word does exist that startwith this 
+
+
+
+
+struct Node {
+private:
+    Node* links[26];  // Array of pointers for 26 lowercase letters
+    bool flag = false; // Marks the end of a word
+
+public:
+    // Check if the character exists in the current node's links
+    bool check(char ch) {
+        return (links[ch - 'a'] != NULL);
+    }
+    
+    // Put a new node for the character in the current node's links
+    void put(char ch, Node* node) {
+        links[ch - 'a'] = node;
+    }
+    
+    // Get the reference node for the given character
+    Node* get(char ch) {
+        return links[ch - 'a'];
+    }
+    
+    // Mark the current node as the end of a word
+    void setEnd() {
+        flag = true;
+    }
+    
+    // Check if the current node marks the end of a word
+    bool isEnd() {
+        return flag;
+    }
+};
+
+class Trie {
+private:
+    Node* root;  // Root node of the trie
+
+public:
+    // Constructor - creates initial trie node
+    Trie() {
+        root = new Node();
+    }
+    
+    // Insert a word into the trie - Time Complexity: O(n)
+    void insert(string word) {
+        Node* node = root;  // Start from root
+        for(int i = 0; i < word.size(); i++) {
+            // Check if current character exists in current node
+            if(!node->check(word[i])) {
+                // If not, create a new node and put it in links
+                node->put(word[i], new Node());
+            }
+            // Move to the reference node for the current character
+            node = node->get(word[i]);
+        }
+        // Mark the last node as end of the word
+        node->setEnd();
+    }
+    
+    // Search for a complete word in the trie
+    bool search(string word) {
+        Node* node = root;
+        for(int i = 0; i < word.size(); i++) {
+            // If character not found, word doesn't exist
+            if(!node->check(word[i])) {
+                return false;
+            }
+            // Move to next character's node
+            node = node->get(word[i]);
+        }
+        // Check if we're at the end of a complete word
+        return node->isEnd();
+    }
+    
+    // Check if any word starts with the given prefix
+    bool startsWith(string prefix) {
+        Node* node = root;
+        for(int i = 0; i < prefix.size(); i++) {
+            // If prefix character not found, no word starts with this prefix
+            if(!node->check(prefix[i])) {
+                return false;
+            }
+            // Move to next character's node
+            node = node->get(prefix[i]);
+        }
+        // If we traversed all prefix characters, prefix exists
+        return true;
+    }
+};
+
+
+
+/// cleaner 
+class Trie {
+private:
+    struct TrieNode {
+        TrieNode* children[26];
+        bool isEnd;
+        TrieNode() {
+            for(int i = 0; i < 26; i++) children[i] = nullptr;
+            isEnd = false;
+        }
+    };
+    
+    TrieNode* root;
+
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(string word) {
+        TrieNode* node = root;
+        for(char c : word) {
+            int idx = c - 'a';
+            if(!node->children[idx]) {
+                node->children[idx] = new TrieNode();
+            }
+            node = node->children[idx];
+        }
+        node->isEnd = true;
+    }
+    
+    bool search(string word) {
+        TrieNode* node = root;
+        for(char c : word) {
+            int idx = c - 'a';
+            if(!node->children[idx]) return false;
+            node = node->children[idx];
+        }
+        return node->isEnd;
+    }
+    
+    bool startsWith(string prefix) {
+        TrieNode* node = root;
+        for(char c : prefix) {
+            int idx = c - 'a';
+            if(!node->children[idx]) return false;
+            node = node->children[idx];
+        }
+        return true;
+    }
+};

@@ -80,8 +80,6 @@ class Solution {
         int minCost(vector<int>& height) {
             int n = height.size();
              int prv1=0 , prv2=0; 
-             
-    
             for (int i = 1; i < n; i++) {
                 
                 int  lf=prv1 + abs(height[i] - height[i - 1]);

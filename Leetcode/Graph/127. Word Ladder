@@ -1,0 +1,65 @@
+// if we see we are generating equence of sting then check this happening levelwise that is bfs apppoch 
+class Solution {
+public:
+    int ladderLength(string B, string E, vector<string>& L) {
+        queue<pair<string ,int>>q; 
+        q.push({B, 1});
+        // check if the word exist in 0(1) 
+        unordered_set<string> st(L.begin(), L.end());
+        while(!q.empty()){
+            string word= q.front().first; 
+             int  cnt= q.front().second; 
+            q.pop();
+            if(word==E) return cnt;
+             for(int i =0 ; i<word.size(); i++){
+                char org= word[i];
+                  for(char ch ='a' ; ch<='z' ; ch++){
+                word[i]=ch;
+                if(st.find(word)!=st.end()){
+                    st.erase(word);
+                    q.push({word, cnt+1});
+                }
+            }
+             word[i]=org; // restoring the org word 
+             }
+
+          
+        } 
+        return 0;
+    }
+};
+
+
+layerwise- 
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> s(begin(wordList), end(wordList));
+        if (s.count(endWord) == 0) return 0;
+        queue<string> q{{beginWord}};
+        s.erase(beginWord);
+        int step = 1;
+        while (q.size()) {
+            int cnt = q.size();
+            while (cnt--) {
+                auto u = q.front();
+                q.pop();
+                if (u == endWord) return step;
+                for (char &c : u) { // add unvisited neighbors of `u`
+                    char tmp = c;
+                    for (char ch = 'a'; ch <= 'z'; ++ch) {
+                        if (tmp == ch) continue;
+                        c = ch;
+                        if (s.count(u) == 0) continue;
+                        s.erase(u);
+                        q.push(u);
+                    }
+                    c = tmp;
+                }
+            }
+            ++step;
+        }
+        return 0;
+    }
+};

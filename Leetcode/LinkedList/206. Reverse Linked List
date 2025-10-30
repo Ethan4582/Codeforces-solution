@@ -40,25 +40,24 @@ public:
 
 Optimal Approach 1 -  In place 
 
-Tc- 0(N)
-SC- 0(1)
+
+
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-          ListNode* prev=nullptr;
-          ListNode* temp= head; 
+        ListNode*  prev= nullptr; 
+        ListNode* curr= head; 
 
-          while(temp){
-             ListNode* front =  temp->next; // we need to store in oder to perform the smae task for the next elment 
-             temp->next= prev;  // link to back for rever 
-             prev=temp; // we need this prveious in order to link and perform the same task for the next element 
-             // prserve the previous elment
-             temp=front;// moving the pointer that is not link
-          }
-
+        while(curr){
+            ListNode* front_store= curr->next; // storing the next elment 
+            curr->next= prev; // change the link 
+            prev=curr; // move to next element 
+            curr= front_store; // the next elemnt to do the same 
+        }
           return prev;
     }
 };
+
 
 
 // Recursive 

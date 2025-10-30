@@ -1,0 +1,74 @@
+
+// find the common max value such that atleast that much citiaton paper 
+// image a sqaure in non-dec  maz squae can we fit 
+
+class Solution {
+public:
+    int hIndex(vector<int>& ct) {
+         sort(ct.rbegin(), ct.rend()); 
+          int i =0;
+         while(i < ct.size() && ct[i]>i){
+            i++;
+         }
+
+         return i;
+        
+    }
+};
+
+
+
+
+
+//counting sort 
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        int papers = citations.size();
+        vector<int> citationBuckets(papers + 1, 0);
+
+        for (int citation : citations) {
+            citationBuckets[min(citation, papers)]++;
+        }
+
+        int cumulativePapers = 0;
+        for (int hIndex = papers; hIndex >= 0; hIndex--) {
+            cumulativePapers += citationBuckets[hIndex];
+            if (cumulativePapers >= hIndex) {
+                return hIndex;
+            }
+        }
+        return 0;        
+    }
+};
+
+
+
+// we use binary search on this index to find theindx that staisfy that value 
+
+class Solution {
+private: 
+bool check(int k , vector<int>& cit){
+    int cnt=0; 
+    for(auto it: cit){
+        cnt+= it>=k;
+    }
+    return cnt>=k;
+    // do we alteast k apper with k citation
+}
+public:
+    int hIndex(vector<int>& cit) {
+        
+        int low=1 , high=cit.size(), ans=0; 
+        while(low<=high){
+            int mid= low +( high-low)/2; 
+            if(check(mid, cit)){
+                ans=mid;
+                low=mid+1;
+            }else{
+                high= mid-1;
+            }
+        }
+        return ans;
+    }
+};

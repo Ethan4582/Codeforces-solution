@@ -31,43 +31,38 @@ public:
 	
 	
 	
-class Solution {
+    class Solution {
+private: 
+    int m, n;
+    int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    
 public:
-    vector<vector<int>> floodFill(vector<vector<int>>& img, int x, int y, int newColor) {
-        int n = img.size();
-        if (n == 0) return img;
-        int m = img[0].size();
-
-        int dir[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-        int srcol = img[x][y];
-
-        if (srcol == newColor) {
-            return img; // No need to fill if the color is the same
-        }
-
-        queue<pair<int, int>> q;
-        q.push({x, y});
-        vis[x][y] = 1;
-        img[x][y] = newColor; // Update the starting pixel color
-
-        while (!q.empty()) {
-            int cx = q.front().first;
-            int cy = q.front().second;
+    vector<vector<int>> floodFill(vector<vector<int>>& img, int x, int y, int newcol) {
+        m = img.size();
+        if (m == 0) return img;
+        n = img[0].size();
+        
+        int originalCol = img[x][y];
+        if(originalCol == newcol) return img;
+        
+        queue<pair<int, int>> q; 
+        q.push({x, y}); 
+        img[x][y] = newcol;
+        
+        while(!q.empty()) {
+            auto [xi, yi] = q.front();
             q.pop();
+            
+            for(auto & [dx, dy] : dirs) {
+                int a = xi + dx;
+                int b = yi + dy;
 
-            for (auto& [dx, dy] : dir) {
-                int a = cx + dx;
-                int b = cy + dy;
-
-                if (a >= 0 && a < n && b >= 0 && b < m && !vis[a][b] && img[a][b] == srcol) {
-                    q.push({a, b});
-                    img[a][b] = newColor;
-                    vis[a][b] = 1;
+                if(a >= 0 && b >= 0 && a < m && b < n && img[a][b] == originalCol) {
+                    q.push({a, b}); 
+                    img[a][b] = newcol; // mark as visited by changing color
                 }
             }
-        }
-
+        } 
         return img;
     }
 };

@@ -1,0 +1,47 @@
+http://leetcode.ca/2021-03-13-1730-Shortest-Path-to-Get-Food/
+
+
+
+class Solution {
+int dirs[4][2]={{1, 0} , { 0 ,1 } , { - 1 , 0 }, { 0, -1}};
+public:
+  int getFood(vector<vector<char>>& G) {
+      int m = G.size(), n = G[0].size();
+    
+      queue<pair<int , int>> q;
+       // need to find the starting point
+      int sx = -1, sy = -1;
+      for(int i =0 ; i < m; i++){
+          for(int j =0 ; j < n; j++){
+              if(G[i][j] == '*'){
+                  sx = i, sy = j;
+                  break;
+              }
+          }
+         }
+         q.push({sx, sy});
+         vis[sx][sy] = 1;
+         int steps = 0;
+         while(!q.empty()){
+            // we need to prcess the layer not just 4 points; 
+            int nz= q.size();
+            while(nz--){
+               auto [x, y] = q.front(); q.pop();
+               
+               for(auto it : dirs){
+                      int a = x + it[0], b = y + it[1];
+                    if (a < 0 || a >= m || b < 0 || b >= n || G[a][b] == 'X') continue; //skip 
+                    if(G[a][b]=='#') return steps+1;
+                    // not need if vis 
+                    G[a][b]='X'; 
+                    q.push(a , b);
+
+               }
+               
+            }
+
+         }
+
+
+      }
+}

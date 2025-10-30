@@ -35,6 +35,39 @@ Space: O(n!⋅n)
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
+            next_permutation(nums.begin(), nums.end());
+    }
+};
+
+Time Complexity: O(n) - single pass
+
+Space Complexity: O(1) - in-place
+
+
+
+------------ the core logic is to -------------------------------------
+
+when use do it yourself we take number from back then try to arrang to make a new bigger number for next permuntation 
+
+when we do try to update the idx to next big number whne when we came fro back we did not have it 
+
+we we see the an idex where we do the change we might a lot ossibiblty to make next larger number but we just the next number 
+
+
+2 1 5 4 3 0 0
+
+so find idx then swap with next idx number 
+
+if we notice we have mountain increasing from backward so we start from back to find the next larger lement thant idx to find next number 
+for next number we need to find the next smaller for idx  so revese it
+
+
+
+
+
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
         int idx = -1;
         int n = nums.size();
 

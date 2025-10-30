@@ -29,54 +29,55 @@ public:
         return max(0, step - 1);
     }
 };
+
+Rotting happens in parallel, not sequentially
 	
 	
 	
 	
-class Solution {
+
+    class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size();
-        if (n == 0) return -1;
-        int m = grid[0].size();
-        int ans = 0;
-        queue<pair<int, pair<int, int>>> q;
-        int dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-        vector<vector<int>> vis(n, vector<int>(m, 0));
+        int n= grid.size(); // row 
+          if (n == 0) return -1;
+            int ans = 0;
+        int m= grid[0].size(); // col 
+        queue<pair<int ,pair<int, int>>> qt; // to store the value; 
+        vector<vector<int>> vis(n, vector<int> (m, 0)); 
+      int dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (grid[i][j] == 2) {
-                    q.push({0, {i, j}});
-                    vis[i][j] = 1;
+        for(int i =0 ; i<n; i++){
+            for(int j =0 ; j<m; j++){
+                if(grid[i][j]==2){ // intial start of all rotten tomato like convway game 
+                    vis[i][j]=1;
+                    qt.push({0 , {i , j}});
+                }
+            }
+        }
+        while(!qt.empty()){
+            int tm= qt.front().first; 
+            int row= qt.front().second.first , col= qt.front().second.second;
+            qt.pop(); 
+            for(auto& [dx, dy]: dirs){
+                int a= dx+row ,b = dy+col; 
+                if(a>=0 && a<n && b>=0 && b<m && vis[a][b]!=1 && grid[a][b]==1 ){
+                    qt.push({tm+1 , { a , b}}); 
+                    ans= max(ans , tm+1);
+                    vis[a][b]=1;
                 }
             }
         }
 
-        while (!q.empty()) {
-            int t = q.front().first;
-            int row = q.front().second.first, col = q.front().second.second;
-            q.pop();
-            for (auto& [dx, dy] : dirs) {
-                int a = row + dx, b = col + dy;
-                if (a >= 0 && a < n && b >= 0 && b < m && vis[a][b] != 1 && grid[a][b] == 1) {
-                    q.push({t + 1, {a, b}});
-                    ans = max(ans, t + 1);
-                    vis[a][b] = 1;
-                }
-            }
-        }
-
-       for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
+          for(int i =0 ; i<n; i++){
+            for(int j =0 ; j<m; j++){
                 if(!vis[i][j] && grid[i][j]==1){
                     return -1;
                 }
             }
         }
-
         return ans;
+        
+
     }
 };
-
-
