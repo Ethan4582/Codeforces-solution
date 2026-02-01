@@ -27,24 +27,32 @@ bool c[N];
 int main() {
     fastread();
     int t ; 
-    cin >>t ; 
-     string s; 
-     cin>>s; 
-     map<string , int> mapi; 
-     for(int i =0 ; i<s.length()-1 ; i++){
-      string curr= s.substr(i , 2); 
-      sort(curr.begin(), curr.end());
-      mapi[curr]++;
-     }
-      string maxipr;
-    int maxi = 0;
- for(auto &[pair, freq] : mapi) {
-        if(freq > maxi || (freq == maxi && pair < maxipr)) {
-            maxi = freq;
-            maxipr = pair;
+    cin >> t ; 
+    string s; 
+    cin >> s; 
+    
+    map<string, int> mpp; 
+    
+     for(int i=0; i<s.size()-1; i++ )
+    {   string f = "";
+        f += s[i];
+        f += s[i + 1];
+ 
+        mpp[f]++;
+ 
+    }
+    
+    string ans_s; 
+    int max_cnt = -1;
+    
+    for(auto &[curr, cnt] : mpp) {
+        if(cnt > max_cnt) {
+            max_cnt = cnt;
+            ans_s = curr;
         }
     }
-    p(maxipr);
-
+    
+    p(ans_s);
+    
     return 0;
 }
