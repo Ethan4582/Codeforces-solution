@@ -1,0 +1,95 @@
+class Solution {
+public:
+
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+
+        int V = graph.size();
+
+        vector<vector<int>> revadj(V);
+
+        vector<int> indegree(V, 0);
+
+        // reverse graph
+        for(int i = 0; i < V; i++){
+
+            for(auto it : graph[i]){
+
+                revadj[it].push_back(i);
+
+                indegree[i]++;
+            }
+        }
+
+        queue<int> q;
+
+        // terminal nodes
+        for(int i = 0; i < V; i++){
+
+            if(indegree[i] == 0){
+                q.push(i);
+            }
+        }
+
+        vector<int> ans;
+
+        while(!q.empty()){
+
+            int node = q.front();
+            q.pop();
+
+            ans.push_back(node);
+
+            for(auto it : revadj[node]){
+
+                indegree[it]--;
+
+                if(indegree[it] == 0){
+                    q.push(it);
+                }
+            }
+        }
+
+        sort(ans.begin(), ans.end());
+
+        return ans;
+    }
+};
+
+
+--------------------------------------------
+dfs will be mroe itntution detech the cycle if same then push the answer 
+
+
+class Solution {
+private: 
+bool dfs(int node , vector<vector<int>>& graph , vector<int>& vis){
+
+    if(vis[node]==1){
+        return false;
+    }
+    if(vis[node]==2){
+        return true;
+    }
+     vis[node] = 1;
+     for(auto it: graph[node]){
+        if(!dfs(it , graph ,vis)){
+            return false; // cycle detected
+        }
+     }
+
+     vis[node]=2;
+     return true;
+
+}
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        vector<int> ans; 
+        vector<int>vis(graph.size(), 0); 
+        for(int i =0 ;i<graph.size(); i++){
+            if(dfs(i , graph , vis)){
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};

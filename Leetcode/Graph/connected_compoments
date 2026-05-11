@@ -25,8 +25,7 @@ vector<vector<int>> build(int V, vector<vector<int>>& edges) {
         }
     }
 
-void bfs(int i, vector<vector<int>>& adj,
-         vector<bool>& vis, vector<int>& comp){
+void bfs(int i, vector<vector<int>>& adj,vector<bool>& vis, vector<int>& comp){
              int n=adj.size();;
               queue<int> q;
         q.push(i);

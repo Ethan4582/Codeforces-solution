@@ -6,6 +6,7 @@ public:
         q.push({B, 1});
         // check if the word exist in 0(1) 
         unordered_set<string> st(L.begin(), L.end());
+        vector<vector<string>> str;
         while(!q.empty()){
             string word= q.front().first; 
              int  cnt= q.front().second; 

@@ -1,0 +1,92 @@
+class Solution {
+private: 
+bool dfs(vector<int>&vis, int node,vector<vector<int>>& adj ){
+    vis[node]=1; 
+
+    for(auto it: adj[node]){
+        if(vis[it]==1){
+            return true; // cycle detected 
+        }
+        if(vis[it]==0){
+            if(dfs(vis ,it, adj)){
+                return true;
+            }
+        }
+    }
+    vis[node]=2;
+    return false;
+}
+public:
+    bool canFinish(int numcrs, vector<vector<int>>& per) {
+       // build the graph from edge list 
+       vector<vector<int>> adjlist(numcrs); 
+       for(auto it: per){
+        adjlist[it[1]].push_back(it[0]);
+       }
+       vector<int>vis(numcrs,0);
+
+       for(int i =0 ; i<adjlist.size(); i++){
+        if(vis[i]==0){
+           // the first node src;
+           if( dfs(vis ,i , adjlist)){
+            return false;
+           }
+        }
+       }
+       
+ return true;
+       
+    }
+};
+
+ 
+//  TC- O(V + E)
+//  SC- O(V + E)
+
+
+BFS Code (Kahn's Algorithm)
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+
+        vector<vector<int>> adj(numCourses);
+        vector<int> indegree(numCourses, 0);
+
+        // build graph + indegree
+        for(auto &p : prerequisites){
+            adj[p[1]].push_back(p[0]);
+            indegree[p[0]]++;
+        }
+
+        queue<int> q;
+
+        // nodes with no prerequisites
+        for(int i = 0; i < numCourses; i++){
+            if(indegree[i] == 0){
+                q.push(i);
+            }
+        }
+
+        int count = 0;
+
+        while(!q.empty()){
+
+            int node = q.front();
+            q.pop();
+
+            count++;
+
+            for(auto neigh : adj[node]){
+
+                indegree[neigh]--;
+
+                if(indegree[neigh] == 0){
+                    q.push(neigh);
+                }
+            }
+        }
+
+        return count == numCourses;
+    }
+};

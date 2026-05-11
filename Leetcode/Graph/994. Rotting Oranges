@@ -9,7 +9,7 @@ public:
             }
         }
         while (q.size()) {
-            for (int cnt = q.size(); cnt--;) {
+            for (int cnt = q.size(); cnt--;) { // intial we have just 1 rooten tomato or spready start from any number of tomato so we need to calute the spreading parallel for all the tomato at same time 
                 auto [x, y] = q.front();
                 q.pop();
                 for (auto &[dx, dy] : dirs) {

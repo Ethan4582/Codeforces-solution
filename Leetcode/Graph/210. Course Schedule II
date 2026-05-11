@@ -1,0 +1,105 @@
+You do NOT push when:
+entering node
+
+You push when: [ to ensure the path is valid ]
+leaving node
+
+Meaning:
+all prerequisites already handled
+
+In topological sort, push node after DFS finishes.
+
+we use a stack we explore it until and we put the nofde on the stack while node is explore during backtracking the we take possible path 
+
+
+
+Class Solution{
+private:
+    bool dfs(int node,vector<int>& vis,stack<int>& st,vector<vector<int>>& adj){
+        vis[node] = 1; // visiting
+        for(auto it : adj[node]){
+            // cycle
+            if(vis[it] == 1)
+                return true;
+            // unvisited
+            if(vis[it] == 0){
+                if(dfs(it, vis, st, adj))
+                    return true;
+            }
+        }
+        vis[node] = 2; // completed
+        // push after dfs complete
+        st.push(node);
+        return false;
+    }
+
+public:
+
+    vector<int> findOrder(int V, vector<vector<int>>& crs) {
+        vector<vector<int>> adj(V);
+        for(auto &it : crs){
+            adj[it[1]].push_back(it[0]);
+        }
+        vector<int> vis(V, 0);
+        stack<int> st;
+        for(int i = 0; i < V; i++){
+            if(vis[i] == 0){
+                if(dfs(i, vis, st, adj)){
+                    return {};
+                }
+            }
+        }
+        vector<int> ans;
+        while(!st.empty()){
+            ans.push_back(st.top());
+            st.pop();
+        }
+
+        return ans;
+    }
+};
+
+
+
+--------------------------Khhan Algorithm is just sorting is just bfs of topology sort -------------------
+	 return count != V; // cycle dected 
+
+class Solution {
+public:
+    vector<int> findOrder(int V, vector<vector<int>>& crs) {
+        vector<vector<int>> adj(V);
+        for(auto &it : crs){
+            adj[it[1]].push_back(it[0]);
+        }
+        // get the indegree
+        vector<int>indegre(V,0);
+
+        for(int i =0 ;i<V; i++){
+            for(auto it: adj[i]){
+                indegre[it]++;
+            }
+        }
+        // put in queue
+        queue<int>q; 
+        for(int i =0; i<V; i++){
+            if(indegre[i]==0){
+                q.push(i);
+            }
+        }
+        vector<int>ans;
+        while(!q.empty()){
+            int node=q.front(); 
+            q.pop(); 
+            ans.push_back(node);
+            for(auto it: adj[node]){
+                // decress the indegree of adj
+                indegre[it]--; 
+                if(indegre[it]==0){
+                    q.push(it);
+                }
+            }
+        }
+
+ return ans;
+    }
+};

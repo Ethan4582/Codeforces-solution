@@ -1,0 +1,71 @@
+Approach	Time	Space
+DFS	O(NM)	O(NM)
+
+class Solution {
+ int dirs[4][2] = {{0,1},{0,-1},{1,0},{-1,0}};
+private:
+void dfs(int i, int j, vector<vector<char>>& A, vector<vector<int>>& vis){
+     vis[i][j] = 1;
+        int m = A.size(), n = A[0].size();
+       for(auto & it: dirs){
+        int x= i+it[0];
+        int y= j+it[1];
+        if(x>=0 && y>=0 && x<m && y<n && A[x][y]=='X' && !vis[x][y]){
+             dfs(x , y , A ,vis);
+        }
+       }
+}
+
+public:
+    int countBattleships(vector<vector<char>>& A) {
+        int ans=0; 
+           int m = A.size(), n = A[0].size();
+        vector<vector<int>> vis(m , vector<int>(n , 0)); 
+        for(int i =0 ; i<m ; i++){
+            for(int j =0 ; j<n; j++){
+                if(A[i][j]=='X' && !vis[i][j]){
+                    ans++;
+                    dfs(i , j  , A ,vis);
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+//dfs is better that bfs the conditon is 1 x k (1 row, k columns) or k x 1  mean we need to go depth and just mark them and move to next x that is not linked 
+	
+	
+	
+	-----------------------optmized------------------------------
+	
+	class Solution {
+public:
+    int countBattleships(vector<vector<char>>& A) {
+        int M= A.size(), N=A[0].size(), ans=0; 
+        for(int i =0; i < M; i++){
+            for(int j =0; j<N; j++){
+                if(A[i][j]=='X'){
+                    // check for boaudnru conditon like 
+                    if((i ==0 || A[i-1][j]=='.') && (j ==0 || A[i][j-1]=='.')){
+                    ans++;
+                }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+
+ // if 1 staright line is created then another line cannot be created just 1 start in post 
+//  ex-
+//  X . X . X
+// . . . . .
+// X . X . X
+
+// or
+
+// X . . X
+// . . . X
+// . . . X
