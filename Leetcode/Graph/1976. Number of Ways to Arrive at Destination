@@ -1,0 +1,87 @@
+Time Complexity: O(E * log(V)), as we are using simple Dijkstra's algorithm here, the time complexity will be of the order E * log(V). Where E = Number of edges and V = Number of vertices.
+
+Space Complexity: O(N)
+
+class Solution {
+public:
+
+    int countPaths(int n, vector<vector<int>>& roads) {
+
+        const int mod = 1e9 + 7;
+
+        // adjacency list
+        // {neighbor, time}
+        vector<vector<pair<int,int>>> adj(n);
+
+        for(auto &it : roads) {
+
+            int u = it[0];
+            int v = it[1];
+            int t = it[2];
+
+            // undirected graph
+            adj[u].push_back({v, t});
+            adj[v].push_back({u, t});
+        }
+
+        // shortest distance
+        vector<long long> dist(n, LLONG_MAX);
+
+        // number of shortest ways
+        vector<int> ways(n, 0);
+
+        // {distance, node}
+        priority_queue<
+            pair<long long,int>,
+            vector<pair<long long,int>>,
+            greater<pair<long long,int>>
+        > pq;
+
+        dist[0] = 0;
+
+        ways[0] = 1;
+
+        pq.push({0, 0});
+
+        while(!pq.empty()) {
+
+            long long currTime = pq.top().first;
+
+            int node = pq.top().second;
+
+            pq.pop();
+
+            // outdated entry
+            if(currTime > dist[node]) {
+                continue;
+            }
+
+            for(auto &it : adj[node]) {
+
+                int adjNode = it.first;
+
+                int newTime = it.second;
+
+                // shorter path found
+                if(dist[adjNode] > currTime + newTime) {
+
+                    dist[adjNode] = currTime + newTime;
+
+                    pq.push({dist[adjNode], adjNode});
+
+                    // inherit ways
+                    ways[adjNode] = ways[node];
+                }
+
+                // another shortest path found
+                else if(dist[adjNode] == currTime + newTime) {
+
+                    ways[adjNode] =
+                        (ways[adjNode] + ways[node]) % mod;
+                }
+            }
+        }
+
+        return ways[n-1] % mod;
+    }
+};

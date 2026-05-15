@@ -1,0 +1,81 @@
+Shortest Path in Directed Acyclic Graph Topological Sort
+
+1.Perform toposort and store the order in a stack
+2.Once the source node is given, pop the elements in the stack until the stack's top is the source 
+3. Rest is the same  ofr undirected graph logic .
+
+
+Time Complexity: O(N+M) {for the topological sort} + O(N+M) {for relaxation of vertices, each node and its adjacent nodes get traversed} ~ O(N+M
+Space Complexity:  O(N) {for the stack storing the topological sort} + O(N) {for storing the shortest distance for each node} + O(N) {for the visited array} + O( N+2M) {for the adjacency list} ~ O(N+M) .
+
+
+class Solution {
+private:
+    bool dfs(stack<int>& st, int node, vector<vector<pair<int,int>>>& adj, vector<int>& vis) {
+
+        vis[node] = 1;
+
+        for(auto it : adj[node]) {
+            int n1 = it.first;
+
+            if(vis[n1] == 1) {
+                return true;
+            }
+
+            if(vis[n1] == 0) {
+                if(dfs(st, n1, adj, vis)) {
+                    return true;
+                }
+            }
+        }
+
+        vis[node] = 2;
+        st.push(node);
+        return false;
+    }
+
+    stack<int> toposort(vector<vector<pair<int,int>>>& adj, int V) {
+
+        vector<int> vis(V, 0);
+        stack<int> st;
+        for(int i = 0; i < V; i++) {
+            if(vis[i] == 0) {
+                dfs(st, i, adj, vis);
+            }
+        }
+
+        return st;
+    }
+
+public:
+
+    vector<int> short_path_DAG( vector<vector<pair<int,int>>>& adj, int V, int src) {
+
+        // topo sort
+        stack<int> st = toposort(adj, V);
+        vector<int> dis(V, INT_MAX);
+        dis[src] = 0;
+        // relaxation in topo order
+        while(!st.empty()) {
+            int node = st.top();
+            st.pop();
+            if(dis[node] != INT_MAX) {
+                for(auto it : adj[node]) {
+                    int n1 = it.first;
+                    int wt = it.second;
+                    if(dis[node] + wt < dis[n1]) {
+                        dis[n1] = dis[node] + wt;
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i < V; i++) {
+            if(dis[i] == INT_MAX) {
+                dis[i] = -1;
+            }
+        }
+
+        return dis;
+    }
+};

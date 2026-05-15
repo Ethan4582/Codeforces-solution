@@ -1,0 +1,74 @@
+class Solution {
+
+private:
+
+    int dirs[4][2] = {
+        {0,1}, {1,0}, {-1,0}, {0,-1}
+    };
+
+public:
+
+    int minimumEffortPath(vector<vector<int>>& H) {
+
+        int m = H.size();
+        int n = H[0].size();
+
+        // dist[i][j] = minimum effort needed to reach cell
+        vector<vector<int>> dist(
+            m,
+            vector<int>(n, INT_MAX)
+        );
+
+        // {effort, {i,j}}
+        priority_queue<
+            pair<int, pair<int,int>>,
+            vector<pair<int, pair<int,int>>>,
+            greater<pair<int, pair<int,int>>>
+        > pq;
+
+        dist[0][0] = 0;
+
+        pq.push({0, {0,0}});
+
+        while(!pq.empty()) {
+
+            int effort = pq.top().first;
+
+            int i = pq.top().second.first;
+            int j = pq.top().second.second;
+
+            pq.pop();
+
+            // reached destination
+            if(i == m-1 && j == n-1) {
+                return effort;
+            }
+
+            for(auto &[dx, dy] : dirs) {
+
+                int x = i + dx;
+                int y = j + dy;
+
+                if(x >= 0 && y >= 0 &&
+                   x < m && y < n) {
+
+                    // edge cost
+                    int diff = abs(H[x][y] - H[i][j]);
+
+                    // path effort
+                    int newEffort = max(effort, diff);
+
+                    // relaxation
+                    if(newEffort < dist[x][y]) {
+
+                        dist[x][y] = newEffort;
+
+                        pq.push({newEffort, {x,y}});
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+};

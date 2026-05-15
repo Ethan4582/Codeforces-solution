@@ -1,0 +1,75 @@
+
+
+class Solution {
+
+public:
+    vector<int> shortest_path_with_unit_weight( vector<vector<int>>& adj, int K, int src) {
+
+        vector<int> path(K, INT_MAX);
+        queue<pair<int,int>> q;
+        path[src] = 0;
+
+        // starting BFS
+        q.push({src, 0});
+        while(!q.empty()) {
+            int node = q.front().first;
+            int we = q.front().second;
+            q.pop();
+
+            for(auto it : adj[node]) {
+
+                // found shorter distance
+                if(path[it] > we + 1) {
+
+                    path[it] = we + 1;
+
+                    q.push({it, we + 1});
+                }
+            }
+        }
+
+        return path;  // this hold each node shortest distance from the source 
+    }
+};
+
+
+
+----------------dfs not becuase it is not optmial it may find longer distance before it find shorter distance -------------------------------
+
+
+class Solution {
+
+private:
+
+    void dfs(int node,
+             int dist,
+             vector<vector<int>>& adj,
+             vector<int>& path) {
+
+        // already found shorter path
+        if(dist >= path[node]) {
+            return;
+        }
+
+        path[node] = dist;
+
+        for(auto it : adj[node]) {
+
+            dfs(it, dist + 1, adj, path);
+        }
+    }
+
+public:
+
+    vector<int> shortest_path_with_unit_weight(
+        vector<vector<int>>& adj,
+        int V,
+        int src) {
+
+        vector<int> path(V, INT_MAX);
+
+        dfs(src, 0, adj, path);
+
+        return path;
+    }
+};

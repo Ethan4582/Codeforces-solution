@@ -1,0 +1,60 @@
+Time Complexity
+O((V + E) log V)
+Space Complexity
+O(V + E)
+
+
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        // bfs over dfs becuase dfs might waste lot of time it will give a lot of depth and then explore  bfs on other can do the claulte on the go while trverseing 
+
+        vector<vector<pair<int, int>>> adj(n+1); // {node} : ... {des1, time1 }
+      // shortest fast reacble time  fo Djkstra
+      for(auto it : times){
+        auto u= it[0]; 
+        auto v= it[1];
+        auto t= it[2]; 
+        adj[u].push_back({v ,t});
+      }
+
+      vector<int> tim(n+1 , INT_MAX); 
+      priority_queue<pair<int, int>, vector<pair<int, int>> , greater<pair<int, int>>> pq; 
+      tim[k]=0;
+      pq.push({0 , k});  // buy time
+      while(!pq.empty()){
+      int currtime = pq.top().first;
+int node = pq.top().second;
+        pq.pop(); 
+
+        if(currtime> tim[node]){
+            // skip it 
+            continue;
+        }
+
+
+         for(auto it: adj[node]){
+              int dst = it.first;
+                int newTime = it.second; 
+
+            if(tim[dst]> currtime +newTime){
+                tim[dst]= currtime +newTime;
+                pq.push({tim[dst] , dst});
+            }
+         }
+      }
+      int ans=0;
+      //we need  the min time but tim array shortes time to reach each node
+
+     for(int i =1 ; i<=n; i++){
+          if(tim[i]==INT_MAX){
+        return -1;
+      }
+
+      ans= max(ans , tim[i]); // max possible time will cover all the node 
+     }
+
+     return ans;
+    }
+};

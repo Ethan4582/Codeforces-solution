@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+         queue<pair<int, pair<int ,int>>> q; // {k ,{node , cost}}
+         vector<vector<pair<int, int>>> adj(n);  // {from , to ,cost}
+         for(auto &it : flights){
+            auto u=it[0]; auto v= it[1]; auto wt= it[2]; 
+            adj[u].push_back({v ,wt});
+         }
+        vector<int> cost(n, INT_MAX);
+         q.push({0 ,{src ,0}}); 
+         cost[src]=0;
+
+         while(!q.empty()){
+            int k1= q.front().first;
+            int node=q.front().second.first;
+            int currcost=q.front().second.second;
+   q.pop(); 
+            if(k1>k){
+                continue;
+            }
+         
+            for(auto & it : adj[node]){
+                int n1= it.first; 
+                int wt= it.second; 
+
+                if(cost[n1]> currcost+wt  ){
+                    cost[n1]= currcost+wt; 
+                    q.push({k1+1 , { n1 , cost[n1]}});
+                }
+            }
+         }
+         if(cost[dst]==INT_MAX){
+            return -1;
+         }
+         return cost[dst];
+    }
+};
+
+Time Complexity: O(N), where the additional log(N) time is eliminated by using a simple queue rather than a priority queue, which is usually used in Dijkstra’s Algorithm. Where N = Number of flights / Number of edges.
+
+Space Complexity: O(|E| + |V|), 

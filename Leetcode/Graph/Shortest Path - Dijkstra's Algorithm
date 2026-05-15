@@ -1,0 +1,101 @@
+
+Note: The Graph doesn’t contain any negative weight cycle
+
+// prepare the distance node using priority_queue  and parent not to track the node arraival 
+ then use the parent array to track  back the path until par[node]!=node keep backtracking the node 
+
+Method	Time Complexity	Space Complexity
+Set-based Dijkstra	O((V + E) log V)	O(V + E)
+
+
+ Class Solution {
+
+    private: 
+    vector<int> DIJ(vector<vector<int>>& adj , int src){
+        vector<int> dist(adj.size(), INT_MAX); 
+
+        set<pair<int,int>> st;
+
+        set.insert({0 , src}); 
+        dist[src]=0; 
+
+        while(!st.empty()){
+             auto it = *(st.begin());
+             int dis= it.first; 
+             int  node= it.second;
+             st.erase(it);
+
+             for(auto it: adj[node]){
+                 int adjNode = it.first;
+                int wt = it.second;
+
+                if(dis+ wt < dist[adjNode]){
+                    if(dist[adjNode]!=INT_MAX){
+                        st.erase({dist[adjNode], adjNode});   // what if we found better path but already avlue exit so i need to delte before i insert thevalue 
+                    }
+                    dist[adjNode] = dis + wt;
+                    
+                    st.insert({dis[adjNode], adjNode});
+                }
+             }
+        }
+
+    }
+ }
+
+
+
+ -------------------------------------- prority_queue----------------------------------
+
+ Time Complexity: O(E log V), as each edge leads to at most one insertion in the priority queue, which takes log V time.
+
+Space Complexity: O(V + E), d
+
+
+
+
+class Solution {
+public:
+    // Function to implement Dijkstra's Algorithm
+    vector<int> dijkstra(int V, vector<vector<pair<int,int>>>& adj, int src) {
+        // Distance array initialized to large value
+        vector<int> dist(V, 1e9);
+
+        // Min-heap storing {distance, node}
+        priority_queue<pair<int,int>, vector<pair<int,int>>, 
+                       greater<pair<int,int>>> pq;
+
+        // Distance to source is 0
+        dist[src] = 0;
+
+        // Push source into heap
+        pq.push({0, src});
+
+        // Process nodes until heap is empty
+        while (!pq.empty()) {
+            // Extract node with minimum distance
+            int d = pq.top().first;
+            int node = pq.top().second;
+            pq.pop();
+
+            // Skip if this distance is outdated
+            if (d > dist[node]) continue;
+
+            // Traverse all adjacent neighbors
+            for (auto it : adj[node]) {
+                int next = it.first;
+                int wt = it.second;
+
+                // Relaxation check
+                if (dist[node] + wt < dist[next]) {
+                    // Update distance
+                    dist[next] = dist[node] + wt;
+
+                    // Push updated distance into heap
+                    pq.push({dist[next], next});
+                }
+            }
+        }
+        return dist;
+    }
+};

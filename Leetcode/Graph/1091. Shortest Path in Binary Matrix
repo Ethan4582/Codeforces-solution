@@ -1,0 +1,50 @@
+
+
+class Solution {
+private:
+    int dirs[8][2] = {
+        {0,1}, {1,0}, {-1,0}, {0,-1},
+        {1,-1}, {-1,1}, {1,1}, {-1,-1}
+    };
+
+public:
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        // blocked start or end
+        if(grid[0][0] == 1 || grid[m-1][n-1] == 1) {
+            return -1;
+        }
+        // distance matrix
+        vector<vector<int>> dist(m, vector<int>(n, INT_MAX));
+        queue<pair<int,int>> q;
+        // start cell
+        dist[0][0] = 1;
+        q.push({0,0});
+        while(!q.empty()) {
+            int i = q.front().first;
+            int j = q.front().second;
+            q.pop();
+            for(auto &[dx, dy] : dirs) {
+                int xi = i + dx;
+                int yi = j + dy;
+                // valid move
+                if(xi >= 0 && yi >= 0 &&
+                   xi < m && yi < n &&
+                   grid[xi][yi] == 0) {
+                    // shorter path found
+                    if(dist[xi][yi] > dist[i][j] + 1) {
+                        dist[xi][yi] = dist[i][j] + 1;
+                        q.push({xi, yi});
+                    }
+                }
+            }
+        }
+
+        if(dist[m-1][n-1] == INT_MAX) {
+            return -1;
+        }
+
+        return dist[m-1][n-1];
+    }
+};
