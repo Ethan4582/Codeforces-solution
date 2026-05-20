@@ -1,0 +1,126 @@
+if we have n component in graph we need atleat n-1 component if not that is impossible so return -1 
+
+
+class Solution {
+private: 
+void dfs(vector<int>& vis ,int node,  vector<vector<int>>& adj){
+    vis[node]=1; 
+    for(auto it: adj[node]){
+        if(!vis[it]){
+            dfs(vis , it , adj);
+        }
+    }
+}
+public:
+    int makeConnected(int n, vector<vector<int>>& con) {
+        // for n connected component we need atlest n-1 edge if not not possible 
+        if(con.size()<n-1){
+            return -1;
+        }
+        // creat adj graph 
+        vector<vector<int>> adj(n); 
+        for(auto it: con){
+            adj[it[0]].push_back(it[1]);
+             adj[it[1]].push_back(it[0]);
+        }
+        vector<int>vis(n , 0); 
+        int ans=0; 
+      for(int i=0; i<n; i++){
+            if(!vis[i]){
+                dfs(vis , i , adj);
+                ans++;
+            }
+        }
+        return ans-1;
+    }
+};
+
+
+
+
+
+-------------optmized DSU------------------------------------------
+DSU helps us track:
+
+which computers belong to same connected group
+
+Time Complexity: O(N + M × α(N)), we visit every node and edge once to find number of components.
+Space Complexity: O(N), for storing parent and rank/size vector for DSU.
+
+
+class DSU {
+
+public:
+    vector<int> parent, rank, size;
+    DSU(int n) {
+        parent.resize(n);
+        // rank.resize(n, 0);
+        size.resize(n+1 , 0);
+        for(int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int findpar(int x) {
+        if(x != parent[x]) {
+            parent[x] =
+                findpar(parent[x]);
+        }
+        return parent[x];
+    }
+
+    void unite(int u, int v) {
+        int x = findpar(u);
+        int y = findpar(v);
+        // already connected
+        if(x == y) {
+            return;
+        }
+        // union by rank
+        if(size[x] < size[y]) {
+            parent[x] = y;
+            size[y]+=size[x];
+        }
+        // else if(rank[x] > rank[y]) {
+        //     parent[y] = x;
+        // }
+        else {
+            parent[y] = x;
+            // rank[x]++;
+            size[x]+=size[y];
+        }
+    }
+};
+
+class Solution {
+
+public:
+
+    int makeConnected(int n,vector<vector<int>>& con) {
+
+        // not enough edges
+        if(con.size() < n - 1) {
+            return -1;
+        }
+
+        DSU dsu(n);
+
+        // connect components
+        for(auto &it : con) {
+
+            dsu.unite(it[0], it[1]);
+        }
+
+        // count connected components
+        unordered_set<int> comp;
+
+        for(int i = 0; i < n; i++) {
+
+            comp.insert(
+                dsu.findpar(i)
+            );
+        }
+
+        return comp.size() - 1;
+    }
+};

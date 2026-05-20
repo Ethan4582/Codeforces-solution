@@ -1,0 +1,51 @@
+Time Complexity
+O(n³)
+
+(Floyd Warshall)
+
+Space Complexity
+O(n²)
+
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& ed, int ts) {
+          vector<vector<int>> dist(n, vector<int>(n , INT_MAX));
+
+          for (auto it: ed){
+            dist[it[0]][it[1]]= it[2];
+             dist[it[1]][it[0]]= it[2];
+          }
+          // the distanct to own city 
+            for (int i = 0; i < n; i++) dist[i][i] = 0;
+
+
+          for(int k= 0 ; k<n; k++){
+
+            for(int i =0 ; i<n; i++){
+                for(int j =0 ; j<n; j++){
+                    if(dist[i][k]==INT_MAX  || dist[k][j]==INT_MAX){
+                        continue;
+                    }
+                    dist[i][j]= min(dist[i][j],(dist[i][k] +dist[k][j]) );
+                }
+            }
+          }
+
+          int citycnt=n; int citynum=-1;
+          for(int i=0;i<n; i++){
+            int cnt=0; 
+            for(int j =0 ; j<n; j++){
+                // distnace is less then threshold
+                if(dist[i][j]<=ts){
+                    cnt++;
+                }
+                // update the which has minium smallest number of cities that are reachable     
+            }
+            if(cnt<=citycnt){
+                   citycnt= cnt;
+                   citynum= i;
+                }
+          }
+          return citynum;
+    }
+};

@@ -1,0 +1,107 @@
+
+// Time: O(N^2)
+// Space: O(N^2)
+
+class Solution {
+private: 
+void dfs(vector<vector<int>> &G ,int i , vector<int>& vis){
+    vis[i]=1; 
+    for(auto it: G[i]){
+        if(vis[it]) continue; 
+        dfs(G , it , vis);
+    }
+}
+int getcomp(vector<vector<int>> & G){
+    vector<int>vis(G.size(), 0); 
+    int cnt=0;
+    for(int i =0; i<G.size(); i++){
+        if(!vis[i]){
+            dfs(G , i , vis); 
+            cnt++;
+        }
+    }
+    return cnt;
+}
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int N= stones.size(); 
+        vector<vector<int>> G(N);
+        for(int i =0; i <N; i++){
+            for(int j =0 ; j<N; j++){
+                if(stones[i][0]==stones[j][0] ||  stones[i][1]==stones[j][1]){ // check the same row or column
+                 G[i].push_back(j); 
+                 G[j].push_back(i);
+                }
+            }
+        }
+        return stones.size()-getcomp(G);
+    }
+};
+
+
+
+//ans- stone.size()- no. connected component ex- 9 we need max possible remvoe  of the stone and we we just no of connected component and remove and left with 1 each node to thus ensure we remove all the node in the same group while still condition is true and this the answer 
+
+
+------------------------DSU-----------------------------------------
+
+TC- ~ O(N²)
+SC-0(N)
+
+class DSU {
+    public: 
+    vector<int> parent, size;
+
+    DSU(int n){
+        parent.resize(n); size.resize(n+1 , 0); 
+        for(int i =0; i<n; i++){
+            parent[i]=i;
+        }
+    }
+
+    int find(int n){
+        if(n!=parent[n]){
+            parent[n]= find(parent[n]);
+        }
+        return parent[n];
+    }
+
+    void  unite(int x , int y){
+        int pu=find(x); int pv= find(y); 
+        if(pu== pv) return ; 
+        if(size[pu]<size[pv]){
+            parent[pu]=pv;
+            size[pv]+=size[pu];
+        }else{
+             parent[pv]=pu;
+            size[pu]+=size[pv];
+        }
+
+    }
+};
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int N= stones.size(); 
+        DSU dsu(N);
+        for(int i =0; i <N; i++){
+            for(int j =0 ; j<N; j++){
+                if(stones[i][0]==stones[j][0] ||  stones[i][1]==stones[j][1]){ // check the same row or column
+                dsu.unite(i, j);
+                }
+            }
+        }
+
+        int conn=0; 
+        for(int i =0; i<N; i++){
+            if(dsu.find(i)==i){
+                conn++;
+            }
+        }
+        return stones.size()-conn;
+    }
+};
+
+
+
+//ans- stone.size()- no. connected component ex- 9 we need max possible remvoe  of the stone and we we just no of connected component and remove and left with 1 each node to thus ensure we remove all the node in the same group while still condition is true and this the answer 
