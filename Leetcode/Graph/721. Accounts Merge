@@ -1,0 +1,164 @@
+// Time: O(NMWlog(NM))
+// Space: O(NMW)
+
+class DSU{
+    vector<int> parent, size, rank; 
+    public: 
+    DSU(int n){
+        parent.resize(n); size.resize(n+1); rank.resize(n+1 , 0); 
+        for(int i =0 ; i<n; i++){
+            parent[i]= i; 
+            size[i]=1;
+        }
+    }
+    int findpar(int node){
+        if(node==parent[node]){
+            return node; // found the super parent 
+        }
+        return parent[node]=findpar(parent[node]); 
+    }
+
+    void uni(int x , int y){
+        int px= findpar(x); 
+        int py= findpar(y); 
+        if(px==py) return; 
+        if(rank[px]<rank[py]){
+            parent[px]=py;
+        }
+        else if(rank[py]<rank[px]){
+            parent[py]=px;
+        }else{
+            parent[py]=px; 
+            rank[px]++; // increse the rank
+        }
+    }
+
+    void sze(int x ,int y){
+        int px= findpar(x); 
+        int py=findpar(y); 
+        if(px==py) return; 
+        if(size[px]<size[py]){
+            parent[px]=py; 
+            size[py]+=size[px];
+        }else if(size[py]< size[px]){
+            parent[py]= px; 
+            size[px]+=size[py];
+        }
+        
+    }
+
+};
+
+
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& acc) {
+         int n= acc.size();
+         DSU dsu(n);
+         unordered_map<string , int> mpp;
+
+         for(int i =0 ;i<n; i++){
+            for(int j=1;j<acc[i].size(); j++){ // iterate over the mail avoid the main name 
+                // if new email then mark it 
+                if(mpp.find(acc[i][j])==mpp.end()){
+                    mpp[acc[i][j]]=i; 
+                }else{
+                    // we already have found a parent previous deuplicate email to union
+                    dsu.uni(i , mpp[acc[i][j]]); // merge with prvious and new 
+                }
+            }
+         }
+
+        vector<vector<string>> store(n);
+         for(auto it: mpp){
+            string mail= it.first; 
+            int node=dsu.findpar(it.second); // push to correct index email and merge
+            store[node].push_back(mail);
+         }
+         // now processing the final answer 
+         vector<vector<string>> ans;
+         for(int i =0 ; i<n; i++){
+            if(store[i].empty()) continue; // skip it 
+            sort(store[i].begin(), store[i].end()); 
+            vector<string> temp;
+            temp.push_back(acc[i][0]); // push the first src name 
+            for(auto &it: store[i]){
+                temp.push_back(it);
+            }
+            ans.push_back(temp);
+         }
+
+         // sort it again 
+         sort(ans.begin(), ans.end());
+         return ans;
+    }
+};
+
+
+
+----------------------------dfs--------------------------------------------------------
+
+// Time: O(NMWlog(NM))
+// Space: O(NMW)
+
+
+class Solution {
+    unordered_map<string, unordered_set<string>> st;
+    unordered_set<string> seen;
+    vector<vector<string>> ans;
+
+private:
+
+    void dfs(string node) {
+
+        if(seen.count(node)) {
+            return;
+        }
+        seen.insert(node);
+        // current connected component emails
+        ans.back().push_back(node);
+
+        /*
+        Since every connected email is reachable
+        through graph edges, DFS completes the
+        ENTIRE connected component first before returning.
+
+        So ans.back() always stores ONE merged account.
+        */
+
+        for(auto &it : st[node]) {
+            dfs(it);
+        }
+    }
+
+public:
+
+    vector<vector<string>>
+    accountsMerge(
+        vector<vector<string>>& acc) {
+
+        // build graph
+        for(auto &it : acc) {
+            string firstMail = it[1];
+            for(int i = 2; i < it.size(); i++) {
+               st[firstMail].insert(it[i]);
+                st[it[i]].insert(firstMail);
+            }
+        }
+
+        // traverse components
+        for(auto &it : acc) {
+            string name = it[0];
+            string firstMail = it[1];
+            if(seen.count(firstMail)) {
+                continue;
+            }
+            ans.push_back({name});
+            dfs(firstMail);
+            // sort only emails
+            sort(ans.back().begin() + 1,   ans.back().end());
+        }
+
+        return ans;
+    }
+};

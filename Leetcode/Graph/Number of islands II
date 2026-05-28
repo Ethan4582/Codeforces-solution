@@ -1,0 +1,192 @@
+TC- O(k * M * N)
+
+Sc-O(M*N)
+
+
+class Solution {
+
+    int dirs[4][2] = { {1, 0}, {0, 1},{-1, 0},{0, -1}};
+
+private:
+    void dfs(int i,int j,int M,int N,vector<vector<int>>& vis,vector<vector<int>>& seen) {
+
+        if(i < 0 || j < 0 || i >= M || j >= N || vis[i][j] == 0 || seen[i][j]) {  return;}
+
+        seen[i][j] = 1;
+        for(auto &it : dirs) {
+            int x = i + it[0];
+            int y = j + it[1];
+
+            dfs(x, y, M, N, vis, seen  );
+        }
+    }
+
+    void bfs( int i,int j, int M, int N,  vector<vector<int>>& vis,  vector<vector<int>>& seen) {
+
+        queue<pair<int,int>> q;
+        q.push({i, j});
+        seen[i][j] = 1;
+        while(!q.empty()) {
+            int x = q.front().first;
+            int y = q.front().second;
+            q.pop();
+            for(auto &it : dirs) {
+                int dx = x + it[0];
+                int dy = y + it[1];
+                if(dx < 0 || dy < 0 || dx >= M || dy >= N || vis[dx][dy] == 0 || seen[dx][dy])
+                    continue;
+                }
+
+                seen[dx][dy] = 1;
+
+                q.push({dx, dy});
+            }
+        }
+    };
+
+public:
+
+    vector<int> numIslands2(int M,int N,  vector<vector<int>>& A) {
+
+        vector<vector<int>> vis( M, vector<int>(N, 0) ); // to mark to reduse your dfs operation 
+
+        vector<int> ans;
+
+        for(auto &it : A) {
+
+            int r = it[0];
+            int c = it[1];
+
+            // duplicate operation
+            if(vis[r][c] == 1) { // 
+                ans.push_back(ans.empty() ? 0 : ans.back() ); // the last possible island after operation
+                continue;
+            }
+
+            vis[r][c] = 1;
+
+            vector<vector<int>> seen(M,vector<int>(N, 0) );
+
+            int cnt = 0;
+            // count islands again
+            for(int i = 0; i < M; i++) {
+
+                for(int j = 0; j < N; j++) {
+
+                    if(vis[i][j] == 1 && !seen[i][j]) {
+
+                        dfs( i, j, M, N, vis, seen );
+                        cnt++;
+                    }
+                }
+            }
+
+            ans.push_back(cnt);
+        }
+
+        return ans;
+    }
+};
+
+
+-------------------------------------DSU -------------------------------------
+
+Time Complexity: O(N × M), Each cell is visited at most once in BFS/DFS traversal.
+
+Space Complexity: O(N × M), 
+
+
+class DSU {
+    vector<int> sz, parent, rankv;
+public:
+    DSU(int n) {
+        parent.resize(n);
+        rankv.resize(n + 1, 0);
+        sz.resize(n + 1, 0);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            sz[i] = 1;
+        }
+    }
+
+    int findpar(int node) {
+        if (node == parent[node]) {
+            return node;
+        }
+        return parent[node] = findpar(parent[node]);
+    }
+
+    void unite(int x, int y) {
+        int px = findpar(x);
+        int py = findpar(y);
+        if (px == py) return;
+        if (rankv[px] < rankv[py]) {
+            parent[px] = py;
+        } else if (rankv[py] < rankv[px]) {
+            parent[py] = px;
+        } else {
+            parent[py] = px;
+            rankv[px]++;
+        }
+    }
+
+    void bysize(int x, int y) {
+        int px = findpar(x);
+        int py = findpar(y);
+        if (px == py) return;
+        if (sz[px] < sz[py]) {
+            parent[px] = py;
+            sz[py] += sz[px];
+        } else {
+            parent[py] = px;
+            sz[px] += sz[py];
+        }
+    }
+};
+
+class Solution {
+    int dirs[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+public:
+    vector<int> numOfIslands(int n, int m, vector<vector<int>>& op) {
+        DSU dsu(n * m);
+
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        int cnt = 0;
+
+        vector<int> ans;
+
+        for (auto it : op) {
+            int x = it[0];
+            int y = it[1];
+            if (vis[x][y] == 1) {
+                ans.push_back(cnt);
+                continue;
+            }
+
+            // if not vis
+            vis[x][y] = 1;
+            cnt++;
+
+            for (auto it : dirs) {
+                int dx = it[0] + x;
+                int dy = it[1] + y;
+                if (dx < n && dy < m && dx >= 0 && dy >= 0) {
+                    // and if the ashnode is land
+                    if (vis[dx][dy] == 1) {
+                        int currnode = x * m + y;
+                        int adjnode = dx * m + dy;
+                        // if they do have same parrent
+                        if (dsu.findpar(currnode) != dsu.findpar(adjnode)) {
+                            cnt--; // reduce foreach new land
+                            // connected them
+                            dsu.unite(currnode, adjnode);
+                        }
+                    }
+                }
+            }
+            ans.push_back(cnt);
+        }
+
+        return ans;
+    }
+};
