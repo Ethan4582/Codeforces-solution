@@ -1,0 +1,63 @@
+
+- in order to stand on cell the elivation has to reach -> t  if not then it is submerged 
+- Instead: cost(next) = max(currentCost, elevation[next])
+- because: path cost = highest elevation seen so far
+
+Time Complexity: O(N^2 * log(N))
+Space Complexity: O(N^2),
+
+class Solution {
+    int dirs[4][2]= {{1, 0}, {0 ,1}, {-1, 0}, {0, -1}};
+public:
+    int swimInWater(vector<vector<int>>& grid) {
+         int n = grid.size();
+
+        vector<vector<int>> dist( n, vector<int>(n, 1e9));
+
+        priority_queue< pair<int,pair<int,int>>,  vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>> >> pq;
+
+        dist[0][0]= grid[0][0];
+         pq.push({grid[0][0], {0,0}});
+          while(!pq.empty()) {
+              int elev = pq.top().first;
+            int x = pq.top().second.first;
+            int y = pq.top().second.second;
+            pq.pop();
+            if(x == n - 1 && y == n - 1) {
+                return elev; // reached the bottom
+            }
+              if(elev > dist[x][y]) {
+                continue;
+            }
+
+              for(auto &it : dirs) {
+
+                int xi = x + it[0];
+
+                int yi = y + it[1];
+
+                if(xi >= 0 &&
+                   yi >= 0 &&
+                   xi < n &&
+                   yi < n) {
+                    int newcost= max(elev , grid[xi][yi]);  // this is need to cover already coverd path like curr is 5 and next is 3 can move to 3 as we coverd this 3 under 5  
+
+//grid[0][1]
+// means:
+// height = 2
+// You cannot stand there until:
+// water level >= 2
+
+                    if(newcost< dist[xi][yi]){
+                        dist[xi][yi]=newcost;
+                        pq.push({newcost, {xi ,yi}});
+                    }  // Everything ≤ 5 is accessible.
+
+                   }
+              }
+
+          }
+          return -1;
+
+    }
+};

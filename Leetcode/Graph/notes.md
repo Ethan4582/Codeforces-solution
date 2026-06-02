@@ -148,7 +148,7 @@ public:
 
 
 
---------------------- just the sorting ------------------------------------------
+--------------------- just the sorting / Topo sort the node at the finsh time ------------------------------------------
 
 class Solution {
 private:
@@ -813,3 +813,230 @@ Now, if we again carefully observe, after applying path compression the rank of 
             size[ulp_u] += size[ulp_v];
         }
     }
+
+
+
+
+
+
+
+
+
+
+    ---------------------------------- Tarjan's Algorithm/ find bridge in graph -------------------------------
+
+tim [] = time of inseration for each node 
+low[]= min lowest time apart from parent node out of all the adjucent node 
+
+
+class Solution {
+    int timer = 1;
+
+    void dfs(int node, int parent, vector<int>& vis, vector<int> adj[], int tim[], int low[], vector<vector<int>>& bridges) {
+        vis[node] = 1;
+        tim[node] = low[node] = timer++;
+        
+        for (auto it : adj[node]) {
+            if (it == parent) continue;
+
+            if (!vis[it]) {
+                dfs(it, node, vis, adj, tim, low, bridges);
+                low[node] = min(low[node], low[it]); // storing the low post reachtime to of adj node 
+
+                // Check if this edge is a bridge
+                if (low[it] > tim[node]) {
+                    bridges.push_back({node, it});
+                }
+            } else {
+                // Back edge: update low-link value using discovery time of the ancestor
+                low[node] = min(low[node], tim[it]); 
+            }
+        }
+    }
+
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<int> adj[n];
+        for (auto& conn : connections) {
+            int u = conn[0], v = conn[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int> vis(n, 0);
+        int tim[n], low[n];
+        vector<vector<int>> bridges;
+
+        dfs(0, -1, vis, adj, tim, low, bridges);
+
+        return bridges;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+---------------------- Articulation Point in Graph----------------
+
+
+
+sing namespace std;
+
+class Solution {
+private:
+    int timer = 1;
+
+    // DFS to find articulation points
+    void dfs(int node, int parent, vector<int> &vis, int tin[], int low[],
+             vector<int> &mark, vector<int> adj[]) {
+
+        vis[node] = 1;
+        tin[node] = low[node] = timer++; // set discovery and low time
+        int child = 0;
+
+        for (auto it : adj[node]) {
+            if (it == parent) continue; // skip the edge to parent
+
+            if (!vis[it]) {
+                dfs(it, node, vis, tin, low, mark, adj); // recursive DFS
+                low[node] = min(low[node], low[it]);     // update low time
+
+                // Check articulation condition (excluding root)
+                if (low[it] >= tin[node] && parent != -1) {
+                    mark[node] = 1;
+                }
+                child++;
+            }
+            else {
+                // back edge case
+                low[node] = min(low[node], tin[it]);
+            }
+        }
+
+        // If root node has more than one child
+        if (parent == -1 && child > 1) {
+            mark[node] = 1;
+        }
+    }
+
+public:
+    vector<int> articulationPoints(int n, vector<int> adj[]) {
+        vector<int> vis(n, 0), mark(n, 0);
+        int tin[n], low[n];
+
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
+                dfs(i, -1, vis, tin, low, mark, adj);
+            }
+        }
+
+        vector<int> ans;
+        for (int i = 0; i < n; i++) {
+            if (mark[i]) ans.push_back(i);
+        }
+        return ans.empty() ? vector<int>{-1} : ans;
+    }
+};
+
+---------------------------------find SSCE------------------------------
+
+
+Strongly Connected Components - Kosaraju's Algorithm
+
+In a directed graph, strongly connected components (SCCs) are subsets of nodes where every node is reachable from every other node within the same subset. Kosaraju’s Algorithm efficiently finds these SCCs by leveraging the concept of graph transposition and finishing times in DFS.
+
+1. do the topolog sort or sort node on the finshing node 
+2. transpose the graph [ so dot go anywhere other than ssce]
+3. do the dfs usig the finish time node store innstack 
+
+Time Complexity: O(V + E),
+
+Space Complexity: O(V + E),
+
+Algo-
+
+
+class Solution {
+   private:
+   void dfs(vector<int> adj[], vector<int>& vis, int node, stack<int>& st) {
+      vis[node] = 1;
+      for (auto it : adj[node]) {
+         if (!vis[it]) {
+            dfs(adj, vis, it, st);
+         }
+      }
+      st.push(node); // push and store the node at finish time
+   }
+
+   void dfs2(vector<vector<int>>& grp, vector<int>& vis, int node) {
+      vis[node] = 1;
+      for (auto it : grp[node]) {
+         if (!vis[it]) {
+            dfs2(grp, vis, it);
+         }
+      }
+   }
+
+   void dfs3(vector<vector<int>>& grp, vector<int>& vis, int node, vector<int>& temp) {
+      vis[node] = 1;
+      temp.push_back(node);
+      for (auto it : grp[node]) {
+         if (!vis[it]) {
+            dfs3(grp, vis, it, temp);
+         }
+      }
+   }
+
+   public:
+   int kosaraju(int V, vector<int> adj[]) {
+      stack<int> st;
+      vector<int> vis(V, 0);
+      for (int i = 0; i < V; i++) {
+         if (!vis[i]) {
+            dfs(adj, vis, i, st);
+         }
+      }
+
+      // transpose the graph
+      vector<vector<int>> transpose_graph(V);
+      for (int i = 0; i < V; i++) {
+         for (auto it : adj[i]) {
+            transpose_graph[it].push_back(i);
+         }
+      }
+
+      // step 3: just dfs on the top sorted node
+      int ans = 0;
+      for (int i = 0; i < V; i++) {
+         vis[i] = 0;
+      }
+      while (!st.empty()) {
+         int node = st.top();
+         st.pop();
+         if (!vis[node]) {
+            ans++;
+            dfs2(transpose_graph, vis, node);
+         }
+      }
+
+      // If we need to return the graph itself
+      // vector<vector<int>> ans;
+      // while (!st.empty()) {
+      //    int node = st.top();
+      //    st.pop();
+      //    if (!vis[node]) {
+      //       vector<int> temp;
+      //       dfs3(transpose_graph, vis, node, temp);
+      //       ans.push_back(temp);
+      //    }
+      // }
+
+      return ans;
+   }
+};

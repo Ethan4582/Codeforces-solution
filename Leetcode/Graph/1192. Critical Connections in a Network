@@ -1,0 +1,48 @@
+class Solution {
+    int timer = 1;
+
+    void dfs(int node, int parent, vector<int>& vis, vector<int> adj[], int tim[], int low[], vector<vector<int>>& bridges) {
+        vis[node] = 1;
+        tim[node] = low[node] = timer++;
+        
+        for (auto it : adj[node]) {
+            if (it == parent) continue;
+
+            if (!vis[it]) {
+                dfs(it, node, vis, adj, tim, low, bridges);
+                low[node] = min(low[node], low[it]); // storing the low post reachtime to of adj node 
+
+                // Check if this edge is a bridge
+                if (low[it] > tim[node]) {
+                    bridges.push_back({node, it});
+                }
+            } else {
+                // Back edge: update low-link value using discovery time of the ancestor
+                low[node] = min(low[node], tim[it]); 
+            }
+        }
+    }
+
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<int> adj[n];
+        for (auto& conn : connections) {
+            int u = conn[0], v = conn[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int> vis(n, 0);
+        int tim[n], low[n];
+        vector<vector<int>> bridges;
+
+        dfs(0, -1, vis, adj, tim, low, bridges);
+
+        return bridges;
+    }
+};
+
+
+Time Complexity: O(V+2E), 
+
+Space Complexity: O(V+2E) + O(3V)

@@ -1,0 +1,221 @@
+Strongly Connected Components - Kosaraju's Algorithm
+
+In a directed graph, strongly connected components (SCCs) are subsets of nodes where every node is reachable from every other node within the same subset. Kosaraju’s Algorithm efficiently finds these SCCs by leveraging the concept of graph transposition and finishing times in DFS.
+
+1. do the topolog sort or sort node on the finshing node 
+2. transpose the graph [ so dot go anywhere other than ssce]
+3. do the dfs usig the finish time node store innstack 
+
+Time Complexity: O(V + E),
+
+Space Complexity: O(V + E),
+
+Algo-
+
+
+class Solution {
+   private:
+   void dfs(vector<int> adj[], vector<int>& vis, int node, stack<int>& st) {
+      vis[node] = 1;
+      for (auto it : adj[node]) {
+         if (!vis[it]) {
+            dfs(adj, vis, it, st);
+         }
+      }
+      st.push(node); // push and store the node at finish time
+   }
+
+   void dfs2(vector<vector<int>>& grp, vector<int>& vis, int node) {
+      vis[node] = 1;
+      for (auto it : grp[node]) {
+         if (!vis[it]) {
+            dfs2(grp, vis, it);
+         }
+      }
+   }
+
+   void dfs3(vector<vector<int>>& grp, vector<int>& vis, int node, vector<int>& temp) {
+      vis[node] = 1;
+      temp.push_back(node);
+      for (auto it : grp[node]) {
+         if (!vis[it]) {
+            dfs3(grp, vis, it, temp);
+         }
+      }
+   }
+
+   public:
+   int kosaraju(int V, vector<int> adj[]) {
+      stack<int> st;
+      vector<int> vis(V, 0);
+      for (int i = 0; i < V; i++) {
+         if (!vis[i]) {
+            dfs(adj, vis, i, st);
+         }
+      }
+
+      // transpose the graph
+      vector<vector<int>> transpose_graph(V);
+      for (int i = 0; i < V; i++) {
+         for (auto it : adj[i]) {
+            transpose_graph[it].push_back(i);
+         }
+      }
+
+      // step 3: just dfs on the top sorted node
+      int ans = 0;
+      for (int i = 0; i < V; i++) {
+         vis[i] = 0;
+      }
+      while (!st.empty()) {
+         int node = st.top();
+         st.pop();
+         if (!vis[node]) {
+            ans++;
+            dfs2(transpose_graph, vis, node);
+         }
+      }
+
+      // If we need to return the graph itself
+      // vector<vector<int>> ans;
+      // while (!st.empty()) {
+      //    int node = st.top();
+      //    st.pop();
+      //    if (!vis[node]) {
+      //       vector<int> temp;
+      //       dfs3(transpose_graph, vis, node, temp);
+      //       ans.push_back(temp);
+      //    }
+      // }
+
+      return ans;
+   }
+};
+
+
+
+class Solution {
+private:
+    // DFS to find the finish time of each node
+    void dfs1(int node, vector<vector<int>>& adj, vector<int>& vis, stack<int>& st) {
+        vis[node] = 1;
+        for (auto nxt : adj[node]) {
+            if (!vis[nxt]) {
+                dfs1(nxt, adj, vis, st);
+            }
+        }
+        st.push(node);
+    }
+
+    // DFS to find the strongly connected components
+    void dfs2(int node, vector<vector<int>>& rev, vector<int>& comp, int id) {
+        comp[node] = id;
+        for (auto nxt : rev[node]) {
+            if (comp[nxt] == -1) {
+                dfs2(nxt, rev, comp, id);
+            }
+        }
+    }
+
+public:
+   
+    vector<string> maxNumOfSubstrings(string s) {
+        int n = s.size();
+
+        vector<int> first(26, n);
+        vector<int> last(26, -1);
+
+        // store the occurrence 
+        for (int i = 0; i < n; i++) {
+            int c = s[i] - 'a';
+            first[c] = min(first[c], i);
+            last[c] = max(last[c], i);
+        }
+
+        // graph and transpose graph 
+        vector<vector<int>> adj(26);
+        vector<vector<int>> rev(26);
+
+        // build the graph to the edge 
+        for (int c = 0; c < 26; c++) {
+            if (last[c] == -1) continue;
+
+            for (int i = first[c]; i <= last[c]; i++) {
+                int nxt = s[i] - 'a';
+                // avoid the oneslef edge
+                if (nxt == c) continue;
+                adj[c].push_back(nxt);
+                rev[nxt].push_back(c);
+            }
+        }
+
+        // ssc algorithm 
+        vector<int> vis(26, 0);
+        stack<int> st;
+
+        for (int i = 0; i < 26; i++) {
+            if (last[i] == -1) continue;
+
+            if (!vis[i]) {
+                dfs1(i, adj, vis, st);
+            }
+        }
+
+        vector<int> comp(26, -1);
+        int sccCount = 0;
+
+        while (!st.empty()) {
+            int node = st.top();
+            st.pop();
+            if (comp[node] == -1) {
+                dfs2(node, rev, comp, sccCount);
+                sccCount++;
+            }
+        }
+
+        vector<int> outdeg(sccCount, 0);
+
+        vector<int> L(sccCount, n);
+        vector<int> R(sccCount, -1);
+
+        // compress the scc graph 
+        for (int u = 0; u < 26; u++) {
+            if (last[u] == -1) continue;
+
+            L[comp[u]] = min(L[comp[u]], first[u]);
+            R[comp[u]] = max(R[comp[u]], last[u]);
+
+            for (auto v : adj[u]) {
+                if (comp[u] != comp[v]) { // to skip the indegree 0
+                    outdeg[comp[u]]++;
+                }
+            }
+        }
+
+        vector<pair<int, int>> intervals;
+
+        for (int scc = 0; scc < sccCount; scc++) {
+            if (outdeg[scc] == 0) {
+                intervals.push_back({ L[scc], R[scc] }); // marking the path 
+            }
+        }
+
+        sort(intervals.begin(), intervals.end(), [](auto& a, auto& b) {
+            return a.second < b.second;
+        });
+
+        vector<string> ans;
+
+        int end = -1;
+
+        for (auto& [l, r] : intervals) {
+
+            if (l > end) {
+                ans.push_back(s.substr(l, r - l + 1));
+                end = r; // marking this much is covered 
+            }
+        }
+
+        return ans;
+    }
+};
