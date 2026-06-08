@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int sumOfGoodIntegers(int n, int k) {
+        int s= max(1 , n-k); // x has to be in value of n-k or n+k 
+        int  ans=0;
+        for(int i=s; i<=n+k; i++) {
+    if((n & i) == 0) {
+        ans += i;
+    }
+}
+        return ans;
+    }
+};
+
+
+https://leetcode.com/problems/sum-of-compatible-numbers-in-range-i/
