@@ -1,0 +1,40 @@
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+class Solution {
+public:
+    int minAddToMakeValid(string s) {
+        stack<char> st; // Use char instead of int for parentheses
+        for (char c : s) {
+            if (c == '(') {
+                st.push(c); // Push opening parentheses onto the stack
+            } else if (c == ')') {
+                // Check if there's a matching opening parenthesis
+                if (!st.empty() && st.top() == '(') {
+                    st.pop(); // Found a pair, pop the opening parenthesis
+                } else {
+                    st.push(c); // No matching opening parenthesis, push the closing one
+                }
+            }
+        }
+        return st.size(); // The size of the stack represents unmatched parentheses
+    }
+};
+
+
+
+// Time: O(N)
+// Space: O(1)
+class Solution {
+public:
+    int minAddToMakeValid(string s) {
+        int left = 0, invalidRight = 0;
+        for (char c : s) {
+            if (c == '(') ++left;
+            else if (left) --left;
+            else ++invalidRight;
+        }
+        return invalidRight + left;
+    }
+};

@@ -1,0 +1,79 @@
+Brute force
+
+class Solution {
+public:
+    vector<int> advantageCount(vector<int>& nums1, vector<int>& nums2) {
+
+        sort(nums1.begin(), nums1.end());
+
+        vector<int> vis(nums1.size(), 0);
+
+        vector<int> ans;
+
+        for(int i = 0; i < nums2.size(); i++) {
+
+            bool found = false;
+
+            for(int j = 0; j < nums1.size(); j++) {
+
+                if(nums1[j] > nums2[i] && !vis[j]) {
+
+                    vis[j] = 1;
+                    ans.push_back(nums1[j]);
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found) {
+
+                for(int j = 0; j < nums1.size(); j++) {
+
+                    if(!vis[j]) {
+
+                        vis[j] = 1;
+                        ans.push_back(nums1[j]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+																								
+			Time  : O(n log n)
+Space : O(n)																					
+																								
+class Solution {
+public:
+    vector<int> advantageCount(vector<int>& nums1, vector<int>& nums2) {
+        // use the orginal indx to store the value of new number 
+        vector<int> ans(nums1.size()); 
+        sort(nums1.begin(), nums1.end());
+        vector<pair<int, int>> b; 
+        for(int i=0; i<nums2.size(); i++){
+            b.push_back({nums2[i],i});
+        }
+        sort(b.begin(), b.end()); 
+
+        int l=0; int r= nums1.size()-1; 
+
+        for(int i =nums1.size()-1; i>=0; i--){
+            int val= b[i].first;
+            int idx= b[i].second; 
+
+            if(nums1[r]>val){
+                ans[idx]=nums1[r];
+                r--;
+            }else{
+                ans[idx]=nums1[l];
+                l++;
+            }
+        }
+
+        return ans;
+
+    }
+};
